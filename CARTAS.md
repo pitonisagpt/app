@@ -6,15 +6,15 @@
 
 ## Arcanos Mayores (22)
 
-- [ ] 0 — El Loco
-- [ ] 1 — El Mago
-- [ ] 2 — La Sacerdotisa
-- [ ] 3 — La Emperatriz
-- [ ] 4 — El Emperador
-- [ ] 5 — El Sumo Sacerdote
-- [ ] 6 — Los Enamorados
-- [ ] 7 — El Carro
-- [ ] 8 — La Justicia
+- [x] 0 — El Loco
+- [x] 1 — El Mago
+- [x] 2 — La Sacerdotisa
+- [x] 3 — La Emperatriz
+- [x] 4 — El Emperador
+- [x] 5 — El Sumo Sacerdote
+- [x] 6 — Los Enamorados
+- [x] 7 — El Carro
+- [x] 8 — La Justicia
 - [ ] 9 — El Ermitaño
 - [ ] 10 — La Rueda de la Fortuna
 - [ ] 11 — La Fuerza

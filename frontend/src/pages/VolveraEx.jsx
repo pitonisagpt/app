@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import StarField from '../components/StarField'
 import CardDisplay from '../components/CardDisplay'
@@ -8,27 +8,38 @@ import { useModuleStream } from '../hooks/useModuleStream'
 
 // ── Full deck (78 cards) ─────────────────────────────────────────────────────
 const MAJOR_ARCANA = [
-  { name: 'El Loco', symbol: '🃏' }, { name: 'El Mago', symbol: '🔮' },
-  { name: 'La Sacerdotisa', symbol: '🌙' }, { name: 'La Emperatriz', symbol: '🌸' },
-  { name: 'El Emperador', symbol: '👑' }, { name: 'El Sumo Sacerdote', symbol: '⛪' },
-  { name: 'Los Enamorados', symbol: '💑' }, { name: 'El Carro', symbol: '🏆' },
-  { name: 'La Justicia', symbol: '⚖️' }, { name: 'El Ermitaño', symbol: '🕯️' },
-  { name: 'La Rueda de la Fortuna', symbol: '☸️' }, { name: 'La Fuerza', symbol: '🦁' },
-  { name: 'El Colgado', symbol: '🙃' }, { name: 'La Muerte', symbol: '🌑' },
-  { name: 'La Templanza', symbol: '🌊' }, { name: 'El Diablo', symbol: '🔗' },
-  { name: 'La Torre', symbol: '⚡' }, { name: 'La Estrella', symbol: '⭐' },
-  { name: 'La Luna', symbol: '🌕' }, { name: 'El Sol', symbol: '☀️' },
-  { name: 'El Juicio', symbol: '📯' }, { name: 'El Mundo', symbol: '🌍' },
+  { id: 0,  name: 'El Loco',                symbol: '🃏' },
+  { id: 1,  name: 'El Mago',                symbol: '🔮' },
+  { id: 2,  name: 'La Sacerdotisa',         symbol: '🌙' },
+  { id: 3,  name: 'La Emperatriz',          symbol: '🌸' },
+  { id: 4,  name: 'El Emperador',           symbol: '👑' },
+  { id: 5,  name: 'El Sumo Sacerdote',      symbol: '⛪' },
+  { id: 6,  name: 'Los Enamorados',         symbol: '💑' },
+  { id: 7,  name: 'El Carro',               symbol: '🏆' },
+  { id: 8,  name: 'La Justicia',            symbol: '⚖️' },
+  { id: 9,  name: 'El Ermitaño',            symbol: '🕯️' },
+  { id: 10, name: 'La Rueda de la Fortuna', symbol: '☸️' },
+  { id: 11, name: 'La Fuerza',              symbol: '🦁' },
+  { id: 12, name: 'El Colgado',             symbol: '🙃' },
+  { id: 13, name: 'La Muerte',              symbol: '🌑' },
+  { id: 14, name: 'La Templanza',           symbol: '🌊' },
+  { id: 15, name: 'El Diablo',              symbol: '🔗' },
+  { id: 16, name: 'La Torre',               symbol: '⚡' },
+  { id: 17, name: 'La Estrella',            symbol: '⭐' },
+  { id: 18, name: 'La Luna',                symbol: '🌕' },
+  { id: 19, name: 'El Sol',                 symbol: '☀️' },
+  { id: 20, name: 'El Juicio',              symbol: '📯' },
+  { id: 21, name: 'El Mundo',               symbol: '🌍' },
 ]
 const MINOR_ARCANA = [
   ...['As','Dos','Tres','Cuatro','Cinco','Seis','Siete','Ocho','Nueve','Diez','Sota','Caballo','Reina','Rey']
-    .map(n => ({ name: `${n} de Bastos`, symbol: '🌿' })),
+    .map((n, i) => ({ id: 22 + i, name: `${n} de Bastos`, symbol: '🌿' })),
   ...['As','Dos','Tres','Cuatro','Cinco','Seis','Siete','Ocho','Nueve','Diez','Sota','Caballo','Reina','Rey']
-    .map(n => ({ name: `${n} de Copas`, symbol: '🍷' })),
+    .map((n, i) => ({ id: 36 + i, name: `${n} de Copas`, symbol: '🍷' })),
   ...['As','Dos','Tres','Cuatro','Cinco','Seis','Siete','Ocho','Nueve','Diez','Sota','Caballo','Reina','Rey']
-    .map(n => ({ name: `${n} de Espadas`, symbol: '⚔️' })),
+    .map((n, i) => ({ id: 50 + i, name: `${n} de Espadas`, symbol: '⚔️' })),
   ...['As','Dos','Tres','Cuatro','Cinco','Seis','Siete','Ocho','Nueve','Diez','Sota','Caballo','Reina','Rey']
-    .map(n => ({ name: `${n} de Pentáculos`, symbol: '🪙' })),
+    .map((n, i) => ({ id: 64 + i, name: `${n} de Pentáculos`, symbol: '🪙' })),
 ]
 const ALL_CARDS = [...MAJOR_ARCANA, ...MINOR_ARCANA]
 
@@ -49,7 +60,14 @@ const RAZON_OPTIONS = [
 ]
 const CONTACTO_OPTIONS = ['Sí, hablamos seguido', 'A veces, de vez en cuando', 'No, sin contacto']
 
-function drawCards() {
+function drawCards(forcedIds = []) {
+  if (forcedIds.length > 0) {
+    return POSICIONES.map((position, i) => {
+      const forced = forcedIds[i] ?? forcedIds[0]
+      const card = ALL_CARDS.find(c => c.id === forced.id) || ALL_CARDS[0]
+      return { ...card, position, reversed: forced.reversed }
+    })
+  }
   return [...ALL_CARDS].sort(() => Math.random() - 0.5).slice(0, 5).map((card, i) => ({
     ...card, position: POSICIONES[i], reversed: Math.random() < 0.33,
   }))
@@ -57,6 +75,11 @@ function drawCards() {
 
 export default function VolveraEx() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const forcedIds = (searchParams.get('test') || '')
+    .split(',').filter(Boolean)
+    .map(s => ({ id: parseInt(s), reversed: s.endsWith('r') }))
+    .filter(({ id }) => !isNaN(id) && id >= 0)
   const { text, isStreaming, error, stream, reset } = useModuleStream()
 
   const [step, setStep]           = useState('form')   // form | cards | reading
@@ -68,7 +91,7 @@ export default function VolveraEx() {
 
   function handleFormSubmit(e) {
     e.preventDefault()
-    const drawn = drawCards()
+    const drawn = drawCards(forcedIds)
     setCards(drawn)
     setStep('cards')
     setRevealed(0)

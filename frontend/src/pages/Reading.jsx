@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { SPREADS } from '../data/spreads'
 import { useSession } from '../context/SessionContext'
 import { useStreaming } from '../hooks/useStreaming'
@@ -10,96 +10,103 @@ import QuestionForm from '../components/QuestionForm'
 import OracleResponse from '../components/OracleResponse'
 
 const MAJOR_ARCANA = [
-  { name: 'El Loco', symbol: '🃏' },
-  { name: 'El Mago', symbol: '🔮' },
-  { name: 'La Sacerdotisa', symbol: '🌙' },
-  { name: 'La Emperatriz', symbol: '🌸' },
-  { name: 'El Emperador', symbol: '👑' },
-  { name: 'El Sumo Sacerdote', symbol: '⛪' },
-  { name: 'Los Enamorados', symbol: '💑' },
-  { name: 'El Carro', symbol: '🏆' },
-  { name: 'La Justicia', symbol: '⚖️' },
-  { name: 'El Ermitaño', symbol: '🕯️' },
-  { name: 'La Rueda de la Fortuna', symbol: '☸️' },
-  { name: 'La Fuerza', symbol: '🦁' },
-  { name: 'El Colgado', symbol: '🙃' },
-  { name: 'La Muerte', symbol: '🌑' },
-  { name: 'La Templanza', symbol: '🌊' },
-  { name: 'El Diablo', symbol: '🔗' },
-  { name: 'La Torre', symbol: '⚡' },
-  { name: 'La Estrella', symbol: '⭐' },
-  { name: 'La Luna', symbol: '🌕' },
-  { name: 'El Sol', symbol: '☀️' },
-  { name: 'El Juicio', symbol: '📯' },
-  { name: 'El Mundo', symbol: '🌍' },
+  { id: 0,  name: 'El Loco',                symbol: '🃏' },
+  { id: 1,  name: 'El Mago',                symbol: '🔮' },
+  { id: 2,  name: 'La Sacerdotisa',         symbol: '🌙' },
+  { id: 3,  name: 'La Emperatriz',          symbol: '🌸' },
+  { id: 4,  name: 'El Emperador',           symbol: '👑' },
+  { id: 5,  name: 'El Sumo Sacerdote',      symbol: '⛪' },
+  { id: 6,  name: 'Los Enamorados',         symbol: '💑' },
+  { id: 7,  name: 'El Carro',               symbol: '🏆' },
+  { id: 8,  name: 'La Justicia',            symbol: '⚖️' },
+  { id: 9,  name: 'El Ermitaño',            symbol: '🕯️' },
+  { id: 10, name: 'La Rueda de la Fortuna', symbol: '☸️' },
+  { id: 11, name: 'La Fuerza',              symbol: '🦁' },
+  { id: 12, name: 'El Colgado',             symbol: '🙃' },
+  { id: 13, name: 'La Muerte',              symbol: '🌑' },
+  { id: 14, name: 'La Templanza',           symbol: '🌊' },
+  { id: 15, name: 'El Diablo',              symbol: '🔗' },
+  { id: 16, name: 'La Torre',               symbol: '⚡' },
+  { id: 17, name: 'La Estrella',            symbol: '⭐' },
+  { id: 18, name: 'La Luna',                symbol: '🌕' },
+  { id: 19, name: 'El Sol',                 symbol: '☀️' },
+  { id: 20, name: 'El Juicio',              symbol: '📯' },
+  { id: 21, name: 'El Mundo',               symbol: '🌍' },
 ]
 
 const MINOR_ARCANA = [
   // Bastos
-  { name: 'As de Bastos', symbol: '🌿' },
-  { name: 'Dos de Bastos', symbol: '🌿' },
-  { name: 'Tres de Bastos', symbol: '🌿' },
-  { name: 'Cuatro de Bastos', symbol: '🌿' },
-  { name: 'Cinco de Bastos', symbol: '🌿' },
-  { name: 'Seis de Bastos', symbol: '🌿' },
-  { name: 'Siete de Bastos', symbol: '🌿' },
-  { name: 'Ocho de Bastos', symbol: '🌿' },
-  { name: 'Nueve de Bastos', symbol: '🌿' },
-  { name: 'Diez de Bastos', symbol: '🌿' },
-  { name: 'Sota de Bastos', symbol: '🌿' },
-  { name: 'Caballo de Bastos', symbol: '🌿' },
-  { name: 'Reina de Bastos', symbol: '🌿' },
-  { name: 'Rey de Bastos', symbol: '🌿' },
+  { id: 22, name: 'As de Bastos',       symbol: '🌿' },
+  { id: 23, name: 'Dos de Bastos',      symbol: '🌿' },
+  { id: 24, name: 'Tres de Bastos',     symbol: '🌿' },
+  { id: 25, name: 'Cuatro de Bastos',   symbol: '🌿' },
+  { id: 26, name: 'Cinco de Bastos',    symbol: '🌿' },
+  { id: 27, name: 'Seis de Bastos',     symbol: '🌿' },
+  { id: 28, name: 'Siete de Bastos',    symbol: '🌿' },
+  { id: 29, name: 'Ocho de Bastos',     symbol: '🌿' },
+  { id: 30, name: 'Nueve de Bastos',    symbol: '🌿' },
+  { id: 31, name: 'Diez de Bastos',     symbol: '🌿' },
+  { id: 32, name: 'Sota de Bastos',     symbol: '🌿' },
+  { id: 33, name: 'Caballo de Bastos',  symbol: '🌿' },
+  { id: 34, name: 'Reina de Bastos',    symbol: '🌿' },
+  { id: 35, name: 'Rey de Bastos',      symbol: '🌿' },
   // Copas
-  { name: 'As de Copas', symbol: '🍷' },
-  { name: 'Dos de Copas', symbol: '🍷' },
-  { name: 'Tres de Copas', symbol: '🍷' },
-  { name: 'Cuatro de Copas', symbol: '🍷' },
-  { name: 'Cinco de Copas', symbol: '🍷' },
-  { name: 'Seis de Copas', symbol: '🍷' },
-  { name: 'Siete de Copas', symbol: '🍷' },
-  { name: 'Ocho de Copas', symbol: '🍷' },
-  { name: 'Nueve de Copas', symbol: '🍷' },
-  { name: 'Diez de Copas', symbol: '🍷' },
-  { name: 'Sota de Copas', symbol: '🍷' },
-  { name: 'Caballo de Copas', symbol: '🍷' },
-  { name: 'Reina de Copas', symbol: '🍷' },
-  { name: 'Rey de Copas', symbol: '🍷' },
+  { id: 36, name: 'As de Copas',        symbol: '🍷' },
+  { id: 37, name: 'Dos de Copas',       symbol: '🍷' },
+  { id: 38, name: 'Tres de Copas',      symbol: '🍷' },
+  { id: 39, name: 'Cuatro de Copas',    symbol: '🍷' },
+  { id: 40, name: 'Cinco de Copas',     symbol: '🍷' },
+  { id: 41, name: 'Seis de Copas',      symbol: '🍷' },
+  { id: 42, name: 'Siete de Copas',     symbol: '🍷' },
+  { id: 43, name: 'Ocho de Copas',      symbol: '🍷' },
+  { id: 44, name: 'Nueve de Copas',     symbol: '🍷' },
+  { id: 45, name: 'Diez de Copas',      symbol: '🍷' },
+  { id: 46, name: 'Sota de Copas',      symbol: '🍷' },
+  { id: 47, name: 'Caballo de Copas',   symbol: '🍷' },
+  { id: 48, name: 'Reina de Copas',     symbol: '🍷' },
+  { id: 49, name: 'Rey de Copas',       symbol: '🍷' },
   // Espadas
-  { name: 'As de Espadas', symbol: '⚔️' },
-  { name: 'Dos de Espadas', symbol: '⚔️' },
-  { name: 'Tres de Espadas', symbol: '⚔️' },
-  { name: 'Cuatro de Espadas', symbol: '⚔️' },
-  { name: 'Cinco de Espadas', symbol: '⚔️' },
-  { name: 'Seis de Espadas', symbol: '⚔️' },
-  { name: 'Siete de Espadas', symbol: '⚔️' },
-  { name: 'Ocho de Espadas', symbol: '⚔️' },
-  { name: 'Nueve de Espadas', symbol: '⚔️' },
-  { name: 'Diez de Espadas', symbol: '⚔️' },
-  { name: 'Sota de Espadas', symbol: '⚔️' },
-  { name: 'Caballo de Espadas', symbol: '⚔️' },
-  { name: 'Reina de Espadas', symbol: '⚔️' },
-  { name: 'Rey de Espadas', symbol: '⚔️' },
+  { id: 50, name: 'As de Espadas',      symbol: '⚔️' },
+  { id: 51, name: 'Dos de Espadas',     symbol: '⚔️' },
+  { id: 52, name: 'Tres de Espadas',    symbol: '⚔️' },
+  { id: 53, name: 'Cuatro de Espadas',  symbol: '⚔️' },
+  { id: 54, name: 'Cinco de Espadas',   symbol: '⚔️' },
+  { id: 55, name: 'Seis de Espadas',    symbol: '⚔️' },
+  { id: 56, name: 'Siete de Espadas',   symbol: '⚔️' },
+  { id: 57, name: 'Ocho de Espadas',    symbol: '⚔️' },
+  { id: 58, name: 'Nueve de Espadas',   symbol: '⚔️' },
+  { id: 59, name: 'Diez de Espadas',    symbol: '⚔️' },
+  { id: 60, name: 'Sota de Espadas',    symbol: '⚔️' },
+  { id: 61, name: 'Caballo de Espadas', symbol: '⚔️' },
+  { id: 62, name: 'Reina de Espadas',   symbol: '⚔️' },
+  { id: 63, name: 'Rey de Espadas',     symbol: '⚔️' },
   // Pentáculos
-  { name: 'As de Pentáculos', symbol: '🪙' },
-  { name: 'Dos de Pentáculos', symbol: '🪙' },
-  { name: 'Tres de Pentáculos', symbol: '🪙' },
-  { name: 'Cuatro de Pentáculos', symbol: '🪙' },
-  { name: 'Cinco de Pentáculos', symbol: '🪙' },
-  { name: 'Seis de Pentáculos', symbol: '🪙' },
-  { name: 'Siete de Pentáculos', symbol: '🪙' },
-  { name: 'Ocho de Pentáculos', symbol: '🪙' },
-  { name: 'Nueve de Pentáculos', symbol: '🪙' },
-  { name: 'Diez de Pentáculos', symbol: '🪙' },
-  { name: 'Sota de Pentáculos', symbol: '🪙' },
-  { name: 'Caballo de Pentáculos', symbol: '🪙' },
-  { name: 'Reina de Pentáculos', symbol: '🪙' },
-  { name: 'Rey de Pentáculos', symbol: '🪙' },
+  { id: 64, name: 'As de Pentáculos',      symbol: '🪙' },
+  { id: 65, name: 'Dos de Pentáculos',     symbol: '🪙' },
+  { id: 66, name: 'Tres de Pentáculos',    symbol: '🪙' },
+  { id: 67, name: 'Cuatro de Pentáculos',  symbol: '🪙' },
+  { id: 68, name: 'Cinco de Pentáculos',   symbol: '🪙' },
+  { id: 69, name: 'Seis de Pentáculos',    symbol: '🪙' },
+  { id: 70, name: 'Siete de Pentáculos',   symbol: '🪙' },
+  { id: 71, name: 'Ocho de Pentáculos',    symbol: '🪙' },
+  { id: 72, name: 'Nueve de Pentáculos',   symbol: '🪙' },
+  { id: 73, name: 'Diez de Pentáculos',    symbol: '🪙' },
+  { id: 74, name: 'Sota de Pentáculos',    symbol: '🪙' },
+  { id: 75, name: 'Caballo de Pentáculos', symbol: '🪙' },
+  { id: 76, name: 'Reina de Pentáculos',   symbol: '🪙' },
+  { id: 77, name: 'Rey de Pentáculos',     symbol: '🪙' },
 ]
 
 const ALL_CARDS = [...MAJOR_ARCANA, ...MINOR_ARCANA]
 
-function drawCards(spread) {
+function drawCards(spread, forcedIds = []) {
+  if (forcedIds.length > 0) {
+    return spread.positions.map((position, i) => {
+      const forced = forcedIds[i] ?? forcedIds[0]
+      const card = ALL_CARDS.find(c => c.id === forced.id) || ALL_CARDS[0]
+      return { ...card, position, reversed: forced.reversed }
+    })
+  }
   const shuffled = [...ALL_CARDS].sort(() => Math.random() - 0.5)
   return spread.positions.map((position, i) => ({
     ...shuffled[i],
@@ -110,8 +117,15 @@ function drawCards(spread) {
 
 export default function Reading() {
   const { spreadId } = useParams()
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const spread = SPREADS[spreadId]
+
+  // ?test=0,1r,2 forces specific card IDs — append "r" to reverse, e.g. ?test=0r,1,2r
+  const forcedIds = (searchParams.get('test') || '')
+    .split(',').filter(Boolean)
+    .map(s => ({ id: parseInt(s), reversed: s.endsWith('r') }))
+    .filter(({ id }) => !isNaN(id) && id >= 0)
 
   const {
     step, setStep,
@@ -152,13 +166,13 @@ export default function Reading() {
   }
 
   function handleQuestionSubmit(q) {
-    const cards = drawCards(spread)
+    const cards = drawCards(spread, forcedIds)
     setDrawnCards(cards)
     setStep('reveal')
   }
 
   function handleNoQuestion() {
-    const cards = drawCards(spread)
+    const cards = drawCards(spread, forcedIds)
     setDrawnCards(cards)
     setStep('reveal')
   }
