@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, useLocation } from 'react-router-dom'
 import { MODULES } from '../data/modules'
 import { SPREADS, CATEGORIES } from '../data/spreads'
@@ -42,33 +43,19 @@ export default function HamburgerMenu() {
     spreads: Object.entries(SPREADS).filter(([, s]) => s.category === catKey),
   })).filter(g => g.spreads.length > 0)
 
-  return (
+  const overlay = (
     <>
-      {/* Hamburger button */}
-      <button
-        onClick={() => setOpen(true)}
-        aria-label="Abrir menú"
-        className="flex flex-col justify-center items-center gap-[5px] w-9 h-9 rounded-lg
-                   border border-mystic-border/50 bg-mystic-surface/60
-                   hover:border-mystic-gold/40 hover:bg-mystic-surface
-                   transition-all duration-200 cursor-pointer"
-      >
-        <span className="w-4 h-px bg-mystic-muted/70 rounded-full block" />
-        <span className="w-4 h-px bg-mystic-muted/70 rounded-full block" />
-        <span className="w-3 h-px bg-mystic-muted/70 rounded-full block self-start ml-2.5" />
-      </button>
-
       {/* Backdrop */}
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         />
       )}
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full z-50 w-[85vw] max-w-sm
+        className={`fixed top-0 right-0 h-full z-[9999] w-[85vw] max-w-sm
                     flex flex-col overflow-hidden
                     transition-transform duration-300 ease-in-out
                     ${open ? 'translate-x-0' : 'translate-x-full'}`}
@@ -180,6 +167,27 @@ export default function HamburgerMenu() {
           </p>
         </div>
       </div>
+    </>
+  )
+
+  return (
+    <>
+      {/* Hamburger button — stays inside the Navbar */}
+      <button
+        onClick={() => setOpen(true)}
+        aria-label="Abrir menú"
+        className="flex flex-col justify-center items-center gap-[5px] w-9 h-9 rounded-lg
+                   border border-mystic-border/50 bg-mystic-surface/60
+                   hover:border-mystic-gold/40 hover:bg-mystic-surface
+                   transition-all duration-200 cursor-pointer"
+      >
+        <span className="w-4 h-px bg-mystic-muted/70 rounded-full block" />
+        <span className="w-4 h-px bg-mystic-muted/70 rounded-full block" />
+        <span className="w-3 h-px bg-mystic-muted/70 rounded-full block self-start ml-2.5" />
+      </button>
+
+      {/* Backdrop + Drawer rendered in document.body to escape backdrop-filter stacking context */}
+      {createPortal(overlay, document.body)}
     </>
   )
 }
