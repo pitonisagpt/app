@@ -42,12 +42,12 @@ const EXTRA_LABEL = {
 }
 
 const TABS = [
-  { id: 'Rueda',    icon: '🔵', label: 'Rueda'    },
-  { id: 'Planetas', icon: '🪐', label: 'Planetas' },
-  { id: 'Aspectos', icon: '✴️', label: 'Aspectos' },
-  { id: 'Casas',    icon: '🏠', label: 'Casas'    },
-  { id: 'Energía',  icon: '⚡', label: 'Energía'  },
-  { id: 'Patrones', icon: '🌀', label: 'Patrones' },
+  { id: 'Rueda',    icon: '🔵', label: 'Rueda',    short: 'Mapa visual' },
+  { id: 'Planetas', icon: '🪐', label: 'Planetas', short: 'Posiciones' },
+  { id: 'Aspectos', icon: '✴️', label: 'Aspectos', short: 'Ángulos' },
+  { id: 'Casas',    icon: '🏠', label: 'Casas',    short: '12 áreas' },
+  { id: 'Energía',  icon: '⚡', label: 'Energía',  short: 'Elementos' },
+  { id: 'Patrones', icon: '🌀', label: 'Patrones', short: 'Figuras' },
 ]
 
 const TAB_INFO = {
@@ -186,41 +186,54 @@ function ChartSummary({ chart, insights, insightsLoading }) {
           <div className="flex-1 h-px bg-gradient-to-r from-mystic-border/40 to-transparent" />
         </div>
 
-        {/* Tab bar */}
-        <div className="flex gap-1.5 px-3 pt-3 pb-0 overflow-x-auto scrollbar-hide">
-          {TABS.map(t => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className={`flex-shrink-0 flex flex-col items-center gap-1 px-4 py-2.5 rounded-xl
-                border transition-all duration-200 cursor-pointer min-w-[72px]
-                ${tab === t.id
-                  ? 'bg-mystic-purple/50 border-mystic-gold/50 text-mystic-gold shadow-lg shadow-mystic-purple/30'
-                  : 'bg-mystic-surface/50 border-mystic-border/50 text-mystic-muted/70 hover:border-mystic-gold/30 hover:text-mystic-muted hover:bg-mystic-surface/80'
-                }`}
-            >
-              <span className="text-lg leading-none">{t.icon}</span>
-              <span className="text-[11px] uppercase tracking-wider font-sans font-medium whitespace-nowrap">
-                {t.label}
-              </span>
-            </button>
-          ))}
+        {/* Tab grid — full width, 3 cols mobile / 6 desktop */}
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-px bg-mystic-border/30">
+          {TABS.map(t => {
+            const active = tab === t.id
+            return (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className={`relative flex flex-col items-center gap-1.5 py-4 px-2
+                  transition-all duration-200 cursor-pointer group
+                  ${active
+                    ? 'bg-mystic-purple/30 text-mystic-gold'
+                    : 'bg-mystic-surface/60 text-mystic-muted/60 hover:bg-mystic-surface/90 hover:text-mystic-muted'
+                  }`}
+              >
+                {/* Active indicator line */}
+                {active && (
+                  <span className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-mystic-gold/80 to-transparent" />
+                )}
+                <span className="text-2xl leading-none">{t.icon}</span>
+                <span className={`text-[11px] font-sans font-semibold tracking-wider uppercase
+                  ${active ? 'text-mystic-gold' : 'text-mystic-muted/70 group-hover:text-mystic-muted'}`}>
+                  {t.label}
+                </span>
+                <span className={`text-[10px] font-sans leading-none
+                  ${active ? 'text-mystic-gold/60' : 'text-mystic-muted/35 group-hover:text-mystic-muted/50'}`}>
+                  {t.short}
+                </span>
+                {/* Click hint on inactive */}
+                {!active && (
+                  <span className="absolute bottom-1.5 right-2 text-[8px] text-mystic-muted/25 group-hover:text-mystic-gold/40 transition-colors font-sans tracking-wider">
+                    TAP
+                  </span>
+                )}
+              </button>
+            )
+          })}
         </div>
 
-        {/* Tab description banner */}
+        {/* Active tab description */}
         {TAB_INFO[tab] && (
-          <div className="mx-3 mt-3 mb-0 rounded-xl bg-mystic-surface/60 border border-mystic-border/40 px-4 py-3 flex gap-3 items-start">
-            <div className="flex-1 min-w-0">
-              <p className="text-mystic-accent/90 text-xs font-display font-semibold tracking-wide mb-0.5">
-                {TAB_INFO[tab].title}
-              </p>
-              <p className="text-mystic-muted/70 text-xs font-sans leading-relaxed">
-                {TAB_INFO[tab].desc}
-              </p>
-              <p className="text-mystic-gold/50 text-[11px] font-sans leading-relaxed mt-1.5 italic">
-                💡 {TAB_INFO[tab].hint}
-              </p>
-            </div>
+          <div className="px-4 py-3 border-b border-mystic-border/30 bg-mystic-surface/20 animate-fadeIn">
+            <p className="text-mystic-muted/70 text-xs font-sans leading-relaxed">
+              {TAB_INFO[tab].desc}
+            </p>
+            <p className="text-mystic-gold/45 text-[11px] font-sans leading-relaxed mt-1 italic">
+              💡 {TAB_INFO[tab].hint}
+            </p>
           </div>
         )}
 
