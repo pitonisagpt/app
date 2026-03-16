@@ -88,7 +88,11 @@ export default function VolveraEx() {
   const [cards, setCards]         = useState([])
   const [revealedCount, setRevealed] = useState(0)
   const [form, setForm]           = useState({
-    nombre: profile.nombre || '', ex_nombre: '', tiempo: '', razon: '', contacto: '',
+    nombre:    profile.nombre    || '',
+    ex_nombre: profile.ex_nombre || '',
+    tiempo:    '',
+    razon:     '',
+    contacto:  '',
   })
 
   function handleFormSubmit(e) {
@@ -122,7 +126,7 @@ export default function VolveraEx() {
     setStep('form')
     setCards([])
     setRevealed(0)
-    setForm({ nombre: '', ex_nombre: '', tiempo: '', razon: '', contacto: '' })
+    setForm({ nombre: profile.nombre || '', ex_nombre: profile.ex_nombre || '', tiempo: '', razon: '', contacto: '' })
   }
 
   const allRevealed = revealedCount >= 5
@@ -166,7 +170,7 @@ export default function VolveraEx() {
               <div>
                 <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Su nombre</label>
                 <input required maxLength={60} value={form.ex_nombre}
-                  onChange={e => setForm(f => ({ ...f, ex_nombre: e.target.value }))}
+                  onChange={e => { setForm(f => ({ ...f, ex_nombre: e.target.value })); updateProfile({ ex_nombre: e.target.value }) }}
                   className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-2.5 text-mystic-text text-sm placeholder:text-mystic-muted/40 focus:outline-none focus:border-rose-400/50"
                   placeholder="Nombre de tu ex" />
               </div>

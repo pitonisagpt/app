@@ -130,13 +130,13 @@ export default function Home() {
       <div className="absolute bottom-40 right-1/4 w-80 h-80 bg-mystic-violet/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <header className="relative z-10 text-center py-20 px-4">
-        <div className="relative inline-block mb-6">
-          <div className="absolute inset-0 rounded-full bg-mystic-gold/20 blur-2xl scale-150 animate-glow" />
-          <div className="text-7xl animate-float inline-block relative" role="img" aria-label="Bola de cristal">🔮</div>
+      <header className="relative z-10 text-center py-14 md:py-20 px-4">
+        <div className="relative inline-flex items-center justify-center mb-6">
+          <div className="absolute w-24 h-24 rounded-full bg-mystic-gold/20 blur-2xl animate-glow" />
+          <span className="text-6xl md:text-7xl animate-float relative leading-none" role="img" aria-label="Bola de cristal">🔮</span>
         </div>
         <h1
-          className="text-5xl md:text-6xl font-display font-bold tracking-widest uppercase mb-3"
+          className="text-4xl sm:text-5xl md:text-6xl font-display font-bold tracking-widest uppercase mb-3"
           style={{
             background: 'linear-gradient(90deg, #c9a84c, #e8c97e, #c9a84c, #9d7a30, #c9a84c)',
             backgroundSize: '300% auto',

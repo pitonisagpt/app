@@ -4,30 +4,19 @@ import StarField from '../components/StarField'
 import CardDisplay from '../components/CardDisplay'
 import ModuleResult from '../components/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
-
-const LS_KEY = 'pitonisa_daily_profile'
-
-function todayKey() {
-  return new Date().toISOString().slice(0, 10)
-}
+import { useUserProfile } from '../hooks/useUserProfile'
 
 export default function TarotDiario() {
   const { text, isStreaming, error, meta, stream, reset } = useModuleStream()
+  const { profile, updateProfile } = useUserProfile()
 
   const [step, setStep]   = useState('form')  // form | reading
   const [card, setCard]   = useState(null)
   const [reversed, setReversed] = useState(false)
-  const [form, setForm]   = useState({ nombre: '', fecha_nacimiento: '' })
-
-  // Restore saved profile from localStorage
-  useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null')
-      if (saved?.nombre && saved?.fecha_nacimiento) {
-        setForm(saved)
-      }
-    } catch { /* ignore */ }
-  }, [])
+  const [form, setForm]   = useState({
+    nombre:           profile.nombre           || '',
+    fecha_nacimiento: profile.fecha_nacimiento || '',
+  })
 
   // Extract card from SSE meta event
   useEffect(() => {
@@ -39,7 +28,7 @@ export default function TarotDiario() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    localStorage.setItem(LS_KEY, JSON.stringify(form))
+    updateProfile({ nombre: form.nombre, fecha_nacimiento: form.fecha_nacimiento })
     setStep('reading')
     await stream('/api/tarot-diario', {
       nombre:           form.nombre,
@@ -89,14 +78,14 @@ export default function TarotDiario() {
             <div>
               <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Tu nombre</label>
               <input required maxLength={60} value={form.nombre}
-                onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
+                onChange={e => { setForm(f => ({ ...f, nombre: e.target.value })); updateProfile({ nombre: e.target.value }) }}
                 className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-2.5 text-mystic-text text-sm placeholder:text-mystic-muted/40 focus:outline-none focus:border-mystic-gold/50"
                 placeholder="Tu nombre" />
             </div>
             <div>
               <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Fecha de nacimiento</label>
               <input required type="date" value={form.fecha_nacimiento}
-                onChange={e => setForm(f => ({ ...f, fecha_nacimiento: e.target.value }))}
+                onChange={e => { setForm(f => ({ ...f, fecha_nacimiento: e.target.value })); updateProfile({ fecha_nacimiento: e.target.value }) }}
                 className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-2.5 text-mystic-text text-sm focus:outline-none focus:border-mystic-gold/50" />
               <p className="text-mystic-muted/40 text-[10px] mt-1.5 tracking-wide">
                 Usada para personalizar tu carta — no la guardamos.
