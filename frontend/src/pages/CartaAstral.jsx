@@ -49,6 +49,39 @@ const TABS = [
   { id: 'Patrones', icon: '🌀', label: 'Patrones' },
 ]
 
+const TAB_INFO = {
+  Rueda: {
+    title: 'Rueda Natal',
+    desc: 'La representación visual de tu carta. Cada planeta ocupa su posición exacta en el zodíaco al momento de tu nacimiento.',
+    hint: 'Los planetas más cerca del borde exterior son tus energías más visibles; los del centro, más internas.',
+  },
+  Planetas: {
+    title: 'Posiciones Planetarias',
+    desc: 'Cada planeta rige un área de tu vida: el Sol tu identidad, la Luna tus emociones, Venus el amor, Marte la acción…',
+    hint: 'Los planetas retrógrados (℞) expresan su energía hacia adentro, con más reflexión e intensidad interior.',
+  },
+  Aspectos: {
+    title: 'Aspectos entre Planetas',
+    desc: 'Los ángulos que forman los planetas entre sí crean tensiones (cuadraturas, oposiciones) o flujos de energía (trígonos, sextiles).',
+    hint: 'Un orbe pequeño significa que el aspecto es muy exacto y su influencia más fuerte en tu personalidad.',
+  },
+  Casas: {
+    title: 'Las 12 Casas Astrológicas',
+    desc: 'Las casas dividen el cielo en 12 áreas temáticas de tu vida. Los ángulos (ASC, IC, DSC, MC) son los puntos más poderosos.',
+    hint: 'La Casa 1 (Ascendente) define tu apariencia y primera impresión; la Casa 10 (MC) tu carrera y legado.',
+  },
+  Energía: {
+    title: 'Distribución de Energía',
+    desc: 'Muestra qué elementos (Fuego, Tierra, Aire, Agua) y modalidades (Cardinal, Fijo, Mutable) dominan tu carta natal.',
+    hint: 'El elemento dominante revela tu temperamento natural; la modalidad, cómo inicias, sostienes o adaptas energía.',
+  },
+  Patrones: {
+    title: 'Patrones y Figuras',
+    desc: 'Configuraciones geométricas formadas por varios planetas simultáneamente. Son los "temas mayores" de tu destino.',
+    hint: 'Un Gran Trígono aporta talentos naturales; una T-Cuadrada, tensión creativa que impulsa el crecimiento.',
+  },
+}
+
 // ── Insight card shown at the bottom of each tab ─────────────────────────────
 function InsightCard({ text, loading }) {
   if (!text && !loading) return null
@@ -152,26 +185,58 @@ function ChartSummary({ chart, insights, insightsLoading }) {
       {/* Sol / Luna / ASC hero cards */}
       <ZodiacHeroCards chart={chart} insights={insights} insightsLoading={insightsLoading} />
 
-      {/* Tabs */}
-      <div className="flex gap-1.5 mb-5 overflow-x-auto pb-1 scrollbar-hide">
-        {TABS.map(t => (
-          <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
-            className={`flex-shrink-0 flex flex-col items-center gap-1 px-4 py-2.5 rounded-xl
-              border transition-all duration-200 cursor-pointer min-w-[72px]
-              ${tab === t.id
-                ? 'bg-mystic-purple/50 border-mystic-gold/50 text-mystic-gold shadow-lg shadow-mystic-purple/30'
-                : 'bg-mystic-surface/50 border-mystic-border/50 text-mystic-muted/70 hover:border-mystic-gold/30 hover:text-mystic-muted hover:bg-mystic-surface/80'
-              }`}
-          >
-            <span className="text-lg leading-none">{t.icon}</span>
-            <span className="text-[11px] uppercase tracking-wider font-sans font-medium whitespace-nowrap">
-              {t.label}
-            </span>
-          </button>
-        ))}
-      </div>
+      {/* ── Explorer section ───────────────────────────────────────── */}
+      <div className="rounded-2xl border border-mystic-border/50 bg-mystic-surface/30 overflow-hidden mt-8">
+
+        {/* Section header */}
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-mystic-border/40 bg-mystic-surface/40">
+          <div className="w-1.5 h-1.5 rounded-full bg-mystic-gold/60 animate-pulse" />
+          <span className="text-[10px] uppercase tracking-[0.3em] text-mystic-gold/70 font-sans font-medium">
+            Explorar tu carta
+          </span>
+          <div className="flex-1 h-px bg-gradient-to-r from-mystic-border/40 to-transparent" />
+        </div>
+
+        {/* Tab bar */}
+        <div className="flex gap-1.5 px-3 pt-3 pb-0 overflow-x-auto scrollbar-hide">
+          {TABS.map(t => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`flex-shrink-0 flex flex-col items-center gap-1 px-4 py-2.5 rounded-xl
+                border transition-all duration-200 cursor-pointer min-w-[72px]
+                ${tab === t.id
+                  ? 'bg-mystic-purple/50 border-mystic-gold/50 text-mystic-gold shadow-lg shadow-mystic-purple/30'
+                  : 'bg-mystic-surface/50 border-mystic-border/50 text-mystic-muted/70 hover:border-mystic-gold/30 hover:text-mystic-muted hover:bg-mystic-surface/80'
+                }`}
+            >
+              <span className="text-lg leading-none">{t.icon}</span>
+              <span className="text-[11px] uppercase tracking-wider font-sans font-medium whitespace-nowrap">
+                {t.label}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Tab description banner */}
+        {TAB_INFO[tab] && (
+          <div className="mx-3 mt-3 mb-0 rounded-xl bg-mystic-surface/60 border border-mystic-border/40 px-4 py-3 flex gap-3 items-start">
+            <div className="flex-1 min-w-0">
+              <p className="text-mystic-accent/90 text-xs font-display font-semibold tracking-wide mb-0.5">
+                {TAB_INFO[tab].title}
+              </p>
+              <p className="text-mystic-muted/70 text-xs font-sans leading-relaxed">
+                {TAB_INFO[tab].desc}
+              </p>
+              <p className="text-mystic-gold/50 text-[11px] font-sans leading-relaxed mt-1.5 italic">
+                💡 {TAB_INFO[tab].hint}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Tab content */}
+        <div className="p-3 pt-4">
 
       {/* Tab: Rueda */}
       {tab === 'Rueda' && (
@@ -355,6 +420,9 @@ function ChartSummary({ chart, insights, insightsLoading }) {
           <InsightCard text={insights?.patrones} loading={insightsLoading && !insights?.patrones} />
         </div>
       )}
+
+        </div>{/* /Tab content */}
+      </div>{/* /Explorer section */}
     </div>
   )
 }
