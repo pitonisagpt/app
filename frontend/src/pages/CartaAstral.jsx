@@ -508,8 +508,8 @@ export default function CartaAstral() {
         city:  form.city.trim(),
         birth_time_known: form.birthTimeKnown,
         ...(form.birthTimeKnown && {
-          hour:   parseInt(form.hour) || 12,
-          minute: parseInt(form.minute) || 0,
+          hour:   form.hour !== '' ? parseInt(form.hour) : 12,
+          minute: form.minute !== '' ? parseInt(form.minute) : 0,
         }),
       }
 
