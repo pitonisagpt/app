@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
+import { useUserProfile } from '../hooks/useUserProfile'
 import StarField from '../components/StarField'
 import ModuleResult from '../components/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
@@ -21,12 +22,16 @@ function TransitBadge({ intensity }) {
 
 export default function Transitos() {
   const { text, isStreaming, error, meta, stream, reset } = useModuleStream()
+  const { profile, updateProfile } = useUserProfile()
 
   const [step, setStep]           = useState('form')   // form | reading
   const [transitCount, setTransitCount] = useState(null)
   const [noHora, setNoHora]       = useState(false)
   const [form, setForm]           = useState({
-    nombre: '', fecha_nacimiento: '', hora_nacimiento: '', ciudad: '',
+    nombre:           profile.nombre           || '',
+    fecha_nacimiento: profile.fecha_nacimiento || '',
+    hora_nacimiento:  profile.hora_nacimiento  || '',
+    ciudad:           profile.ciudad           || '',
   })
 
   useEffect(() => {
@@ -86,7 +91,7 @@ export default function Transitos() {
             <div>
               <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Tu nombre</label>
               <input required maxLength={60} value={form.nombre}
-                onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
+                onChange={e => { setForm(f => ({ ...f, nombre: e.target.value })); updateProfile({ nombre: e.target.value }) }}
                 className={inputCls} placeholder="Tu nombre" />
             </div>
 
@@ -94,7 +99,7 @@ export default function Transitos() {
               <div>
                 <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Fecha de nacimiento</label>
                 <input required type="date" value={form.fecha_nacimiento}
-                  onChange={e => setForm(f => ({ ...f, fecha_nacimiento: e.target.value }))}
+                  onChange={e => { setForm(f => ({ ...f, fecha_nacimiento: e.target.value })); updateProfile({ fecha_nacimiento: e.target.value }) }}
                   className={inputCls} />
               </div>
               <div>
@@ -103,7 +108,7 @@ export default function Transitos() {
                   <span className="normal-case text-mystic-muted/40 ml-1">(opcional)</span>
                 </label>
                 <input type="time" value={form.hora_nacimiento} disabled={noHora}
-                  onChange={e => setForm(f => ({ ...f, hora_nacimiento: e.target.value }))}
+                  onChange={e => { setForm(f => ({ ...f, hora_nacimiento: e.target.value })); updateProfile({ hora_nacimiento: e.target.value }) }}
                   className={`${inputCls} ${noHora ? 'opacity-40 cursor-not-allowed' : ''}`} />
                 <label className="flex items-center gap-1.5 mt-1.5 cursor-pointer">
                   <input type="checkbox" checked={noHora} onChange={e => setNoHora(e.target.checked)}
@@ -116,7 +121,7 @@ export default function Transitos() {
             <div>
               <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Ciudad de nacimiento</label>
               <input required value={form.ciudad}
-                onChange={e => setForm(f => ({ ...f, ciudad: e.target.value }))}
+                onChange={e => { setForm(f => ({ ...f, ciudad: e.target.value })); updateProfile({ ciudad: e.target.value }) }}
                 className={inputCls} placeholder="ej: Ciudad de México, México" />
             </div>
 

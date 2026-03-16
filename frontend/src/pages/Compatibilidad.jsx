@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
+import { useUserProfile } from '../hooks/useUserProfile'
 import StarField from '../components/StarField'
 import ModuleResult from '../components/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
@@ -36,12 +37,17 @@ function ScoreMeter({ score }) {
 
 export default function Compatibilidad() {
   const { text, isStreaming, error, meta, stream, reset } = useModuleStream()
+  const { profile, updateProfile } = useUserProfile()
 
   const [step, setStep]   = useState('form')   // form | reading
   const [score, setScore] = useState(null)
   const [form, setForm]   = useState({
-    nombre_a: '', fecha_a: '', ciudad_a: '',
-    nombre_b: '', fecha_b: '', ciudad_b: '',
+    nombre_a: profile.nombre           || '',
+    fecha_a:  profile.fecha_nacimiento || '',
+    ciudad_a: profile.ciudad           || '',
+    nombre_b: profile.nombre_b         || '',
+    fecha_b:  profile.fecha_b          || '',
+    ciudad_b: profile.ciudad_b         || '',
   })
 
   useEffect(() => {
@@ -99,17 +105,17 @@ export default function Compatibilidad() {
                 <h3 className="text-blue-300/80 text-xs tracking-widest uppercase font-sans">Tú</h3>
                 <div>
                   <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Nombre</label>
-                  <input required value={form.nombre_a} onChange={e => setForm(f => ({ ...f, nombre_a: e.target.value }))}
+                  <input required value={form.nombre_a} onChange={e => { setForm(f => ({ ...f, nombre_a: e.target.value })); updateProfile({ nombre: e.target.value }) }}
                     className={inputCls} placeholder="Tu nombre" />
                 </div>
                 <div>
                   <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Fecha de nacimiento</label>
-                  <input required type="date" value={form.fecha_a} onChange={e => setForm(f => ({ ...f, fecha_a: e.target.value }))}
+                  <input required type="date" value={form.fecha_a} onChange={e => { setForm(f => ({ ...f, fecha_a: e.target.value })); updateProfile({ fecha_nacimiento: e.target.value }) }}
                     className={inputCls} />
                 </div>
                 <div>
                   <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Ciudad de nacimiento <span className="normal-case text-mystic-muted/40">(opcional)</span></label>
-                  <input value={form.ciudad_a} onChange={e => setForm(f => ({ ...f, ciudad_a: e.target.value }))}
+                  <input value={form.ciudad_a} onChange={e => { setForm(f => ({ ...f, ciudad_a: e.target.value })); updateProfile({ ciudad: e.target.value }) }}
                     className={inputCls} placeholder="ej: Madrid, España" />
                 </div>
               </div>
@@ -119,17 +125,17 @@ export default function Compatibilidad() {
                 <h3 className="text-pink-300/80 text-xs tracking-widest uppercase font-sans">La otra persona</h3>
                 <div>
                   <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Nombre</label>
-                  <input required value={form.nombre_b} onChange={e => setForm(f => ({ ...f, nombre_b: e.target.value }))}
+                  <input required value={form.nombre_b} onChange={e => { setForm(f => ({ ...f, nombre_b: e.target.value })); updateProfile({ nombre_b: e.target.value }) }}
                     className={inputCls} placeholder="Su nombre" />
                 </div>
                 <div>
                   <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Fecha de nacimiento</label>
-                  <input required type="date" value={form.fecha_b} onChange={e => setForm(f => ({ ...f, fecha_b: e.target.value }))}
+                  <input required type="date" value={form.fecha_b} onChange={e => { setForm(f => ({ ...f, fecha_b: e.target.value })); updateProfile({ fecha_b: e.target.value }) }}
                     className={inputCls} />
                 </div>
                 <div>
                   <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Ciudad de nacimiento <span className="normal-case text-mystic-muted/40">(opcional)</span></label>
-                  <input value={form.ciudad_b} onChange={e => setForm(f => ({ ...f, ciudad_b: e.target.value }))}
+                  <input value={form.ciudad_b} onChange={e => { setForm(f => ({ ...f, ciudad_b: e.target.value })); updateProfile({ ciudad_b: e.target.value }) }}
                     className={inputCls} placeholder="ej: Barcelona, España" />
                 </div>
               </div>

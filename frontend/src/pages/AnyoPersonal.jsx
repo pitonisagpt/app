@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
+import { useUserProfile } from '../hooks/useUserProfile'
 import StarField from '../components/StarField'
 import ModuleResult from '../components/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
@@ -11,11 +12,15 @@ const NUMBER_COLORS = {
 
 export default function AnyoPersonal() {
   const { text, isStreaming, error, meta, stream, reset } = useModuleStream()
+  const { profile, updateProfile } = useUserProfile()
 
   const [step, setStep]   = useState('form')   // form | number | reading
   const [numero, setNumero] = useState(null)
   const [archetype, setArchetype] = useState('')
-  const [form, setForm]   = useState({ nombre: '', fecha_nacimiento: '' })
+  const [form, setForm]   = useState({
+    nombre: profile.nombre || '',
+    fecha_nacimiento: profile.fecha_nacimiento || '',
+  })
 
   useEffect(() => {
     if (meta?.__anyo__) {
@@ -73,14 +78,14 @@ export default function AnyoPersonal() {
             <div>
               <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Tu nombre</label>
               <input required maxLength={60} value={form.nombre}
-                onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
+                onChange={e => { setForm(f => ({ ...f, nombre: e.target.value })); updateProfile({ nombre: e.target.value }) }}
                 className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-2.5 text-mystic-text text-sm placeholder:text-mystic-muted/40 focus:outline-none focus:border-violet-400/50"
                 placeholder="Tu nombre" />
             </div>
             <div>
               <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Fecha de nacimiento</label>
               <input required type="date" value={form.fecha_nacimiento}
-                onChange={e => setForm(f => ({ ...f, fecha_nacimiento: e.target.value }))}
+                onChange={e => { setForm(f => ({ ...f, fecha_nacimiento: e.target.value })); updateProfile({ fecha_nacimiento: e.target.value }) }}
                 className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-2.5 text-mystic-text text-sm focus:outline-none focus:border-violet-400/50" />
             </div>
             <div className="text-center pt-2">

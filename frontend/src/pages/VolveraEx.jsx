@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useUserProfile } from '../hooks/useUserProfile'
 import Navbar from '../components/Navbar'
 import StarField from '../components/StarField'
 import CardDisplay from '../components/CardDisplay'
@@ -81,12 +82,13 @@ export default function VolveraEx() {
     .map(s => ({ id: parseInt(s), reversed: s.endsWith('r') }))
     .filter(({ id }) => !isNaN(id) && id >= 0)
   const { text, isStreaming, error, stream, reset } = useModuleStream()
+  const { profile, updateProfile } = useUserProfile()
 
   const [step, setStep]           = useState('form')   // form | cards | reading
   const [cards, setCards]         = useState([])
   const [revealedCount, setRevealed] = useState(0)
   const [form, setForm]           = useState({
-    nombre: '', ex_nombre: '', tiempo: '', razon: '', contacto: '',
+    nombre: profile.nombre || '', ex_nombre: '', tiempo: '', razon: '', contacto: '',
   })
 
   function handleFormSubmit(e) {
@@ -157,7 +159,7 @@ export default function VolveraEx() {
               <div>
                 <label className="block text-mystic-muted/70 text-xs tracking-widest uppercase mb-1.5">Tu nombre</label>
                 <input required maxLength={60} value={form.nombre}
-                  onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
+                  onChange={e => { setForm(f => ({ ...f, nombre: e.target.value })); updateProfile({ nombre: e.target.value }) }}
                   className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-2.5 text-mystic-text text-sm placeholder:text-mystic-muted/40 focus:outline-none focus:border-rose-400/50"
                   placeholder="Tu nombre" />
               </div>

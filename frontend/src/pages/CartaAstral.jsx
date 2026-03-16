@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useUserProfile, profileToCartaAstral, cartaAstralToProfile } from '../hooks/useUserProfile'
 import StarField from '../components/StarField'
 import Navbar from '../components/Navbar'
 import OracleMarkdown from '../components/OracleMarkdown'
@@ -462,11 +463,13 @@ function LoadingOracle({ phase }) {
 // ── Main page ────────────────────────────────────────────────────────────────
 export default function CartaAstral() {
   const currentYear = new Date().getFullYear()
+  const { profile, updateProfile } = useUserProfile()
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState(() => ({
     name: '', day: '', month: '', year: '', hour: '', minute: '', city: '',
     birthTimeKnown: true,
-  })
+    ...profileToCartaAstral(profile),
+  }))
   const [error, setError]             = useState('')
   const [loading, setLoading]         = useState(false)
   const [chart, setChart]             = useState(null)
@@ -479,7 +482,11 @@ export default function CartaAstral() {
   const displayedText = useTypewriter(readingText, streaming)
 
   function setField(key, val) {
-    setForm(f => ({ ...f, [key]: val }))
+    setForm(f => {
+      const next = { ...f, [key]: val }
+      updateProfile(cartaAstralToProfile(next))
+      return next
+    })
     setError('')
   }
 
