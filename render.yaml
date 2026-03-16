@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: pitonisa-gpt-backend
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    envVars:
+      - key: ALLOWED_ORIGINS
+        sync: false   # set this manually in Render dashboard to your frontend URL
+      - key: ANTHROPIC_API_KEY
+        sync: false
