@@ -1,6 +1,7 @@
 /**
  * ZodiacHeroCards.jsx — Sol / Luna / Ascendente hero cards
  */
+import OraclePulse, { PULSE_MESSAGES } from './OraclePulse'
 
 const SIGN_DATA = {
   Aries:       { symbol: '♈', element: 'Fuego',  modality: 'Cardinal', emoji: '🔥', ruling: 'Marte' },
@@ -96,19 +97,13 @@ function HeroCard({ icon, label, planet, deg, house, signRaw, insight, insightLo
       {/* Insight blurb */}
       {(insight || insightLoading) && (
         <div className="border-t pt-3 mt-1" style={{ borderColor: border }}>
-          {insightLoading ? (
-            <div className="flex gap-1.5 py-1">
-              {[0,1,2].map(i => (
-                <div key={i} className="w-1.5 h-1.5 rounded-full animate-pulse"
-                     style={{ backgroundColor: `${color}50`, animationDelay: `${i*0.2}s` }} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-[12px] font-sans leading-relaxed italic"
-               style={{ color: 'rgba(209,213,219,0.7)' }}>
-              {insight}
-            </p>
-          )}
+          {insightLoading
+            ? <OraclePulse messages={PULSE_MESSAGES.hero} compact />
+            : <p className="text-[12px] font-sans leading-relaxed italic"
+                 style={{ color: 'rgba(209,213,219,0.7)' }}>
+                {insight}
+              </p>
+          }
         </div>
       )}
     </div>

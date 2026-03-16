@@ -7,6 +7,7 @@ import ChartWheel from '../components/ChartWheel'
 import DistributionCharts from '../components/DistributionCharts'
 import ZodiacHeroCards from '../components/ZodiacHeroCards'
 import PatternCards from '../components/PatternCards'
+import OraclePulse, { PULSE_MESSAGES } from '../components/OraclePulse'
 import { useTypewriter } from '../hooks/useTypewriter'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
@@ -94,16 +95,10 @@ function InsightCard({ text, loading }) {
           <p className="text-[10px] uppercase tracking-[0.25em] text-mystic-gold/60 font-sans mb-2">
             La Pitonisa revela
           </p>
-          {loading ? (
-            <div className="flex gap-1.5 py-1">
-              {[0,1,2].map(i => (
-                <div key={i} className="w-1.5 h-1.5 rounded-full bg-mystic-gold/40 animate-pulse"
-                     style={{ animationDelay: `${i * 0.2}s` }} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-mystic-muted/80 text-sm font-sans leading-relaxed italic">{text}</p>
-          )}
+          {loading
+            ? <OraclePulse messages={PULSE_MESSAGES.insight} />
+            : <p className="text-mystic-muted/80 text-sm font-sans leading-relaxed italic">{text}</p>
+          }
         </div>
       </div>
     </div>
@@ -122,16 +117,10 @@ function PlanetReadingCard({ icon, title, subtitle, insightKey, insights, insigh
         <p className="font-display font-semibold text-mystic-accent text-sm">{title}</p>
         {subtitle && <p className="text-[10px] text-mystic-muted/50 font-sans uppercase tracking-wider mt-0.5">{subtitle}</p>}
         <div className="mt-2">
-          {loading ? (
-            <div className="flex gap-1.5 py-1">
-              {[0,1,2].map(i => (
-                <div key={i} className="w-1.5 h-1.5 rounded-full bg-mystic-gold/40 animate-pulse"
-                     style={{ animationDelay: `${i*0.2}s` }} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-mystic-muted/75 text-sm font-sans leading-relaxed italic">{text}</p>
-          )}
+          {loading
+            ? <OraclePulse messages={PULSE_MESSAGES.planets} />
+            : <p className="text-mystic-muted/75 text-sm font-sans leading-relaxed italic">{text}</p>
+          }
         </div>
       </div>
     </div>
