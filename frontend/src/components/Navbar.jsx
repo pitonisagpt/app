@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import HamburgerMenu from './HamburgerMenu'
+import SidebarMenu from './SidebarMenu'
 
 function ArrowLeftIcon() {
   return (
@@ -16,6 +17,12 @@ export default function Navbar() {
     <nav className="relative z-10 border-b border-mystic-border/40 backdrop-blur-md"
          style={{ background: 'linear-gradient(180deg, rgba(16,16,38,0.95), rgba(10,10,24,0.90))' }}>
       <div className="max-w-6xl mx-auto px-5 py-3.5 flex items-center justify-between">
+
+        {/* Left: desktop sidebar toggle + logo */}
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:block">
+            <SidebarMenu />
+          </div>
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group cursor-pointer">
@@ -35,8 +42,9 @@ export default function Navbar() {
             <p className="text-[10px] text-mystic-muted/60 tracking-[0.15em] uppercase font-sans">Tu Oráculo con IA</p>
           </div>
         </Link>
+        </div>
 
-        {/* Desktop: back link — Mobile: hamburger */}
+        {/* Right: desktop back link — Mobile: hamburger */}
         <div className="flex items-center gap-3">
           <Link
             to="/"
