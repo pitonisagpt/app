@@ -40,7 +40,14 @@ const EXTRA_LABEL = {
   north_node: { label: 'Nodo Norte',  icon: '☊' },
 }
 
-const TABS = ['Rueda', 'Planetas', 'Aspectos', 'Casas', 'Energía', 'Patrones']
+const TABS = [
+  { id: 'Rueda',    icon: '🔵', label: 'Rueda'    },
+  { id: 'Planetas', icon: '🪐', label: 'Planetas' },
+  { id: 'Aspectos', icon: '✴️', label: 'Aspectos' },
+  { id: 'Casas',    icon: '🏠', label: 'Casas'    },
+  { id: 'Energía',  icon: '⚡', label: 'Energía'  },
+  { id: 'Patrones', icon: '🌀', label: 'Patrones' },
+]
 
 // ── Insight card shown at the bottom of each tab ─────────────────────────────
 function InsightCard({ text, loading }) {
@@ -146,18 +153,22 @@ function ChartSummary({ chart, insights, insightsLoading }) {
       <ZodiacHeroCards chart={chart} insights={insights} insightsLoading={insightsLoading} />
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-4 bg-mystic-surface/40 rounded-xl p-1 border border-mystic-border/40">
+      <div className="flex gap-1.5 mb-5 overflow-x-auto pb-1 scrollbar-hide">
         {TABS.map(t => (
           <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`flex-1 py-1.5 text-[11px] uppercase tracking-widest font-sans rounded-lg transition-all duration-200 cursor-pointer
-              ${tab === t
-                ? 'bg-mystic-purple/60 text-mystic-gold border border-mystic-gold/20'
-                : 'text-mystic-muted/60 hover:text-mystic-muted'
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`flex-shrink-0 flex flex-col items-center gap-1 px-4 py-2.5 rounded-xl
+              border transition-all duration-200 cursor-pointer min-w-[72px]
+              ${tab === t.id
+                ? 'bg-mystic-purple/50 border-mystic-gold/50 text-mystic-gold shadow-lg shadow-mystic-purple/30'
+                : 'bg-mystic-surface/50 border-mystic-border/50 text-mystic-muted/70 hover:border-mystic-gold/30 hover:text-mystic-muted hover:bg-mystic-surface/80'
               }`}
           >
-            {t}
+            <span className="text-lg leading-none">{t.icon}</span>
+            <span className="text-[11px] uppercase tracking-wider font-sans font-medium whitespace-nowrap">
+              {t.label}
+            </span>
           </button>
         ))}
       </div>
