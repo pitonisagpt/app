@@ -129,8 +129,7 @@ function PlanetReadingCard({ icon, title, subtitle, insightKey, insights, insigh
 }
 
 // ── Birth chart summary grid ─────────────────────────────────────────────────
-function ChartSummary({ chart, insights, insightsLoading }) {
-  const [tab, setTab] = useState('Rueda')
+function ChartSummary({ chart, insights, insightsLoading, tab, setTab }) {
   const planets = chart.planets
   const elemColor = ELEMENT_COLOR[chart.dominant_element] || '#e8c97e'
 
@@ -478,6 +477,7 @@ export default function CartaAstral() {
   const [phaseIdx, setPhaseIdx]       = useState(0)
   const [insights, setInsights]       = useState(null)
   const [insightsLoading, setInsightsLoading] = useState(false)
+  const [chartTab, setChartTab]       = useState('Rueda')
 
   const displayedText = useTypewriter(readingText, streaming)
 
@@ -491,17 +491,33 @@ export default function CartaAstral() {
   }
 
   function validate() {
-    if (!form.name.trim())         return 'Por favor ingresa tu nombre.'
-    if (!form.day || !form.month || !form.year) return 'Por favor ingresa tu fecha de nacimiento completa.'
-    if (!form.city.trim())         return 'Por favor ingresa tu ciudad de nacimiento.'
-    if (form.birthTimeKnown && (!form.hour || !form.minute)) {
-      return 'Por favor ingresa la hora de nacimiento (o desmarca "Conozco mi hora exacta").'
-    }
+    if (!form.name.trim())               return 'Por favor ingresa tu nombre.'
+    if (!form.day)                       return 'Por favor selecciona el día de nacimiento.'
+    if (!form.month)                     return 'Por favor selecciona el mes de nacimiento.'
+    if (!form.year)                      return 'Por favor ingresa el año de nacimiento.'
+    if (!form.city.trim())               return 'Por favor ingresa tu ciudad de nacimiento.'
+    if (form.birthTimeKnown && form.hour === '') return 'Por favor selecciona la hora de nacimiento (o desmarca "Conozco mi hora exacta").'
+    if (form.birthTimeKnown && form.minute === '') return 'Por favor selecciona los minutos (o desmarca "Conozco mi hora exacta").'
     return null
+  }
+
+  // Which fields have a validation issue (for red-border feedback after first submit attempt)
+  const [submitted, setSubmitted] = useState(false)
+  function fieldErr(key) {
+    if (!submitted) return false
+    if (key === 'name')   return !form.name.trim()
+    if (key === 'day')    return !form.day
+    if (key === 'month')  return !form.month
+    if (key === 'year')   return !form.year
+    if (key === 'city')   return !form.city.trim()
+    if (key === 'hour')   return form.birthTimeKnown && form.hour === ''
+    if (key === 'minute') return form.birthTimeKnown && form.minute === ''
+    return false
   }
 
   async function handleSubmit(e) {
     e.preventDefault()
+    setSubmitted(true)
     const err = validate()
     if (err) { setError(err); return }
 
@@ -669,10 +685,10 @@ export default function CartaAstral() {
                 onChange={e => setField('name', e.target.value)}
                 placeholder="Nombre o apodo..."
                 maxLength={80}
-                className="w-full bg-mystic-card border border-mystic-border/80 rounded-xl px-4 py-3
+                className={`w-full bg-mystic-card rounded-xl px-4 py-3
                            text-mystic-text placeholder-mystic-muted/40 font-sans text-sm
-                           focus:outline-none focus:border-mystic-gold/60 focus:ring-2 focus:ring-mystic-gold/15
-                           transition-all duration-200"
+                           focus:outline-none focus:ring-2 transition-all duration-200
+                           border ${fieldErr('name') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
                 style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
               />
             </div>
@@ -687,10 +703,9 @@ export default function CartaAstral() {
                   <select
                     value={form.day}
                     onChange={e => setField('day', e.target.value)}
-                    className="w-full bg-mystic-card border border-mystic-border/80 rounded-xl px-3 py-3
-                               text-mystic-text font-sans text-sm
-                               focus:outline-none focus:border-mystic-gold/60 focus:ring-2 focus:ring-mystic-gold/15
-                               transition-all duration-200 cursor-pointer"
+                    className={`w-full rounded-xl px-3 py-3 text-mystic-text font-sans text-sm
+                               focus:outline-none focus:ring-2 transition-all duration-200 cursor-pointer
+                               border ${fieldErr('day') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
                     style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
                   >
                     <option value="">Día</option>
@@ -703,10 +718,9 @@ export default function CartaAstral() {
                   <select
                     value={form.month}
                     onChange={e => setField('month', e.target.value)}
-                    className="w-full bg-mystic-card border border-mystic-border/80 rounded-xl px-3 py-3
-                               text-mystic-text font-sans text-sm
-                               focus:outline-none focus:border-mystic-gold/60 focus:ring-2 focus:ring-mystic-gold/15
-                               transition-all duration-200 cursor-pointer"
+                    className={`w-full rounded-xl px-3 py-3 text-mystic-text font-sans text-sm
+                               focus:outline-none focus:ring-2 transition-all duration-200 cursor-pointer
+                               border ${fieldErr('month') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
                     style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
                   >
                     <option value="">Mes</option>
@@ -723,10 +737,9 @@ export default function CartaAstral() {
                     placeholder="Año"
                     min={1900}
                     max={currentYear}
-                    className="w-full bg-mystic-card border border-mystic-border/80 rounded-xl px-3 py-3
-                               text-mystic-text placeholder-mystic-muted/40 font-sans text-sm
-                               focus:outline-none focus:border-mystic-gold/60 focus:ring-2 focus:ring-mystic-gold/15
-                               transition-all duration-200"
+                    className={`w-full rounded-xl px-3 py-3 text-mystic-text placeholder-mystic-muted/40 font-sans text-sm
+                               focus:outline-none focus:ring-2 transition-all duration-200
+                               border ${fieldErr('year') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
                     style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
                   />
                 </div>
@@ -765,10 +778,9 @@ export default function CartaAstral() {
                     <select
                       value={form.hour}
                       onChange={e => setField('hour', e.target.value)}
-                      className="w-full bg-mystic-card border border-mystic-border/80 rounded-xl px-3 py-3
-                                 text-mystic-text font-sans text-sm
-                                 focus:outline-none focus:border-mystic-gold/60 focus:ring-2 focus:ring-mystic-gold/15
-                                 transition-all duration-200 cursor-pointer"
+                      className={`w-full rounded-xl px-3 py-3 text-mystic-text font-sans text-sm
+                                 focus:outline-none focus:ring-2 transition-all duration-200 cursor-pointer
+                                 border ${fieldErr('hour') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
                       style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
                     >
                       <option value="">Hora</option>
@@ -781,10 +793,9 @@ export default function CartaAstral() {
                     <select
                       value={form.minute}
                       onChange={e => setField('minute', e.target.value)}
-                      className="w-full bg-mystic-card border border-mystic-border/80 rounded-xl px-3 py-3
-                                 text-mystic-text font-sans text-sm
-                                 focus:outline-none focus:border-mystic-gold/60 focus:ring-2 focus:ring-mystic-gold/15
-                                 transition-all duration-200 cursor-pointer"
+                      className={`w-full rounded-xl px-3 py-3 text-mystic-text font-sans text-sm
+                                 focus:outline-none focus:ring-2 transition-all duration-200 cursor-pointer
+                                 border ${fieldErr('minute') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
                       style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
                     >
                       <option value="">Min</option>
@@ -808,10 +819,10 @@ export default function CartaAstral() {
                 onChange={e => setField('city', e.target.value)}
                 placeholder="ej: Bogotá, Madrid, Ciudad de México..."
                 maxLength={100}
-                className="w-full bg-mystic-card border border-mystic-border/80 rounded-xl px-4 py-3
+                className={`w-full bg-mystic-card rounded-xl px-4 py-3
                            text-mystic-text placeholder-mystic-muted/40 font-sans text-sm
-                           focus:outline-none focus:border-mystic-gold/60 focus:ring-2 focus:ring-mystic-gold/15
-                           transition-all duration-200"
+                           focus:outline-none focus:ring-2 transition-all duration-200
+                           border ${fieldErr('city') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
                 style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
               />
               <p className="text-mystic-muted/40 text-[11px] font-sans mt-1">
@@ -845,9 +856,9 @@ export default function CartaAstral() {
               <LoadingOracle phase={ORACLE_PHASES[phaseIdx]} />
             )}
 
-            {chart && <ChartSummary chart={chart} insights={insights} insightsLoading={insightsLoading} />}
+            {chart && <ChartSummary chart={chart} insights={insights} insightsLoading={insightsLoading} tab={chartTab} setTab={setChartTab} />}
 
-            {(displayedText || (streaming && chart)) && (
+            {chartTab === 'Rueda' && (displayedText || (streaming && chart)) && (
               <div className="w-full">
                 {/* Header bar */}
                 <div className="flex items-center gap-3 mb-2 px-2">
@@ -884,8 +895,8 @@ export default function CartaAstral() {
               </div>
             )}
 
-            {/* Tema de Vida — shown after streaming completes */}
-            {!streaming && displayedText && insights?.tema_vida && (
+            {/* Tema de Vida — shown after streaming completes, only on Rueda tab */}
+            {chartTab === 'Rueda' && !streaming && displayedText && insights?.tema_vida && (
               <div className="mt-6 animate-fadeIn">
                 <div className="flex items-center gap-3 mb-3 px-1">
                   <div className="flex-1 h-px bg-gradient-to-r from-transparent to-mystic-gold/30" />
@@ -904,7 +915,7 @@ export default function CartaAstral() {
               </div>
             )}
 
-            {!streaming && displayedText && (
+            {chartTab === 'Rueda' && !streaming && displayedText && (
               <div className="mt-10 flex justify-center gap-4 animate-fadeIn">
                 <button
                   onClick={handleReset}

@@ -63,8 +63,8 @@ export function profileToCartaAstral(profile) {
 
   if (profile.hora_nacimiento) {
     const [h, min] = profile.hora_nacimiento.split(':')
-    if (h   !== undefined) out.hour   = h
-    if (min !== undefined) out.minute = min
+    if (h   !== undefined) out.hour   = String(parseInt(h, 10))   // strip leading zero: "08" → "8"
+    if (min !== undefined) out.minute = String(parseInt(min, 10)) // strip leading zero: "05" → "5"
   }
 
   return out
