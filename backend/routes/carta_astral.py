@@ -176,9 +176,38 @@ def build_insights_prompt(chart: dict) -> str:
     ) or "ninguno destacado"
 
     retro_set = set(chart["retrograde_planets"])
+    extra = chart.get("extra_points", {})
 
     def retro_note(key):
         return " (retrógrado)" if key in retro_set else ""
+
+    def extra_line(key, label):
+        pt = extra.get(key)
+        if not pt:
+            return ""
+        return f"\n{label}: {pt['sign']} ({pt.get('house', '')})"
+
+    chiron_line     = extra_line("chiron",     "Quirón")
+    lilith_line     = extra_line("lilith",     "Lilith")
+    north_node_line = extra_line("north_node", "Nodo Norte")
+    extra_data = chiron_line + lilith_line + north_node_line
+
+    has_chiron     = bool(extra.get("chiron"))
+    has_lilith     = bool(extra.get("lilith"))
+    has_north_node = bool(extra.get("north_node"))
+
+    chiron_key = (
+        f'  "chiron": "Quirón en {extra["chiron"]["sign"]} para {name} — su herida más profunda, el dolor que no cierra pero que se convierte en don y sabiduría cuando se trabaja",'
+        if has_chiron else ""
+    )
+    lilith_key = (
+        f'  "lilith": "Lilith en {extra["lilith"]["sign"]} para {name} — su lado salvaje, lo que reprime o niega pero que necesita integrar para ser auténtico/a y libre",'
+        if has_lilith else ""
+    )
+    north_node_key = (
+        f'  "north_node": "Nodo Norte en {extra["north_node"]["sign"]} para {name} — la dirección de su crecimiento, lo que vino a aprender en esta vida aunque le resulte incómodo",'
+        if has_north_node else ""
+    )
 
     return f"""Carta Natal de {name}
 Fecha: {chart['birth_date']} · Ciudad: {chart['birth_city']}
@@ -187,12 +216,12 @@ Mercurio en {p['mercurio']['sign']} ({p['mercurio']['house']}){retro_note('mercu
 Venus en {p['venus']['sign']} ({p['venus']['house']}) · Marte en {p['marte']['sign']} ({p['marte']['house']}){retro_note('marte')}
 Júpiter en {p['jupiter']['sign']} ({p['jupiter']['house']}) · Saturno en {p['saturno']['sign']} ({p['saturno']['house']}){retro_note('saturno')}
 Urano en {p['urano']['sign']} ({p['urano']['house']}){retro_note('urano')} · Neptuno en {p['neptuno']['sign']} ({p['neptuno']['house']}){retro_note('neptuno')} · Plutón en {p['pluton']['sign']} ({p['pluton']['house']}){retro_note('pluton')}
-Ascendente: {chart['ascendant']} · MC: {chart['midheaven']}
+Ascendente: {chart['ascendant']} · MC: {chart['midheaven']}{extra_data}
 Elemento dominante: {chart['dominant_element']} · Modalidad: {chart['dominant_modality']}
 Aspectos más exactos: {asp_str}
 Retrógrados: {retro}
 
-Genera exactamente este JSON. Cada valor debe tener 60–90 palabras, tono directo y personal, segunda persona, mencionando el nombre {name}. Concreto y reconocible — que {name} se vea reflejado/a:
+Genera exactamente este JSON. Cada valor: 60–90 palabras, tono directo y personal, segunda persona, mencionando {name}. Concreto — que {name} se vea reflejado/a:
 {{
   "rueda": "qué revela la configuración global de la carta — su geometría energética y propósito de alma",
   "planetas": "síntesis de las posiciones planetarias más poderosas y cómo moldean el carácter de {name}",
@@ -210,6 +239,9 @@ Genera exactamente este JSON. Cada valor debe tener 60–90 palabras, tono direc
   "neptuno": "Neptuno en {p['neptuno']['sign']} para {name} — sus ideales profundos, su espiritualidad y dónde puede perderse o soñar",
   "pluton": "Plutón en {p['pluton']['sign']} para {name} — su poder de transformación, lo que destruye para renacer, su fuerza más oscura y profunda",
   "ascendente": "el Ascendente en {chart['ascendant']} para {name} — cómo se proyecta al mundo, su máscara social y primer impacto",
+{chiron_key}
+{lilith_key}
+{north_node_key}
   "tema_vida": "el gran tema de vida, el don más profundo y el propósito del alma de {name} según la síntesis total de su carta natal",
   "patrones": "los patrones configuracionales más poderosos de la carta de {name} — planeta rector, esteliones, grandes trígonos o cruces en T — y su mensaje para su destino"
 }}"""

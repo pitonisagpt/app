@@ -37,9 +37,9 @@ const ASPECT_TYPE_COLOR = {
 }
 
 const EXTRA_LABEL = {
-  chiron:     { label: 'Quirón',      icon: '⚷' },
-  lilith:     { label: 'Lilith',      icon: '⚸' },
-  north_node: { label: 'Nodo Norte',  icon: '☊' },
+  chiron:     { label: 'Quirón',     icon: '⚷', subtitle: 'Herida y don',        insightKey: 'chiron' },
+  lilith:     { label: 'Lilith',     icon: '⚸', subtitle: 'Sombra y autenticidad', insightKey: 'lilith' },
+  north_node: { label: 'Nodo Norte', icon: '☊', subtitle: 'Propósito de vida',   insightKey: 'north_node' },
 }
 
 const PLANET_INSIGHT_KEY = {
@@ -307,14 +307,19 @@ function ChartSummary({ chart, insights, insightsLoading, tab, setTab }) {
                 {Object.entries(chart.extra_points).map(([key, pt]) => {
                   const cfg = EXTRA_LABEL[key]
                   if (!cfg || !pt) return null
+                  const isSelected = selectedPlanet === key
                   return (
-                    <div key={key}
-                      className="bg-mystic-surface/40 border border-mystic-border/40 rounded-xl p-2.5 text-center">
+                    <button key={key}
+                      onClick={() => setSelectedPlanet(isSelected ? null : key)}
+                      className={`border rounded-xl p-2.5 text-center w-full transition-colors duration-200
+                        ${isSelected
+                          ? 'border-mystic-gold/60 bg-mystic-surface/80'
+                          : 'bg-mystic-surface/40 border-mystic-border/40 hover:border-mystic-gold/30'}`}>
                       <span className="text-base">{cfg.icon}</span>
                       <p className="text-[10px] text-mystic-muted/60 font-sans mt-0.5">{cfg.label}</p>
                       <p className="text-mystic-accent text-xs font-display font-semibold">{pt.sign}</p>
                       <p className="text-mystic-muted/40 text-[10px] font-sans">{pt.deg}</p>
-                    </div>
+                    </button>
                   )
                 })}
               </div>
@@ -327,21 +332,25 @@ function ChartSummary({ chart, insights, insightsLoading, tab, setTab }) {
             </p>
           )}
 
-          {/* Planet insight — shown when a planet is selected */}
+          {/* Planet / extra-point insight — shown when an item is selected */}
           {selectedPlanet && (() => {
-            const insightKey = PLANET_INSIGHT_KEY[selectedPlanet]
-            const pl = planets[selectedPlanet]
+            const extraCfg = EXTRA_LABEL[selectedPlanet]
+            const insightKey = extraCfg ? extraCfg.insightKey : PLANET_INSIGHT_KEY[selectedPlanet]
+            const icon     = extraCfg ? extraCfg.icon     : PLANET_ICONS[selectedPlanet]
+            const label    = extraCfg ? extraCfg.label    : PLANET_LABEL[selectedPlanet]
+            const subtitle = extraCfg ? extraCfg.subtitle : PLANET_SUBTITLE[selectedPlanet]
+            const pt       = extraCfg ? chart.extra_points?.[selectedPlanet] : planets[selectedPlanet]
             return (
               <div className="rounded-xl border border-mystic-gold/20 bg-mystic-surface/50 p-4 overflow-hidden relative animate-fadeIn">
                 <div className="absolute inset-0 bg-gradient-to-br from-mystic-purple/5 to-transparent pointer-events-none" />
                 <div className="flex items-start gap-3">
-                  <span className="text-xl select-none mt-0.5" aria-hidden="true">{PLANET_ICONS[selectedPlanet]}</span>
+                  <span className="text-xl select-none mt-0.5" aria-hidden="true">{icon}</span>
                   <div className="flex-1">
                     <p className="font-display font-semibold text-mystic-accent text-sm">
-                      {PLANET_LABEL[selectedPlanet]} en {pl?.sign}
+                      {label} en {pt?.sign}
                     </p>
                     <p className="text-[10px] text-mystic-muted/50 font-sans uppercase tracking-wider mt-0.5 mb-2">
-                      {PLANET_SUBTITLE[selectedPlanet]}
+                      {subtitle}
                     </p>
                     {insightsLoading && !insights?.[insightKey]
                       ? <OraclePulse messages={PULSE_MESSAGES.planets} />
