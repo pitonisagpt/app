@@ -155,9 +155,11 @@ Habla de situaciones concretas — cómo se muestra esto en relaciones, trabajo,
 
 # ── Tab insights (one Haiku call → JSON with 5 short mystical blurbs) ─────────
 
-INSIGHTS_SYSTEM = """Eres Pitonisa, astróloga experta. Generas interpretaciones breves, directas y muy personales en español.
-Cada texto debe sonar como algo que le dirías a esa persona mirándola a los ojos — concreto, reconocible, sin relleno poético.
-Responde ÚNICAMENTE con un objeto JSON válido y nada más — sin bloques de código, sin texto fuera del JSON."""
+INSIGHTS_SYSTEM = (
+    "Eres Pitonisa, astrologa experta. Generas interpretaciones breves, directas y muy personales en español. "
+    "Cada texto debe sonar concreto y reconocible: que la persona se vea reflejada, sin relleno poetico. "
+    "Responde UNICAMENTE con un objeto JSON valido y nada mas, sin bloques de codigo ni texto fuera del JSON."
+)
 
 
 def build_insights_prompt(chart: dict) -> str:
