@@ -21,8 +21,10 @@ ARCHETYPES: dict[int, tuple[str, str]] = {
 }
 
 SYSTEM_PROMPT = (
-    "Eres Pitonisa, una vidente mística y numeróloga. Hablas en español con tono profético "
-    "y esperanzador, directamente al consultante usando 'tú'. Responde siempre en español."
+    "Eres Pitonisa, numeróloga experta. Hablas en español con tono directo y esperanzador, "
+    "usando 'tú'. Describes lo que le espera a una persona este año en términos concretos y reconocibles: "
+    "no 'las energías del 4 te invitan a construir', sino 'este es un año de trabajo duro y resultados reales'. "
+    "Responde siempre en español."
 )
 
 
@@ -43,33 +45,32 @@ def _calculate(day: int, month: int) -> int:
 
 def _build_prompt(nombre: str, numero: int, archetype: tuple) -> str:
     nombre_arch, keywords = archetype
-    return f"""Eres Pitonisa. {nombre} está viviendo su Año Personal {numero}: "{nombre_arch}".
-Palabras clave de este año: {keywords}.
+    return f"""Eres Pitonisa. {nombre} está en su Año Personal {numero}: "{nombre_arch}".
+Temas principales de este año: {keywords}.
 
-Genera una predicción profunda y personal para {nombre}. \
-Integra el número {numero} y su arquetipo a lo largo de toda la lectura.
+Escribe una lectura personal y concreta para {nombre} sobre lo que le trae este año.
+Integra el número {numero} y su significado a lo largo de toda la lectura.
 
-Interpreta las 6 áreas de vida, cada una en su propio párrafo. \
-No uses encabezados: introduce cada área naturalmente \
-(ej: "En el territorio del amor...", "Tu camino laboral este año...").
+Cubre las 6 áreas de vida, cada una en párrafo propio, sin usar títulos — introdúcelas
+con frases naturales como "En el amor, este año..." o "Laboralmente, lo que viene para ti...".
 
-Áreas a cubrir (en este orden):
+Áreas (en este orden):
 1. Amor y relaciones
 2. Trabajo y vocación
-3. Dinero y abundancia
-4. Salud y energía vital
+3. Dinero y finanzas
+4. Salud y bienestar
 5. Familia y vínculos cercanos
-6. Crecimiento espiritual
+6. Desarrollo personal
 
-Después de las 6 áreas, escribe un párrafo de cierre que incluya:
-- El mes de mayor energía este año (entre enero y diciembre) y por qué
-- El mayor desafío y la fortaleza interior que lo supera
-- Un mantra de una sola oración para este año, original y poderoso
+Cierra con un párrafo que diga:
+- Cuál será el mes más intenso o importante del año y por qué
+- El principal obstáculo que {nombre} probablemente va a enfrentar y cómo superarlo
+- Una frase corta que resuma bien lo que es este año para {nombre}
 
-Habla directamente a {nombre} usando "tú". Usa frases como "las energías te invitan a...", \
-"el universo te prepara para...", "hay una ventana de oportunidad en...". \
-Sin afirmaciones de certeza absoluta. Sin encabezados, sin listas. \
-Tono profético pero esperanzador. Extensión: 450-600 palabras."""
+Habla directo a {nombre} usando "tú". Sé concreta: en vez de "hay oportunidades de crecimiento", \
+di qué tipo de oportunidades y en qué contexto. Nada de "las energías te invitan" — habla de \
+situaciones reales que una persona vive. Sin predicciones absolutas, pero sí con claridad. \
+Sin encabezados, sin listas. Extensión: 450-580 palabras."""
 
 
 async def _event_gen(req: AnyoPersonalRequest, numero: int, archetype: tuple):

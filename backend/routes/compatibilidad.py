@@ -10,8 +10,10 @@ from services.synastry import calculate_synastry
 router = APIRouter()
 
 SYSTEM_PROMPT = (
-    "Eres Pitonisa, una vidente astróloga experta en sinastría. Hablas en español con tono "
-    "místico y cálido, directamente al consultante usando 'tú'. Responde siempre en español."
+    "Eres Pitonisa, una astróloga experta en relaciones de pareja. Hablas en español con tono "
+    "directo, cálido y honesto, usando 'tú'. Evitas el lenguaje abstracto y místico: hablas de "
+    "dinámicas reales de pareja, de cómo se complementan o chocan dos personas en la vida cotidiana. "
+    "Responde siempre en español."
 )
 
 
@@ -46,33 +48,36 @@ def _build_prompt(req: CompatibilidadRequest, data: dict) -> str:
         for a in tension
     ) or "- Sin tensiones planetarias destacadas"
 
-    return f"""Eres Pitonisa. Estás leyendo la sinastría entre {req.nombre_a} y {req.nombre_b}.
+    return f"""Eres Pitonisa. Estás leyendo la compatibilidad entre {req.nombre_a} y {req.nombre_b}.
 
-Puntuación de compatibilidad energética: {score}%
-Aspecto dominante de la conexión: {dominant_txt}
+Puntuación de compatibilidad: {score}%
+Aspecto principal de la conexión: {dominant_txt}
 
-Aspectos de armonía entre las cartas:
+Aspectos de armonía:
 {harmony_lines}
 
-Aspectos de tensión y crecimiento:
+Aspectos de tensión:
 {tension_lines}
 
 Escribe una interpretación de 4 párrafos:
 
-Primero — describe la naturaleza de su atracción y qué los une magnéticamente. \
-Menciona el aspecto dominante y explica qué energía despierta en cada uno.
+Primero — explica qué conecta a {req.nombre_a} y {req.nombre_b}: qué se atraen, \
+qué tienen en común en su manera de ver la vida, qué sienten cuando están juntos. \
+Menciona el aspecto dominante explicando qué significa en términos concretos de pareja.
 
-Segundo — los dones de esta unión: qué se potencian mutuamente, qué crean juntos \
-que no podrían crear solos.
+Segundo — qué funciona bien entre ellos: en qué se complementan, qué se dan el uno al otro, \
+qué fluye sin esfuerzo. Habla de situaciones reales de convivencia o relación.
 
-Tercero — sin dramatizar, el mayor desafío de esta relación y qué patrón energético \
-necesitan comprender para no repetirlo.
+Tercero — sin dramatizar, cuál es el principal punto de fricción y por qué aparece. \
+Qué patrón tienden a repetir, qué conversación evitan tener, dónde suelen chocar. \
+Que sea útil, no alarmante.
 
-Cuarto — termina con una pregunta reflexiva para {req.nombre_a} sobre lo que esta \
-unión le enseña sobre sí mismo/a.
+Cuarto — termina con una pregunta directa para {req.nombre_a} sobre lo que esta relación \
+le está mostrando de sí misma/o.
 
 Habla directamente a {req.nombre_a} usando "tú". Menciona a {req.nombre_b} por nombre. \
-Sin afirmaciones deterministas. Tono místico y cálido. Sin encabezados. 350-450 palabras."""
+Sin predicciones absolutas. Tono directo y cálido, como alguien que conoce bien las relaciones. \
+Sin encabezados. 350-440 palabras."""
 
 
 async def _event_gen(req: CompatibilidadRequest, data: dict):

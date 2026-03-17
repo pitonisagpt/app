@@ -32,15 +32,17 @@ const MAJOR_ARCANA = [
   { id: 20, name: 'El Juicio',              symbol: '📯' },
   { id: 21, name: 'El Mundo',               symbol: '🌍' },
 ]
+const BASTOS_SYMBOLS  = ['🌱','🌿','🌲','🎉','🥊','🏅','🛡️','🚀','🏰','🎒','🦊','🐎','🌺','🦅']
+const COPAS_SYMBOLS   = ['💧','💞','🥂','😔','😢','🌹','🌈','🚣','🍾','🏡','🧚','🦢','🧜','🐋']
+const ESPADAS_SYMBOLS = ['⚔️','😌','💔','😴','🗡️','⛵','🦝','🪢','😰','💥','🦋','🌪️','🧊','🗺️']
+const PENTS_SYMBOLS   = ['🪙','🔄','🏗️','🤑','🚪','🎁','🌾','🔨','🦚','💎','📚','🐂','🌻','🏔️']
+const RANKS = ['As','Dos','Tres','Cuatro','Cinco','Seis','Siete','Ocho','Nueve','Diez','Sota','Caballo','Reina','Rey']
+
 const MINOR_ARCANA = [
-  ...['As','Dos','Tres','Cuatro','Cinco','Seis','Siete','Ocho','Nueve','Diez','Sota','Caballo','Reina','Rey']
-    .map((n, i) => ({ id: 22 + i, name: `${n} de Bastos`, symbol: '🌿' })),
-  ...['As','Dos','Tres','Cuatro','Cinco','Seis','Siete','Ocho','Nueve','Diez','Sota','Caballo','Reina','Rey']
-    .map((n, i) => ({ id: 36 + i, name: `${n} de Copas`, symbol: '🍷' })),
-  ...['As','Dos','Tres','Cuatro','Cinco','Seis','Siete','Ocho','Nueve','Diez','Sota','Caballo','Reina','Rey']
-    .map((n, i) => ({ id: 50 + i, name: `${n} de Espadas`, symbol: '⚔️' })),
-  ...['As','Dos','Tres','Cuatro','Cinco','Seis','Siete','Ocho','Nueve','Diez','Sota','Caballo','Reina','Rey']
-    .map((n, i) => ({ id: 64 + i, name: `${n} de Pentáculos`, symbol: '🪙' })),
+  ...RANKS.map((n, i) => ({ id: 22 + i, name: `${n} de Bastos`,     symbol: BASTOS_SYMBOLS[i]  })),
+  ...RANKS.map((n, i) => ({ id: 36 + i, name: `${n} de Copas`,      symbol: COPAS_SYMBOLS[i]   })),
+  ...RANKS.map((n, i) => ({ id: 50 + i, name: `${n} de Espadas`,    symbol: ESPADAS_SYMBOLS[i] })),
+  ...RANKS.map((n, i) => ({ id: 64 + i, name: `${n} de Pentáculos`, symbol: PENTS_SYMBOLS[i]   })),
 ]
 const ALL_CARDS = [...MAJOR_ARCANA, ...MINOR_ARCANA]
 
