@@ -150,7 +150,7 @@ Cubre en párrafos propios y fluidos:
 9. Cierre: el don principal de {chart['name']} y la lección central de su vida según esta carta.
 
 Extensión: 700–880 palabras. Párrafos fluidos. Dirígete a {chart['name']} en segunda persona.
-Habla de situaciones concretas — cómo se muestra esto en relaciones, trabajo, decisiones — no solo de arquetipos.
+Habla de situaciones concretas: cómo se muestra esto en relaciones, trabajo, decisiones. No solo arquetipos."""
 
 
 # ── Tab insights (one Haiku call → JSON with 5 short mystical blurbs) ─────────
