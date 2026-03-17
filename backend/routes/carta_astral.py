@@ -175,26 +175,41 @@ def build_insights_prompt(chart: dict) -> str:
         f"{a['planet1']} {a['symbol']} {a['planet2']}" for a in top_aspects
     ) or "ninguno destacado"
 
+    retro_set = set(chart["retrograde_planets"])
+
+    def retro_note(key):
+        return " (retrógrado)" if key in retro_set else ""
+
     return f"""Carta Natal de {name}
 Fecha: {chart['birth_date']} · Ciudad: {chart['birth_city']}
 Sol en {p['sol']['sign']} ({p['sol']['house']}) · Luna en {p['luna']['sign']} ({p['luna']['house']})
+Mercurio en {p['mercurio']['sign']} ({p['mercurio']['house']}){retro_note('mercurio')}
+Venus en {p['venus']['sign']} ({p['venus']['house']}) · Marte en {p['marte']['sign']} ({p['marte']['house']}){retro_note('marte')}
+Júpiter en {p['jupiter']['sign']} ({p['jupiter']['house']}) · Saturno en {p['saturno']['sign']} ({p['saturno']['house']}){retro_note('saturno')}
+Urano en {p['urano']['sign']} ({p['urano']['house']}){retro_note('urano')} · Neptuno en {p['neptuno']['sign']} ({p['neptuno']['house']}){retro_note('neptuno')} · Plutón en {p['pluton']['sign']} ({p['pluton']['house']}){retro_note('pluton')}
 Ascendente: {chart['ascendant']} · MC: {chart['midheaven']}
 Elemento dominante: {chart['dominant_element']} · Modalidad: {chart['dominant_modality']}
 Aspectos más exactos: {asp_str}
 Retrógrados: {retro}
 
-Genera exactamente este JSON. Cada valor debe tener 70–100 palabras, tono directo y personal, segunda persona, mencionando el nombre {name}. Que cada texto suene concreto y reconocible — que {name} se vea reflejado/a:
+Genera exactamente este JSON. Cada valor debe tener 60–90 palabras, tono directo y personal, segunda persona, mencionando el nombre {name}. Concreto y reconocible — que {name} se vea reflejado/a:
 {{
   "rueda": "qué revela la configuración global de la carta — su geometría energética y propósito de alma",
   "planetas": "síntesis de las posiciones planetarias más poderosas y cómo moldean el carácter de {name}",
   "aspectos": "qué dicen los aspectos entre planetas sobre los dones y tensiones creativas de {name}",
   "casas": "las casas más cargadas y qué áreas de vida llaman a {name} a crecer",
   "energia": "cómo el elemento {chart['dominant_element']} y la modalidad {chart['dominant_modality']} colorean toda la vida de {name}",
-  "sol": "interpretación personal y profunda del Sol en {p['sol']['sign']} para {name} — su esencia vital, identidad y propósito consciente",
-  "luna": "interpretación personal de la Luna en {p['luna']['sign']} para {name} — sus emociones, necesidades íntimas y mundo interior",
-  "ascendente": "interpretación del Ascendente en {chart['ascendant']} para {name} — cómo se proyecta al mundo, su máscara social y primer impacto",
-  "venus_marte": "cómo Venus en {p['venus']['sign']} y Marte en {p['marte']['sign']} definen el amor, la atracción y la pasión de {name}",
-  "saturno_jupiter": "qué revelan Júpiter en {p['jupiter']['sign']} y Saturno en {p['saturno']['sign']} sobre la expansión, los límites y las lecciones kármicas de {name}",
+  "sol": "el Sol en {p['sol']['sign']} para {name} — su esencia vital, identidad y propósito consciente",
+  "luna": "la Luna en {p['luna']['sign']} para {name} — sus emociones, necesidades íntimas y mundo interior",
+  "mercurio": "Mercurio en {p['mercurio']['sign']} para {name} — cómo piensa, cómo se expresa, cómo procesa la información y toma decisiones",
+  "venus": "Venus en {p['venus']['sign']} para {name} — qué busca en el amor, cómo atrae, qué necesita para sentirse querido/a",
+  "marte": "Marte en {p['marte']['sign']} para {name} — cómo actúa, cómo se enoja, cómo persigue lo que quiere",
+  "jupiter": "Júpiter en {p['jupiter']['sign']} para {name} — dónde tiene suerte natural, cómo crece y dónde confía en la vida",
+  "saturno": "Saturno en {p['saturno']['sign']} para {name} — qué le cuesta, dónde debe construir con esfuerzo, su lección más dura",
+  "urano": "Urano en {p['urano']['sign']} para {name} — dónde rompe moldes, dónde necesita libertad, su impulso de cambio generacional",
+  "neptuno": "Neptuno en {p['neptuno']['sign']} para {name} — sus ideales profundos, su espiritualidad y dónde puede perderse o soñar",
+  "pluton": "Plutón en {p['pluton']['sign']} para {name} — su poder de transformación, lo que destruye para renacer, su fuerza más oscura y profunda",
+  "ascendente": "el Ascendente en {chart['ascendant']} para {name} — cómo se proyecta al mundo, su máscara social y primer impacto",
   "tema_vida": "el gran tema de vida, el don más profundo y el propósito del alma de {name} según la síntesis total de su carta natal",
   "patrones": "los patrones configuracionales más poderosos de la carta de {name} — planeta rector, esteliones, grandes trígonos o cruces en T — y su mensaje para su destino"
 }}"""
@@ -205,7 +220,7 @@ async def generate_tab_insights(chart: dict) -> dict:
     try:
         msg = await client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=2500,
+            max_tokens=4000,
             system=INSIGHTS_SYSTEM,
             messages=[{"role": "user", "content": build_insights_prompt(chart)}],
         )
@@ -288,8 +303,8 @@ async def carta_astral(raw_request: Request):
                 year=req.year,
                 month=req.month,
                 day=req.day,
-                hour=req.hour or 12,
-                minute=req.minute or 0,
+                hour=req.hour if req.hour is not None else 12,
+                minute=req.minute if req.minute is not None else 0,
                 city=req.city,
                 birth_time_known=req.birth_time_known,
             ),

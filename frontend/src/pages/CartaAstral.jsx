@@ -42,6 +42,26 @@ const EXTRA_LABEL = {
   north_node: { label: 'Nodo Norte',  icon: '☊' },
 }
 
+const PLANET_INSIGHT_KEY = {
+  sol: 'sol', luna: 'luna', mercurio: 'mercurio',
+  venus: 'venus', marte: 'marte',
+  jupiter: 'jupiter', saturno: 'saturno',
+  urano: 'urano', neptuno: 'neptuno', pluton: 'pluton',
+}
+
+const PLANET_SUBTITLE = {
+  sol: 'Identidad y propósito',
+  luna: 'Emociones e interior',
+  mercurio: 'Mente y comunicación',
+  venus: 'Amor y atracción',
+  marte: 'Acción y deseo',
+  jupiter: 'Expansión y suerte',
+  saturno: 'Límites y karma',
+  urano: 'Cambio y liberación',
+  neptuno: 'Ilusión y espiritualidad',
+  pluton: 'Transformación y poder',
+}
+
 const TABS = [
   { id: 'Rueda',    icon: '🔵', label: 'Rueda',    short: 'Mapa visual' },
   { id: 'Planetas', icon: '🪐', label: 'Planetas', short: 'Posiciones' },
@@ -69,8 +89,8 @@ const TAB_INFO = {
   },
   Casas: {
     title: 'Las 12 Casas Astrológicas',
-    desc: 'Las casas dividen el cielo en 12 áreas temáticas de tu vida. Los ángulos (ASC, IC, DSC, MC) son los puntos más poderosos.',
-    hint: 'La Casa 1 (Ascendente) define tu apariencia y primera impresión; la Casa 10 (MC) tu carrera y legado.',
+    desc: 'Las casas dividen el cielo en 12 áreas temáticas de tu vida. Los ángulos (Ascendente, IC, Descendente, Medio Cielo) son los puntos más poderosos.',
+    hint: 'La Casa 1 (Ascendente) define tu apariencia y primera impresión; la Casa 10 (Medio Cielo) tu carrera y legado.',
   },
   Energía: {
     title: 'Distribución de Energía',
@@ -132,6 +152,7 @@ function PlanetReadingCard({ icon, title, subtitle, insightKey, insights, insigh
 function ChartSummary({ chart, insights, insightsLoading, tab, setTab }) {
   const planets = chart.planets
   const elemColor = ELEMENT_COLOR[chart.dominant_element] || '#e8c97e'
+  const [selectedPlanet, setSelectedPlanet] = useState(null)
 
   return (
     <div className="mb-8 animate-fadeInUp">
@@ -157,7 +178,7 @@ function ChartSummary({ chart, insights, insightsLoading, tab, setTab }) {
       <div className="flex justify-center gap-5 mb-5 flex-wrap">
         {[
           { label: 'Ascendente', value: chart.ascendant },
-          { label: 'MC',         value: chart.midheaven },
+          { label: 'Medio Cielo', value: chart.midheaven },
           { label: 'Elemento',   value: chart.dominant_element, color: elemColor },
           { label: 'Modalidad',  value: chart.dominant_modality },
         ].map(({ label, value, color }, i, arr) => (
@@ -251,34 +272,31 @@ function ChartSummary({ chart, insights, insightsLoading, tab, setTab }) {
       {/* Tab: Planetas */}
       {tab === 'Planetas' && (
         <div className="animate-fadeIn space-y-4">
-          {/* Personal planet readings */}
-          <PlanetReadingCard icon="☀️" title={`Sol en ${planets.sol?.sign}`} subtitle="Tu identidad y propósito consciente"
-            insightKey="sol" insights={insights} insightsLoading={insightsLoading} />
-          <PlanetReadingCard icon="🌙" title={`Luna en ${planets.luna?.sign}`} subtitle="Tu mundo emocional e interior"
-            insightKey="luna" insights={insights} insightsLoading={insightsLoading} />
-          <PlanetReadingCard icon="♀ ♂" title={`Venus en ${planets.venus?.sign} · Marte en ${planets.marte?.sign}`} subtitle="Amor, atracción y pasión"
-            insightKey="venus_marte" insights={insights} insightsLoading={insightsLoading} />
-          <PlanetReadingCard icon="♃ ♄" title={`Júpiter en ${planets.jupiter?.sign} · Saturno en ${planets.saturno?.sign}`} subtitle="Expansión, límites y karma"
-            insightKey="saturno_jupiter" insights={insights} insightsLoading={insightsLoading} />
-
-          {/* Planet grid */}
+          {/* Clickable planet grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-            {Object.entries(planets).map(([key, pl]) => (
-              <div
-                key={key}
-                className="bg-mystic-surface/60 border border-mystic-border/50 rounded-xl p-3 text-center
-                           hover:border-mystic-gold/30 transition-colors duration-200"
-              >
-                <div className="text-lg mb-1" aria-hidden="true">{PLANET_ICONS[key]}</div>
-                <p className="text-[10px] text-mystic-muted/60 uppercase tracking-wider font-sans">{PLANET_LABEL[key]}</p>
-                <p className="text-mystic-accent text-sm font-display font-semibold mt-0.5">{pl.sign}</p>
-                <p className="text-mystic-muted/50 text-[10px] font-sans">{pl.deg}</p>
-                {pl.house && <p className="text-mystic-muted/40 text-[10px] font-sans">{pl.house}</p>}
-                {pl.retrograde && (
-                  <span className="text-[9px] text-amber-400/70 font-sans">℞ retr.</span>
-                )}
-              </div>
-            ))}
+            {Object.entries(planets).map(([key, pl]) => {
+              const isSelected = selectedPlanet === key
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelectedPlanet(isSelected ? null : key)}
+                  className={`bg-mystic-surface/60 border rounded-xl p-3 text-center
+                             transition-colors duration-200 w-full
+                             ${isSelected
+                               ? 'border-mystic-gold/60 bg-mystic-surface/80'
+                               : 'border-mystic-border/50 hover:border-mystic-gold/30'}`}
+                >
+                  <div className="text-lg mb-1" aria-hidden="true">{PLANET_ICONS[key]}</div>
+                  <p className="text-[10px] text-mystic-muted/60 uppercase tracking-wider font-sans">{PLANET_LABEL[key]}</p>
+                  <p className="text-mystic-accent text-sm font-display font-semibold mt-0.5">{pl.sign}</p>
+                  <p className="text-mystic-muted/50 text-[10px] font-sans">{pl.deg}</p>
+                  {pl.house && <p className="text-mystic-muted/40 text-[10px] font-sans">{pl.house}</p>}
+                  {pl.retrograde && (
+                    <span className="text-[9px] text-amber-400/70 font-sans">℞ retr.</span>
+                  )}
+                </button>
+              )
+            })}
           </div>
 
           {/* Extra points */}
@@ -308,7 +326,34 @@ function ChartSummary({ chart, insights, insightsLoading, tab, setTab }) {
               Planetas retrógrados: {chart.retrograde_planets.join(', ')}
             </p>
           )}
-          <InsightCard text={insights?.planetas} loading={insightsLoading && !insights?.planetas} />
+
+          {/* Planet insight — shown when a planet is selected */}
+          {selectedPlanet && (() => {
+            const insightKey = PLANET_INSIGHT_KEY[selectedPlanet]
+            const pl = planets[selectedPlanet]
+            return (
+              <div className="rounded-xl border border-mystic-gold/20 bg-mystic-surface/50 p-4 overflow-hidden relative animate-fadeIn">
+                <div className="absolute inset-0 bg-gradient-to-br from-mystic-purple/5 to-transparent pointer-events-none" />
+                <div className="flex items-start gap-3">
+                  <span className="text-xl select-none mt-0.5" aria-hidden="true">{PLANET_ICONS[selectedPlanet]}</span>
+                  <div className="flex-1">
+                    <p className="font-display font-semibold text-mystic-accent text-sm">
+                      {PLANET_LABEL[selectedPlanet]} en {pl?.sign}
+                    </p>
+                    <p className="text-[10px] text-mystic-muted/50 font-sans uppercase tracking-wider mt-0.5 mb-2">
+                      {PLANET_SUBTITLE[selectedPlanet]}
+                    </p>
+                    {insightsLoading && !insights?.[insightKey]
+                      ? <OraclePulse messages={PULSE_MESSAGES.planets} />
+                      : <p className="text-mystic-muted/80 text-sm font-sans leading-relaxed italic">
+                          {insights?.[insightKey] || 'La interpretación estará disponible en breve.'}
+                        </p>
+                    }
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
         </div>
       )}
 
