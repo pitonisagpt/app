@@ -4,6 +4,7 @@ import { useUserProfile } from '../hooks/useUserProfile'
 import StarField from '../components/StarField'
 import ModuleResult from '../components/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
+import SeoHead from '../components/SeoHead'
 
 const INTENSITY_LABEL = { 1: 'Suave', 2: 'Moderado', 3: 'Intenso', 4: 'Exacto' }
 const INTENSITY_COLOR  = { 1: '#8cb8c8', 2: '#e8c97e', 3: '#e8a08c', 4: '#fca5a5' }
@@ -62,6 +63,11 @@ export default function Transitos() {
 
   return (
     <div className="min-h-screen bg-mystic-bg relative overflow-hidden">
+      <SeoHead
+        title="Tránsitos Planetarios"
+        description="Qué planetas te afectan ahora mismo y por cuánto tiempo. Astrología en tiempo real con Swiss Ephemeris e interpretación con IA."
+        path="/transitos"
+      />
       <StarField count={80} />
       <div className="absolute top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-900/6 rounded-full blur-3xl pointer-events-none" />
       <Navbar />
@@ -154,7 +160,7 @@ export default function Transitos() {
               <span className="text-amber-400/70 text-sm tracking-[0.3em] uppercase">Mensaje Cósmico</span>
               <div className="flex-1 h-px bg-gradient-to-l from-transparent to-amber-400/30" />
             </div>
-            <ModuleResult text={text} isStreaming={isStreaming} error={error} onReset={handleReset} />
+            <ModuleResult text={text} isStreaming={isStreaming} error={error} onReset={handleReset} moduleId="transitos" />
           </div>
         )}
       </main>

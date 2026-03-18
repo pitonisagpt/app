@@ -124,7 +124,14 @@ function DonutChart({ segments, title, centerIcon }) {
 
 // ── Main export ───────────────────────────────────────────────────────────────
 
-export default function DistributionCharts({ chart }) {
+const DONUT_CONFIGS = [
+  { key: 'elementos',   title: 'Elementos',   centerIcon: '🔥', segsKey: 'element_count',  cfg: ELEMENT_CONFIG  },
+  { key: 'modalidades', title: 'Modalidades', centerIcon: '⚡', segsKey: 'modality_count', cfg: MODALITY_CONFIG },
+  { key: 'polaridad',   title: 'Polaridad',   centerIcon: '☯', segsKey: 'polarity_count', cfg: POLARITY_CONFIG },
+  { key: 'cuadrantes',  title: 'Cuadrantes',  centerIcon: '🏠', segsKey: 'quadrant_count', cfg: QUADRANT_CONFIG, labelKey: true },
+]
+
+export default function DistributionCharts({ chart, selectedEnergy, onSelectEnergy }) {
   if (!chart) return null
 
   const total = chart.dist_total ?? 10
@@ -134,30 +141,45 @@ export default function DistributionCharts({ chart }) {
     icon: ELEMENT_CONFIG[name]?.icon,
   }))
 
-  const modalitySegs = Object.entries(chart.modality_count ?? {}).map(([name, val]) => ({
-    label: name, value: val, color: MODALITY_CONFIG[name]?.color ?? '#888',
-    icon: MODALITY_CONFIG[name]?.icon,
-  }))
-
-  const polaritySegs = Object.entries(chart.polarity_count ?? {}).map(([name, val]) => ({
-    label: name, value: val, color: POLARITY_CONFIG[name]?.color ?? '#888',
-    icon: POLARITY_CONFIG[name]?.icon,
-  }))
-
-  const quadrantSegs = Object.entries(chart.quadrant_count ?? {}).map(([name, val]) => ({
-    label: QUADRANT_CONFIG[name]?.label ?? name,
-    value: val,
-    color: QUADRANT_CONFIG[name]?.color ?? '#888',
-  }))
+  const allSegs = {
+    elementos:   elementSegs,
+    modalidades: Object.entries(chart.modality_count ?? {}).map(([name, val]) => ({
+      label: name, value: val, color: MODALITY_CONFIG[name]?.color ?? '#888', icon: MODALITY_CONFIG[name]?.icon,
+    })),
+    polaridad:   Object.entries(chart.polarity_count ?? {}).map(([name, val]) => ({
+      label: name, value: val, color: POLARITY_CONFIG[name]?.color ?? '#888', icon: POLARITY_CONFIG[name]?.icon,
+    })),
+    cuadrantes:  Object.entries(chart.quadrant_count ?? {}).map(([name, val]) => ({
+      label: QUADRANT_CONFIG[name]?.label ?? name, value: val, color: QUADRANT_CONFIG[name]?.color ?? '#888',
+    })),
+  }
 
   return (
     <div className="space-y-6">
-      {/* Donut row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 p-4 bg-slate-800/40 rounded-2xl border border-slate-700/40">
-        {elementSegs.length > 0  && <DonutChart segments={elementSegs}  title="Elementos"  centerIcon="🔥" />}
-        {modalitySegs.length > 0 && <DonutChart segments={modalitySegs} title="Modalidades" centerIcon="⚡" />}
-        {polaritySegs.length > 0 && <DonutChart segments={polaritySegs} title="Polaridad"   centerIcon="☯" />}
-        {quadrantSegs.length > 0 && <DonutChart segments={quadrantSegs} title="Cuadrantes"  centerIcon="🏠" />}
+      {/* Donut row — each is clickable */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {DONUT_CONFIGS.map(({ key, title, centerIcon }) => {
+          const segs = allSegs[key]
+          if (!segs?.length) return null
+          const isSelected = selectedEnergy === key
+          return (
+            <button
+              key={key}
+              onClick={() => onSelectEnergy(isSelected ? null : key)}
+              className={`rounded-2xl p-4 flex flex-col items-center gap-2 border transition-colors duration-200 w-full
+                ${isSelected
+                  ? 'border-mystic-gold/40 bg-mystic-surface/70'
+                  : 'border-slate-700/40 bg-slate-800/40 hover:border-slate-600/60'}`}
+            >
+              <DonutChart segments={segs} title={title} centerIcon={centerIcon} />
+              {isSelected && (
+                <span className="text-[9px] uppercase tracking-widest text-mystic-gold/60 font-sans">
+                  🔮 La Pitonisa revela
+                </span>
+              )}
+            </button>
+          )
+        })}
       </div>
 
       {/* Element keyword cards */}
@@ -177,10 +199,7 @@ export default function DistributionCharts({ chart }) {
               <div
                 key={seg.label}
                 className="rounded-xl p-3 flex flex-col gap-2"
-                style={{
-                  background: `${seg.color}10`,
-                  border: `1px solid ${seg.color}25`,
-                }}
+                style={{ background: `${seg.color}10`, border: `1px solid ${seg.color}25` }}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-lg">{cfg?.icon}</span>
@@ -195,7 +214,6 @@ export default function DistributionCharts({ chart }) {
                     </span>
                   ))}
                 </div>
-                {/* Mini bar */}
                 <div className="w-full bg-slate-700/50 rounded-full h-1 overflow-hidden">
                   <div className="h-1 rounded-full" style={{ width: `${pct}%`, backgroundColor: seg.color }} />
                 </div>

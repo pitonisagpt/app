@@ -1,64 +1,53 @@
-/**
- * OraclePulse — animated cycling text loader.
- * Replaces boring dots with mystical rotating messages.
- * Usage: <OraclePulse messages={MY_MESSAGES} />
- */
 import { useState, useEffect } from 'react'
+import Waveform from './Waveform'
 
 export const PULSE_MESSAGES = {
   insight: [
-    { icon: '🔮', text: 'La Pitonisa contempla los astros...' },
-    { icon: '✨', text: 'Los arquetipos despiertan en el cosmos...' },
-    { icon: '🌙', text: 'El velo se levanta lentamente...' },
-    { icon: '⭐', text: 'Las estrellas descifran su mensaje...' },
-    { icon: '🕯️', text: 'La llama del oráculo ilumina...' },
+    'La Pitonisa contempla los astros...',
+    'El velo se levanta lentamente...',
+    'Las estrellas descifran su mensaje...',
+    'La llama del oráculo ilumina...',
+    'Los arquetipos despiertan en silencio...',
+    'La conciencia cósmica se enfoca...',
+    'El espejo del alma refleja la verdad...',
+    'Los símbolos ancianos cobran voz...',
+    'La intuición teje su respuesta...',
+    'El tiempo se detiene para revelar...',
   ],
   planets: [
-    { icon: '🪐', text: 'Calculando posiciones planetarias...' },
-    { icon: '☀️', text: 'El Sol revela tu propósito...' },
-    { icon: '🌙', text: 'La Luna expone tu mundo interior...' },
-    { icon: '✨', text: 'Los planetas alinean su energía...' },
-    { icon: '🔭', text: 'La cámara celeste enfoca tu carta...' },
+    'Calculando posiciones planetarias...',
+    'El Sol revela tu propósito de vida...',
+    'Los planetas alinean su energía...',
+    'La Luna expone tu mundo interior...',
+    'Mercurio descifra tu forma de pensar...',
+    'Venus traza el mapa de tu corazón...',
+    'Saturno pesa tus lecciones pendientes...',
+    'Júpiter señala tu camino de expansión...',
+    'Plutón toca las profundidades del alma...',
+    'El Ascendente dibuja tu máscara real...',
   ],
   hero: [
-    { icon: '✨', text: 'Descifrando tu signo...' },
-    { icon: '🔮', text: 'Los arquetipos cobran vida...' },
-    { icon: '🌌', text: 'El cosmos revela tu esencia...' },
-    { icon: '⭐', text: 'La Pitonisa lee tu firma astral...' },
+    'Descifrando tu signo solar...',
+    'Los arquetipos cobran vida...',
+    'La Pitonisa lee tu firma astral...',
+    'Tu Luna revela el mundo que nadie ve...',
+    'El cosmos reconoce tu patrón único...',
+    'La carta se abre como un mapa del alma...',
   ],
 }
 
 export default function OraclePulse({ messages = PULSE_MESSAGES.insight, interval = 1900, compact = false }) {
   const [idx, setIdx] = useState(0)
-  const [key, setKey] = useState(0)
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setIdx(i => (i + 1) % messages.length)
-      setKey(k => k + 1)
-    }, interval)
+    const id = setInterval(() => setIdx(i => (i + 1) % messages.length), interval)
     return () => clearInterval(id)
   }, [messages, interval])
 
-  const msg = messages[idx]
-
-  if (compact) {
-    return (
-      <div key={key} className="flex items-center gap-1.5 animate-fadeIn">
-        <span className="text-xs select-none leading-none">{msg.icon}</span>
-        <span className="text-mystic-muted/55 text-[11px] font-sans italic tracking-wide">
-          {msg.text}
-        </span>
-      </div>
-    )
-  }
-
   return (
-    <div key={key} className="flex items-center gap-2 py-0.5 animate-fadeIn">
-      <span className="text-base select-none leading-none">{msg.icon}</span>
-      <span className="text-mystic-muted/65 text-xs font-sans italic tracking-wide">
-        {msg.text}
-      </span>
-    </div>
+    <Waveform
+      label={typeof messages[idx] === 'object' ? messages[idx].text : messages[idx]}
+      className={compact ? '' : 'py-0.5'}
+    />
   )
 }

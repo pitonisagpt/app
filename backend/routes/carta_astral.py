@@ -351,3 +351,216 @@ async def carta_astral(raw_request: Request):
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+# ── House reading endpoint ─────────────────────────────────────────────────────
+
+HOUSE_NAMES = [
+    "Casa I (Casa 1) — Ascendente",
+    "Casa II (Casa 2)",
+    "Casa III (Casa 3)",
+    "Casa IV (Casa 4) — IC (Fondo del Cielo)",
+    "Casa V (Casa 5)",
+    "Casa VI (Casa 6)",
+    "Casa VII (Casa 7) — Descendente",
+    "Casa VIII (Casa 8)",
+    "Casa IX (Casa 9)",
+    "Casa X (Casa 10) — Medio Cielo",
+    "Casa XI (Casa 11)",
+    "Casa XII (Casa 12)",
+]
+
+HOUSE_AREAS = [
+    "tu identidad, apariencia y la energía que proyectas al mundo sin querer — la máscara que más se convierte en cara real",
+    "tu relación con el dinero, los bienes materiales y cuánto te valoras a ti mismo/a",
+    "tu forma de pensar, comunicarte y aprender, más los hermanos, vecinos y el entorno inmediato",
+    "tus raíces, familia de origen, mundo emocional privado y el tipo de hogar que necesitas",
+    "el placer, la creatividad, los romances y todo lo que haces por pura alegría — incluyendo hijos",
+    "la salud física, las rutinas diarias, el trabajo cotidiano y los hábitos que te sostienen o te enferman",
+    "las relaciones serias, la pareja, los socios — y lo que proyectas en otros porque no ves aún en ti",
+    "la sexualidad profunda, las transformaciones radicales, el dinero ajeno, las herencias y el poder compartido",
+    "tus creencias, filosofía de vida, espiritualidad, educación superior y los viajes que amplían tu mente",
+    "tu vocación, imagen pública, ambiciones y el legado que quieres dejar en el mundo",
+    "tus amistades elegidas, grupos, causas colectivas y los sueños más grandes que tienes para el futuro",
+    "tu inconsciente, las sombras, los miedos ocultos, el retiro espiritual y los patrones que operan sin que los veas",
+]
+
+HOUSE_SYSTEM_PROMPT = """Eres Pitonisa, astróloga con décadas de experiencia.
+Interpretas una casa natal de forma directa, personal y empática, en español.
+Tu objetivo es que la persona se reconozca: que lea lo que escribes y piense "eso soy yo".
+Habla en segunda persona, menciona el nombre de la persona.
+Hazlo concreto — relaciones reales, situaciones cotidianas, miedos reconocibles, fortalezas tangibles.
+No uses frases vacías ni poesía abstracta.
+
+FORMATO:
+- 3 párrafos fluidos separados por línea en blanco.
+- Usa **negrita** para los conceptos clave (planeta, signo, casa).
+- Usa *cursiva* para énfasis emocional cuando aporte.
+- Máximo 200 palabras en total.
+- Cierra con una frase corta, directa y memorable — sin consejo genérico.
+- NO empieces con el nombre de la casa ni con "Esta casa".
+- NO uses: "las energías te invitan", "el cosmos susurra", "vibra en frecuencia", "el universo conspira"."""
+
+
+def build_house_prompt(chart: dict, house_index: int) -> str:
+    name = chart.get("name", "tú")
+    p = chart.get("planets", {})
+    cusps = chart.get("house_cusps", [])
+    sign_names = ["Aries","Tauro","Géminis","Cáncer","Leo","Virgo",
+                  "Libra","Escorpio","Sagitario","Capricornio","Acuario","Piscis"]
+
+    cusp_lon = cusps[house_index] if house_index < len(cusps) else 0
+    sign_idx = int((cusp_lon % 360) / 30)
+    deg = cusp_lon % 30
+    sign = sign_names[sign_idx]
+
+    # Find planets in this house
+    house_num = house_index + 1
+    planets_in_house = [
+        f"{k} en {v['sign']}" for k, v in p.items()
+        if str(v.get("house", "")).replace("Casa ", "") == str(house_num)
+    ]
+    extra = chart.get("extra_points", {})
+    for k, v in extra.items():
+        if str(v.get("house", "")).replace("Casa ", "") == str(house_num):
+            planets_in_house.append(f"{k} en {v['sign']}")
+
+    planets_str = (
+        "Planetas presentes: " + ", ".join(planets_in_house)
+        if planets_in_house else "No hay planetas en esta casa (casa vacía — el signo y su regente son más importantes)"
+    )
+
+    house_name = HOUSE_NAMES[house_index]
+    area = HOUSE_AREAS[house_index]
+
+    return (
+        f"Interpreta la {house_name} de la carta natal de {name}.\n"
+        f"Cúspide: {deg:.1f}° de {sign}\n"
+        f"{planets_str}\n"
+        f"Área de vida: {area}\n\n"
+        f"Escribe la interpretación personalizada para {name}. "
+        f"Menciona el signo {sign} en la cúspide y lo que eso dice sobre cómo {name} vive esta área. "
+        f"Si hay planetas, menciónalos con su impacto concreto. "
+        f"Si la casa está vacía, explica cómo el signo {sign} colorea esta área y qué buscar en el planeta regente."
+    )
+
+
+async def stream_house_reading(chart: dict, house_index: int):
+    client = anthropic.AsyncAnthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    async with client.messages.stream(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=400,
+        system=HOUSE_SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": build_house_prompt(chart, house_index)}],
+    ) as stream:
+        async for text in stream.text_stream:
+            yield text
+
+
+class HouseReadingRequest(BaseModel):
+    chart: dict
+    house_index: int
+
+    @field_validator("house_index")
+    @classmethod
+    def index_ok(cls, v: int) -> int:
+        if not 0 <= v <= 11:
+            raise ValueError("Índice de casa inválido")
+        return v
+
+
+async def house_event_generator(chart: dict, house_index: int):
+    try:
+        async for chunk in stream_house_reading(chart, house_index):
+            yield f"data: {json.dumps(chunk)}\n\n"
+    except Exception as e:
+        yield f"data: {json.dumps({'__error__': str(e)})}\n\n"
+    yield "data: [DONE]\n\n"
+
+
+@router.post("/carta-astral/energy-reading")
+async def energy_reading_route(req: Request):
+    try:
+        body = await req.json()
+    except Exception:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=400, content={"detail": "Petición inválida."})
+
+    chart      = body.get("chart", {})
+    energy_type = body.get("energy_type", "")
+    name       = chart.get("name", "tú")
+
+    ENERGY_SYSTEM = """Eres Pitonisa, astróloga con décadas de experiencia.
+Interpretas la distribución energética de una carta natal en español — tono directo, personal, segunda persona.
+Habla de cómo esa energía se vive en la vida real de la persona: decisiones, emociones, vínculos, trabajo.
+No uses frases vacías ni poesía abstracta.
+FORMATO: 2–3 párrafos fluidos. Usa **negrita** para conceptos clave. Máximo 150 palabras.
+NO empieces con "Esta distribución" ni con el nombre del elemento/modalidad.
+NO uses: "las energías te invitan", "el cosmos susurra", "vibra en frecuencia"."""
+
+    type_prompts = {
+        "elementos": (
+            f"Carta de {name} — Distribución de elementos:\n"
+            f"{_format_counts(chart.get('element_count', {}), chart.get('dist_total', 10))}\n\n"
+            f"Interpreta qué dice esta proporción de Fuego/Tierra/Aire/Agua sobre la personalidad de {name}: "
+            f"sus fortalezas naturales, lo que le cuesta equilibrar y cómo vive sus relaciones y decisiones."
+        ),
+        "modalidades": (
+            f"Carta de {name} — Distribución de modalidades:\n"
+            f"{_format_counts(chart.get('modality_count', {}), chart.get('dist_total', 10))}\n\n"
+            f"Interpreta qué dice esta proporción Cardinal/Fija/Mutable sobre cómo {name} inicia proyectos, "
+            f"se aferra a lo que tiene y se adapta al cambio. Sé específico/a sobre su ritmo vital."
+        ),
+        "polaridad": (
+            f"Carta de {name} — Distribución de polaridad:\n"
+            f"{_format_counts(chart.get('polarity_count', {}), chart.get('dist_total', 10))}\n\n"
+            f"Interpreta qué dice esta proporción Masculino/Femenino (Activo/Receptivo) sobre cómo {name} "
+            f"actúa en el mundo vs cómo absorbe y procesa — en el trabajo, el amor y la toma de decisiones."
+        ),
+        "cuadrantes": (
+            f"Carta de {name} — Distribución de cuadrantes:\n"
+            f"{_format_counts(chart.get('quadrant_count', {}), chart.get('dist_total', 10))}\n\n"
+            f"Interpreta qué dice la concentración de planetas en estos cuadrantes sobre las prioridades vitales "
+            f"de {name}: Q1 (identidad), Q2 (familia/valores), Q3 (relaciones/expansión), Q4 (carrera/sociedad)."
+        ),
+    }
+
+    prompt = type_prompts.get(energy_type)
+    if not prompt:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=400, content={"detail": "Tipo de energía inválido."})
+
+    async def gen():
+        client = anthropic.AsyncAnthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        try:
+            async with client.messages.stream(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=350,
+                system=ENERGY_SYSTEM,
+                messages=[{"role": "user", "content": prompt}],
+            ) as stream:
+                async for text in stream.text_stream:
+                    yield f"data: {json.dumps(text)}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'__error__': str(e)})}\n\n"
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(gen(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+def _format_counts(counts: dict, total: int) -> str:
+    lines = []
+    for name, val in counts.items():
+        pct = round(val / total * 100) if total else 0
+        lines.append(f"  {name}: {val} planetas ({pct}%)")
+    return "\n".join(lines)
+
+
+@router.post("/carta-astral/house-reading")
+async def house_reading(req: HouseReadingRequest):
+    return StreamingResponse(
+        house_event_generator(req.chart, req.house_index),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )

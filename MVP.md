@@ -1,12 +1,12 @@
-# Pitonisa GPT — MVP
+# Pitonisa GPT — Estado actual del producto
 
-> Oráculo de tarot e astrología con Inteligencia Artificial. Interpretaciones personales, streaming en tiempo real y cálculo astronómico de precisión.
+> Oráculo de tarot, astrología y numerología con Inteligencia Artificial. Interpretaciones personales, streaming en tiempo real y cálculo astronómico de precisión.
 
 ---
 
 ## Lo que hace la app
 
-Pitonisa GPT tiene dos módulos principales: **Tiradas de Tarot** y **Carta Astral**. Ambos usan Claude (Anthropic) para generar interpretaciones únicas, personalizadas y en español, con una experiencia visual inmersiva.
+Pitonisa GPT combina tres disciplinas esotéricas —**Tarot**, **Astrología** y **Numerología**— con Claude (Anthropic) para generar lecturas únicas, personalizadas y en español, con una experiencia visual oscura e inmersiva.
 
 ---
 
@@ -21,9 +21,9 @@ Pitonisa GPT tiene dos módulos principales: **Tiradas de Tarot** y **Carta Astr
 
 ### Mazo
 
-22 Arcanos Mayores (El Loco → El Mundo), con posibilidad de salir en posición invertida (~33% de probabilidad). Cada carta tiene su nombre, símbolo y posición dentro de la tirada.
+78 cartas: **22 Arcanos Mayores** (El Loco → El Mundo) + **56 Arcanos Menores** (Bastos, Copas, Espadas, Pentáculos). Posibilidad de salir en posición invertida (~33% de probabilidad). Modo de prueba disponible vía `?test=0,1r,2` en la URL.
 
-### Tiradas disponibles — 22 en total
+### Tiradas disponibles — 30+ en total
 
 **Consultas Rápidas**
 | Tirada | Cartas | Descripción |
@@ -85,95 +85,183 @@ Cada tirada temática activa una voz distinta en el prompt de Claude:
 
 ---
 
-## 2. Carta Astral
+## 2. Módulos Especiales
+
+### Tarot del Día · `/tarot-diario`
+
+- Carta diaria **determinista**: misma carta para el mismo usuario en el mismo día (hash SHA-256 de nombre + fecha_nacimiento + fecha)
+- Arcanos Mayores + Menores, con posición invertida
+- **Racha diaria (streak)**: contador de días consecutivos con badge 🔥, mejor racha histórica en localStorage
+- **Hitos de racha**: celebraciones en 3, 7, 14, 21, 30, 60, 100 y 365 días con colores únicos
+- "Vuelve mañana" nudge al terminar la lectura
+- "Ya consultaste hoy" aviso si el usuario regresa el mismo día
+
+### ¿Volverá mi ex? · `/volvera-ex`
+
+- Tirada de 5 cartas especializada en relaciones pasadas
+- Inputs: nombre, tiempo separados, razón de la ruptura, si hay contacto actual
+- Animación de fases del oráculo al pulsar "Consultar" (igual que TarotDiario)
+- Guardia anti-doble-click durante la consulta
+
+### Compatibilidad Amorosa · `/compatibilidad`
+
+- Cálculo de sinastría de dos cartas natales
+- **Puntaje de compatibilidad 0–100%** emitido como meta-evento antes del streaming
+- Interpretación personalizada con IA en streaming
+- Inputs para ambas personas: nombre, fecha, hora y ciudad
+
+### Tránsitos Planetarios · `/transitos`
+
+- Planetas actuales en tránsito sobre el mapa natal del usuario
+- Número de tránsitos activos emitido como meta-evento
+- Hora de nacimiento opcional (usa mediodía solar si no se tiene)
+- Calcula posiciones actuales vía Swiss Ephemeris
+
+### Predicción del Año Personal · `/anyo-personal`
+
+- **Número rector del año** calculado por numerología pitagórica (dígitos de fecha de nacimiento)
+- Número emitido como meta-evento → revelan visualmente antes de que llegue el texto
+- Arquetipo del año (ej. "El Año del Poder") en el encabezado
+- Dot-row con tantos puntos como el número personal
+- Interpretación en streaming con IA
+
+---
+
+## 3. Carta Astral · `/carta-astral`
 
 Cálculo astronómico real del cielo en el momento exacto del nacimiento, seguido de una interpretación personalizada con IA.
 
 ### Datos que el usuario ingresa
 
-- Nombre
-- Fecha de nacimiento (día, mes, año)
-- Hora de nacimiento (opcional — si no la sabe, se usa mediodía solar)
-- Ciudad de nacimiento
+- Nombre, fecha de nacimiento, hora (opcional), ciudad de nacimiento
 
 ### Cálculo astronómico
 
-- **Motor:** Swiss Ephemeris (JPL/NASA DE431) vía la librería Python `kerykeion`
-- **Geocodificación:** OpenStreetMap Nominatim → latitud, longitud y zona horaria exacta
-- **10 planetas principales:** Sol, Luna, Mercurio, Venus, Marte, Júpiter, Saturno, Urano, Neptuno, Plutón
+- **Motor:** Swiss Ephemeris (JPL/NASA DE431) vía `kerykeion`
+- **Geocodificación:** OpenStreetMap Nominatim → lat/lng + zona horaria exacta
+- **10 planetas:** Sol, Luna, Mercurio, Venus, Marte, Júpiter, Saturno, Urano, Neptuno, Plutón
 - **Puntos extra:** Quirón, Nodo Norte, Nodo Sur, Lilith, Parte de Fortuna, Vértice, Ceres, Juno, Vesta, Palas
 - **12 casas astrológicas** (sistema Placidus)
 - **Aspectos mayores:** Conjunción, Sextil, Cuadratura, Trígono, Oposición, Quincuncio
+- Al cargar la carta, guarda automáticamente signo Sol, Luna y Ascendente en el perfil del usuario
 
-### Interpretación con IA (dos modelos en paralelo)
+### Interpretación con IA — dos modelos en paralelo
 
-| Tarea | Modelo | Descripción |
+| Tarea | Modelo | Output |
 |---|---|---|
-| Interpretación tarot | Claude Haiku 4.5 | 400–600 palabras en streaming |
-| Interpretación carta astral | Claude Sonnet 4.6 | 700–900 palabras en streaming, requiere mayor profundidad |
-| Insights de tabs | Claude Haiku 4.5 | 12 textos cortos en JSON, generados en paralelo |
+| Interpretación principal | Claude Sonnet 4.6 | 700–900 palabras en streaming |
+| Insights de tabs (12 textos) | Claude Haiku 4.5 | JSON paralelo, 12 insights cortos |
 
 Los 12 insights cubren: rueda, planetas, aspectos, casas, energía, Sol, Luna, Ascendente, Venus+Marte, Júpiter+Saturno, patrones y tema de vida.
 
 ### Visualizaciones — 6 tabs
 
-**Tab 1 · Rueda**
-- SVG interactivo de la carta natal (400×400px)
-- Anillo zodiacal con los 12 signos en colores
-- Líneas de casas (ángulos ASC/IC/DSC/MC destacados)
-- Números de casas en el interior
-- Gliphs de planetas con colores únicos por planeta
-- Líneas de aspectos (verde = armoniosos, rojo = tensos, ámbar = neutros)
-- Etiquetas ASC, DSC, MC, IC
-- Leyenda de aspectos
+**Tab 1 · Rueda** — SVG interactivo 400×400px: anillo zodiacal con 12 signos en colores, líneas de casas, glyphs de planetas, líneas de aspectos (verde = armoniosos, rojo = tensos, ámbar = neutros), etiquetas ASC/DSC/MC/IC, leyenda.
 
-**Tab 2 · Planetas**
-- Cards de interpretación personal para Sol, Luna, Venus+Marte, Júpiter+Saturno (con texto de la IA)
-- Grid con los 10 planetas: signo, grados, casa, indicador de retrógrado
-- Grid de puntos adicionales: Quirón, Lilith, Nodo Norte
+**Tab 2 · Planetas** — Cards de interpretación IA para Sol, Luna, Venus+Marte, Júpiter+Saturno; grid con los 10 planetas (signo, grados, casa, retrógrado); grid de puntos adicionales.
 
-**Tab 3 · Aspectos**
-- Tabla completa de todos los aspectos detectados
-- Ícono y nombre del aspecto, tipo (armónico / tenso / neutro), orbe en grados
+**Tab 3 · Aspectos** — Tabla completa de aspectos: ícono, nombre, tipo (armónico / tenso / neutro), orbe en grados.
 
-**Tab 4 · Casas**
-- Tabla de las 12 casas con cúspide (grados + signo) y significado de vida
-- Casas angulares (ASC, IC, DSC, MC) destacadas en dorado
+**Tab 4 · Casas** — Tabla de las 12 casas con cúspide (grados + signo) y significado de vida; casas angulares destacadas en dorado.
 
-**Tab 5 · Energía**
-- Donuts SVG con distribución de Elementos, Modalidades, Polaridad y Cuadrantes
-- Cards de elementos con porcentaje, barra de progreso y palabras clave (ej. Fuego → Pasión, Impulso, Liderazgo)
+**Tab 5 · Energía** — Donuts SVG con distribución de Elementos, Modalidades, Polaridad y Cuadrantes; cards de elementos con porcentaje, barra y palabras clave.
 
-**Tab 6 · Patrones**
-- **Planeta Rector** — el planeta que gobierna el Ascendente, con su posición y casa
-- **Secta** — si la carta es Diurna (Sol, Júpiter, Saturno fuertes) o Nocturna (Luna, Venus, Marte fuertes)
-- **Esteliones** — grupos de 3+ planetas en el mismo signo
-- **Configuraciones especiales** — Gran Trígono, Cruz en T, Cruz Mayor, Dedo del Destino (Yod)
-- **Dignidades planetarias** — domicilio ✨, exaltación ⬆️, detrimento ⬇️, caída 📉 para cada planeta
-- **Énfasis hemisférico** — distribución Norte/Sur/Este/Oeste con descripciones
-- **Puntos especiales** — Parte de Fortuna, Vértice, asteroides principales, Nodo Sur
+**Tab 6 · Patrones** — Planeta rector, secta (diurna/nocturna), esteliones, configuraciones especiales (Gran Trígono, Cruz en T, Cruz Mayor, Yod), dignidades planetarias, énfasis hemisférico, puntos especiales.
 
-### Cards de Sol / Luna / Ascendente (siempre visibles sobre los tabs)
+### Hero-cards Sol / Luna / Ascendente
 
-Tres hero-cards prominentes mostrando los tres pilares de la personalidad:
-- Símbolo del signo, elemento, modalidad y planeta rector de cada uno
-- Glow de color según el elemento (fuego = naranja, agua = índigo, aire = celeste, tierra = lima)
-- Texto interpretativo corto generado por la IA
-
-### Tema de Vida
-
-Al final de la interpretación principal, una card especial con el resumen del propósito de alma según la síntesis total de la carta.
+Tres cards prominentes siempre visibles sobre los tabs: signo, elemento, modalidad, planeta rector y texto interpretativo de la IA. Glow de color por elemento (fuego = naranja, agua = índigo, aire = celeste, tierra = lima).
 
 ---
 
-## Experiencia de usuario
+## 4. Dashboard Cósmico en el Home — "✦ Tu cielo ahora"
+
+Sección visual unificada bajo el header principal con tres componentes en tiempo real:
+
+### Luna en Tiempo Real
+
+- Fase lunar actual calculada via `kerykeion` (ángulo Luna−Sol)
+- Muestra: emoji de fase, nombre de fase, signo lunar, % de iluminación (barra), próxima fase en días
+- Gold shimmer para Luna Llena y Luna Nueva
+- Enlace a `/tirada/lunar`
+- Cache 1 hora en localStorage
+
+### Retrato Numerológico
+
+- **Número de Vida** calculado desde la fecha de nacimiento (método pitagórico, preserva números maestros 11/22/33)
+- **Número de Destino** (todas las letras del nombre)
+- **Número de Alma** (solo vocales)
+- Badge del número con glow dorado para números maestros
+- Título y keyword del arquetipo (ej. "El Sabio · Espiritualidad")
+- Descripción del número + Destino y Alma como datos secundarios
+- Enlace a `/anyo-personal`
+- Solo visible si el usuario tiene fecha de nacimiento guardada
+
+### Planetas Retrógrados Activos
+
+- Detecta planetas retrógrados usando `pyswisseph` directamente (`swe.calc_ut` con `FLG_SPEED`)
+- Para cada planeta retrógrado: símbolo astrológico con glow de color único por planeta, nombre, badge "Retrógrado", fecha "hasta el X", significado (ej. "comunicación, contratos y tecnología bajo revisión"), consejo práctico en itálica
+- Búsqueda binaria para encontrar fecha de estación directa (max 300 días)
+- Colores únicos: Mercurio=slate, Venus=rose, Marte=red, Júpiter=amber, Saturno=yellow, Urano=cyan, Neptuno=blue, Plutón=violet
+- Estado vacío: card verde "Cielo directo — energía favorable"
+- Skeleton mientras carga; `null` en caso de error de red
+- Cache 12 horas en localStorage
+- Enlace a `/transitos`
+
+### Layout del dashboard
+
+- Grid 2 columnas: Luna (izq) + Numerología (der) — cards de altura igual
+- Si no hay fecha de nacimiento: solo Luna a ancho completo
+- Planetas retrógrados en ancho completo debajo
+- 1 retrógrado → card full-width; 2+ → grid 2 columnas
+
+---
+
+## 5. Perfil de usuario persistente
+
+- Guardado en `localStorage` bajo clave `pitonisa_profile`
+- Campos: nombre, fecha_nacimiento, hora_nacimiento, ciudad, nombre_pareja, fecha_nacimiento_pareja, signo_sol, signo_luna, signo_ascendente
+- Los signos Sol/Luna/Ascendente se guardan automáticamente al calcular la carta astral
+- Todos los formularios de la app pre-rellenan sus campos desde el perfil
+
+### Perfil de signos en el Home
+
+- Si el usuario tiene signos guardados: muestra "Hola, {nombre}" + pills ☀️ Sol · 🌙 Luna · ↑ Ascendente
+- Si no: muestra el conteo de tiradas y módulos disponibles
+
+---
+
+## 6. Onboarding
+
+- Modal de bienvenida en la primera visita (flag `pitonisa_onboarding_done` en localStorage)
+- 2 pasos: nombre (requerido) → fecha de nacimiento (opcional, con botón "Saltar")
+- Barra de progreso (50% → 100%), puntos de paso, animación de fade-out al cerrar
+- Título: "El oráculo te espera" (neutro, sin género)
+- Guarda directamente en el perfil del usuario vía `updateProfile`
+
+---
+
+## 7. SEO y Open Graph
+
+- Cada página usa `<SeoHead>` (react-helmet-async) con título, descripción y tags OG dinámicos
+- Formato de título: `{Página} — Pitonisa GPT`
+- Tags estáticos en `index.html` para WhatsApp/Facebook (no requieren JS)
+- `react-helmet-async` para Telegram y Google con tags dinámicos por página
+- OG image referenciada: `/og-image.png` (1200×630px)
+- Var de entorno `VITE_APP_URL` para URL base
+
+---
+
+## 8. Experiencia de usuario
 
 - **Streaming en tiempo real** — el texto de la Pitonisa aparece palabra por palabra
-- **Fondo de estrellas animado** — campo estelar dinámico en toda la app
-- **Animaciones de carga** — fases de consulta con íconos rotativos y puntos pulsantes
-- **Diseño oscuro-místico** — paleta azul noche / dorado / púrpura con efectos glow
-- **Responsive** — funciona en móvil y desktop
-- **Guardrails de seguridad** — validación de inputs, protección contra prompt injection, nunca revela el sistema ni el modelo de IA
+- **Efecto typewriter** — suavizado de los chunks SSE a ~250 chars/seg, snap al final
+- **Fondo de estrellas animado** — StarField dinámico en toda la app (configurable)
+- **Fases del oráculo** — mensajes místicos rotativos + waveform animado mientras carga
+- **Cartas animadas** — flip animation con stagger de 400ms por carta
+- **Diseño oscuro-místico** — paleta azul noche / dorado / púrpura con glow, shimmer y float
+- **Responsive** — grid adaptativo mobile/desktop (1 → 2 → 3 columnas)
+- **Guardrails de seguridad** — validación de inputs, protección anti-prompt-injection, el modelo nunca se revela
 
 ---
 
@@ -183,20 +271,41 @@ Al final de la interpretación principal, una card especial con el resumen del p
 |---|---|
 | Frontend | React 18 + Vite + Tailwind CSS |
 | Backend | FastAPI (Python) + Uvicorn |
-| IA | Claude Haiku 4.5 (tarot) + Claude Sonnet 4.6 (carta astral) + Claude Haiku 4.5 (insights) |
-| Astrología | kerykeion (Swiss Ephemeris / JPL DE431) |
+| IA — Tarot | Claude Haiku 4.5 (streaming SSE) |
+| IA — Carta Astral | Claude Sonnet 4.6 (stream) + Claude Haiku 4.5 (insights paralelos) |
+| Astrología | kerykeion + pyswisseph (Swiss Ephemeris / JPL DE431) |
 | Geocodificación | OpenStreetMap Nominatim + TimezoneFinder |
 | Streaming | Server-Sent Events (SSE) |
-| Concurrencia | asyncio — Haiku corre en paralelo al stream de Sonnet |
+| Concurrencia | asyncio — insights de Haiku corren en paralelo al stream de Sonnet |
+| SEO | react-helmet-async + OG tags estáticos en index.html |
+| Persistencia | localStorage (perfil, streak, caché lunar, caché retrógrados) |
+| Routing | React Router v6 |
 
 ---
 
-## Lo que NO tiene el MVP (next steps)
+## API Endpoints
 
-- Autenticación / cuentas de usuario
-- Guardado de lecturas o historial
+| Endpoint | Método | Módulo |
+|---|---|---|
+| `/api/interpret` | POST | Tiradas de Tarot (genérico) |
+| `/api/carta-astral` | POST | Carta Astral completa |
+| `/api/tarot-diario` | POST | Tarot del Día |
+| `/api/volvera-ex` | POST | ¿Volverá mi ex? |
+| `/api/compatibilidad` | POST | Compatibilidad Amorosa |
+| `/api/transitos` | POST | Tránsitos Planetarios |
+| `/api/anyo-personal` | POST | Predicción del Año Personal |
+| `/api/moon-phase` | GET | Fase lunar actual (cacheable) |
+| `/api/retrograde-planets` | GET | Planetas retrógrados (cacheable) |
+
+---
+
+## Lo que NO tiene aún (posibles next steps)
+
+- Autenticación / cuentas de usuario (sin servidor)
+- Historial de lecturas guardadas
 - Pagos o acceso premium
-- Cartas menores del Tarot (solo Arcanos Mayores)
-- Sinastría (comparación de dos cartas astrales)
-- Tránsitos y predicciones futuras
-- Versión en otros idiomas
+- Sinastría completa (comparación visual de dos ruedas)
+- Notificaciones push (recordatorio de tarot diario)
+- Versión en otros idiomas (solo español)
+- OG image real (`/og-image.png` está referenciada pero no generada)
+- Deploy de `/api/moon-phase` y `/api/retrograde-planets` en producción

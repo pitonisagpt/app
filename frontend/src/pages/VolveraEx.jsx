@@ -6,6 +6,7 @@ import StarField from '../components/StarField'
 import CardDisplay from '../components/CardDisplay'
 import ModuleResult from '../components/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
+import SeoHead from '../components/SeoHead'
 
 // ── Full deck (78 cards) ─────────────────────────────────────────────────────
 const MAJOR_ARCANA = [
@@ -89,6 +90,7 @@ export default function VolveraEx() {
   const [step, setStep]           = useState('form')   // form | cards | reading
   const [cards, setCards]         = useState([])
   const [revealedCount, setRevealed] = useState(0)
+  const [consulting, setConsulting] = useState(false)
   const [form, setForm]           = useState({
     nombre:    profile.nombre    || '',
     ex_nombre: profile.ex_nombre || '',
@@ -112,6 +114,9 @@ export default function VolveraEx() {
   }
 
   async function handleConsult() {
+    if (consulting) return
+    setConsulting(true)
+    setStep('reading')
     await stream('/api/volvera-ex', {
       nombre:    form.nombre,
       ex_nombre: form.ex_nombre,
@@ -120,7 +125,7 @@ export default function VolveraEx() {
       contacto:  form.contacto,
       cards:     cards.map(c => ({ name: c.name, symbol: c.symbol, position: c.position, reversed: c.reversed })),
     })
-    setStep('reading')
+    setConsulting(false)
   }
 
   function handleReset() {
@@ -135,6 +140,11 @@ export default function VolveraEx() {
 
   return (
     <div className="min-h-screen bg-mystic-bg relative overflow-hidden">
+      <SeoHead
+        title="¿Volverá mi ex?"
+        description="Las cartas revelan la energía entre tú y quien se fue. Tirada de tarot especializada para relaciones pasadas, con lectura del oráculo."
+        path="/volvera-ex"
+      />
       <StarField count={80} />
       <div className="absolute top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-rose-900/8 rounded-full blur-3xl pointer-events-none" />
       <Navbar />
@@ -231,12 +241,24 @@ export default function VolveraEx() {
                 <p className="text-mystic-muted/60 text-sm mb-5 italic font-serif tracking-wide">
                   Las cartas han hablado. ¿Deseas conocer su mensaje?
                 </p>
-                <button onClick={handleConsult}
+                <button onClick={handleConsult} disabled={consulting}
                   className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
                              bg-gradient-to-r from-rose-800 via-pink-800 to-rose-700
                              text-mystic-text border border-rose-600/30
-                             transition-all duration-300 hover:shadow-2xl hover:shadow-rose-900/20 hover:-translate-y-0.5 animate-glow">
-                  🔮 Consultar a la Pitonisa
+                             transition-all duration-300 hover:shadow-2xl hover:shadow-rose-900/20 hover:-translate-y-0.5 animate-glow
+                             disabled:opacity-60 disabled:cursor-not-allowed">
+                  {consulting
+                    ? <span className="flex items-center gap-3 justify-center">
+                        <span className="flex items-center gap-[3px]">
+                          {[0.35,0.70,1,0.55,0.85,0.45,0.65,0.30,0.75].map((h, i) => (
+                            <span key={i} className="w-[3px] rounded-full bg-mystic-text/70 animate-waveform origin-center inline-block"
+                              style={{ height: `${Math.round(h*12)}px`, animationDelay: `${(i*0.09).toFixed(2)}s` }} />
+                          ))}
+                        </span>
+                        Consultando…
+                      </span>
+                    : '🔮 Consultar a la Pitonisa'
+                  }
                 </button>
               </div>
             )}
@@ -257,7 +279,7 @@ export default function VolveraEx() {
               <span className="text-rose-400/70 text-sm tracking-[0.3em] uppercase">La Lectura</span>
               <div className="flex-1 h-px bg-gradient-to-l from-transparent to-rose-400/30" />
             </div>
-            <ModuleResult text={text} isStreaming={isStreaming} error={error} onReset={handleReset} />
+            <ModuleResult text={text} isStreaming={isStreaming} error={error} onReset={handleReset} moduleId="volvera-ex" />
           </div>
         )}
       </main>

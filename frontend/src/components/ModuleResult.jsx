@@ -1,34 +1,29 @@
 import { useState, useEffect } from 'react'
 import { useTypewriter } from '../hooks/useTypewriter'
 import OracleMarkdown from './OracleMarkdown'
+import Waveform from './Waveform'
+import RelatedCTAs from './RelatedCTAs'
 
 const PHASES = [
   { icon: '🕯️', text: 'La Pitonisa enciende las velas...' },
   { icon: '🌙', text: 'Los espíritus consultan el cosmos...' },
   { icon: '🔮', text: 'El oráculo contempla tu destino...' },
   { icon: '✨', text: 'Los arcanos revelan sus secretos...' },
+  { icon: '🌀', text: 'La energía se concentra en tu pregunta...' },
+  { icon: '🪬', text: 'La Pitonisa escucha lo invisible...' },
+  { icon: '🌌', text: 'El cosmos organiza su mensaje...' },
+  { icon: '⚡', text: 'La verdad emerge desde las sombras...' },
+  { icon: '🫀', text: 'La lectura late al ritmo de tu historia...' },
+  { icon: '🌿', text: 'La sabiduría antigua toma forma...' },
+  { icon: '🔺', text: 'Los patrones ocultos se hacen visibles...' },
+  { icon: '🃏', text: 'Las cartas conocen lo que aún no ves...' },
 ]
-
-function Waveform() {
-  const bars = [0.35, 0.70, 1, 0.55, 0.85, 0.45, 0.65, 0.30, 0.75]
-  return (
-    <div className="flex items-center gap-[3px]" aria-hidden="true">
-      {bars.map((h, i) => (
-        <div
-          key={i}
-          className="w-[3px] rounded-full bg-mystic-gold/55 animate-waveform origin-center"
-          style={{ height: `${Math.round(h * 14)}px`, animationDelay: `${(i * 0.09).toFixed(2)}s` }}
-        />
-      ))}
-    </div>
-  )
-}
 
 /**
  * Standalone oracle display for the special modules.
  * Does NOT depend on SessionContext — receives text/isStreaming as props.
  */
-export default function ModuleResult({ text, isStreaming, error, onReset }) {
+export default function ModuleResult({ text, isStreaming, error, onReset, moduleId }) {
   const displayed = useTypewriter(text, isStreaming)
   const [phaseIndex, setPhaseIndex] = useState(0)
   const [phaseKey,   setPhaseKey]   = useState(0)
@@ -76,12 +71,6 @@ export default function ModuleResult({ text, isStreaming, error, onReset }) {
           <p className="text-mystic-muted/80 text-sm tracking-[0.22em] uppercase font-sans">{phase.text}</p>
         </div>
         <Waveform />
-        <div className="flex gap-2">
-          {[0,1,2,3].map(i => (
-            <div key={i} className="w-1 h-1 rounded-full bg-mystic-gold/40 animate-pulse-slow"
-                 style={{ animationDelay: `${i * 0.25}s` }} />
-          ))}
-        </div>
       </div>
     )
   }
@@ -133,9 +122,14 @@ export default function ModuleResult({ text, isStreaming, error, onReset }) {
         <div className="flex-1 h-px bg-gradient-to-l from-transparent to-mystic-border/40" />
       </div>
 
+      {/* Related CTAs */}
+      {!isStreaming && displayed && (
+        <RelatedCTAs sourceId={moduleId} sourceType="module" />
+      )}
+
       {/* Reset button */}
       {!isStreaming && displayed && (
-        <div className="mt-10 text-center animate-fadeIn">
+        <div className="mt-6 text-center animate-fadeIn">
           <button
             onClick={onReset}
             className="group relative overflow-hidden py-3.5 px-12 rounded-xl

@@ -5,7 +5,7 @@ export const MODULES = [
     icon:        '💔',
     description: 'Las cartas revelan la energía entre tú y quien se fue.',
     path:        '/volvera-ex',
-    badge:       'Viral',
+    badge:       'Tarot',
     badgeColor:  'rose',
   },
   {
@@ -14,7 +14,7 @@ export const MODULES = [
     icon:        '🌅',
     description: 'Tu carta personal de hoy, nueva cada mañana.',
     path:        '/tarot-diario',
-    badge:       'Gratis',
+    badge:       'Tarot',
     badgeColor:  'emerald',
   },
   {
@@ -41,7 +41,7 @@ export const MODULES = [
     icon:        '🪐',
     description: 'Qué planetas te afectan ahora mismo y por cuánto tiempo.',
     path:        '/transitos',
-    badge:       'Premium',
+    badge:       'Astrología',
     badgeColor:  'amber',
   },
 ]

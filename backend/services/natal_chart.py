@@ -543,12 +543,28 @@ def calculate_natal_chart(
         if q:
             quadrant_count[q] += 1
 
+    # UTC conversion
+    utc_time_str = None
+    if birth_time_known:
+        try:
+            from datetime import datetime
+            import pytz
+            local_tz = pytz.timezone(geo["timezone"])
+            local_dt = local_tz.localize(datetime(year, month, day, hour, minute))
+            utc_dt = local_dt.astimezone(pytz.utc)
+            utc_time_str = utc_dt.strftime("%H:%M")
+        except Exception:
+            utc_time_str = None
+
     return {
         "name":              name,
         "birth_date":        f"{day:02d}/{month:02d}/{year}",
         "birth_time":        f"{hour:02d}:{minute:02d}" if birth_time_known else "desconocida",
+        "birth_time_utc":    utc_time_str,
         "birth_city":        geo["display_name"].split(",")[0].strip(),
         "birth_city_full":   geo["display_name"],
+        "latitude":          round(geo["lat"], 4),
+        "longitude":         round(geo["lon"], 4),
         "timezone":          geo["timezone"],
         "birth_time_known":  birth_time_known,
         # Planets

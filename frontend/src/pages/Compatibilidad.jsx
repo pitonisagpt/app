@@ -4,6 +4,7 @@ import { useUserProfile } from '../hooks/useUserProfile'
 import StarField from '../components/StarField'
 import ModuleResult from '../components/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
+import SeoHead from '../components/SeoHead'
 
 function ScoreMeter({ score }) {
   const color = score >= 70 ? '#86efac' : score >= 45 ? '#e8c97e' : '#fca5a5'
@@ -73,6 +74,11 @@ export default function Compatibilidad() {
 
   return (
     <div className="min-h-screen bg-mystic-bg relative overflow-hidden">
+      <SeoHead
+        title="Compatibilidad Amorosa"
+        description="Sinastría astral: descubre qué os une y qué os reta. Análisis de compatibilidad entre dos personas con inteligencia artificial."
+        path="/compatibilidad"
+      />
       <StarField count={80} />
       <div className="absolute top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-900/8 rounded-full blur-3xl pointer-events-none" />
       <Navbar />
@@ -164,7 +170,7 @@ export default function Compatibilidad() {
               <span className="text-blue-400/70 text-sm tracking-[0.3em] uppercase">La Sinastría</span>
               <div className="flex-1 h-px bg-gradient-to-l from-transparent to-blue-400/30" />
             </div>
-            <ModuleResult text={text} isStreaming={isStreaming} error={error} onReset={handleReset} />
+            <ModuleResult text={text} isStreaming={isStreaming} error={error} onReset={handleReset} moduleId="compatibilidad" />
           </div>
         )}
       </main>

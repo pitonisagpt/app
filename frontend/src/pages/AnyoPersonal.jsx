@@ -4,6 +4,7 @@ import { useUserProfile } from '../hooks/useUserProfile'
 import StarField from '../components/StarField'
 import ModuleResult from '../components/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
+import SeoHead from '../components/SeoHead'
 
 const NUMBER_COLORS = {
   1: '#e88c8c', 2: '#8cb8e8', 3: '#e8c97e', 4: '#8cc8a0',
@@ -49,6 +50,11 @@ export default function AnyoPersonal() {
 
   return (
     <div className="min-h-screen bg-mystic-bg relative overflow-hidden">
+      <SeoHead
+        title="Predicción del Año"
+        description="Tu número rector y lo que los próximos 12 meses reservan para ti. Numerología personal con interpretación de inteligencia artificial."
+        path="/anyo-personal"
+      />
       <StarField count={80} />
       <div className="absolute top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-mystic-purple/8 rounded-full blur-3xl pointer-events-none" />
       <Navbar />
@@ -64,7 +70,7 @@ export default function AnyoPersonal() {
               style={{ background: 'linear-gradient(90deg, #c9a84c, #e8c97e, #c9a84c)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
             Predicción del Año Personal
           </h2>
-          <p className="text-mystic-muted/70 text-sm tracking-wide">Tu número rector y la energía de los próximos 12 meses.</p>
+          <p className="text-mystic-muted/70 text-sm tracking-wide">Tu energía personal para {new Date().getFullYear()} · cambia cada año.</p>
           <div className="mt-4 flex justify-center items-center gap-3">
             <div className="w-16 h-px bg-gradient-to-r from-transparent to-violet-400/40" />
             <span className="text-violet-400/60 text-xs">✦</span>
@@ -131,7 +137,7 @@ export default function AnyoPersonal() {
               <div className="flex-1 h-px bg-gradient-to-l from-transparent to-violet-400/30" />
             </div>
 
-            <ModuleResult text={text} isStreaming={isStreaming} error={error} onReset={handleReset} />
+            <ModuleResult text={text} isStreaming={isStreaming} error={error} onReset={handleReset} moduleId="anyo-personal" />
           </div>
         )}
       </main>

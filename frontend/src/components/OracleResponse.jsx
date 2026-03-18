@@ -2,37 +2,27 @@ import { useState, useEffect } from 'react'
 import { useSession } from '../context/SessionContext'
 import { useTypewriter } from '../hooks/useTypewriter'
 import OracleMarkdown from './OracleMarkdown'
+import Waveform from './Waveform'
+import RelatedCTAs from './RelatedCTAs'
 
-// Mystical loading messages that cycle while waiting for the first chunk
 const ORACLE_PHASES = [
   { icon: '🕯️', text: 'La Pitonisa enciende las velas...' },
   { icon: '🌙', text: 'Los espíritus despiertan en la oscuridad...' },
   { icon: '🔮', text: 'El oráculo contempla tu destino...' },
   { icon: '✨', text: 'Las cartas revelan sus secretos...' },
+  { icon: '🃏', text: 'Los arcanos mayores toman la palabra...' },
+  { icon: '🌀', text: 'La energía de la tirada se condensa...' },
+  { icon: '🪬', text: 'La Pitonisa escucha lo que no se dice...' },
+  { icon: '🌌', text: 'El universo organiza su respuesta...' },
+  { icon: '⚡', text: 'La verdad emerge desde las sombras...' },
+  { icon: '🫀', text: 'Las cartas pulsan al ritmo de tu pregunta...' },
+  { icon: '🌿', text: 'La sabiduría ancestral despierta...' },
+  { icon: '🔺', text: 'Los símbolos se alinean para ti...' },
 ]
-
-// Animated voice waveform — shows while the oracle is "speaking"
-function Waveform() {
-  const bars = [0.35, 0.70, 1, 0.55, 0.85, 0.45, 0.65, 0.30, 0.75]
-  return (
-    <div className="flex items-center gap-[3px]" aria-hidden="true">
-      {bars.map((h, i) => (
-        <div
-          key={i}
-          className="w-[3px] rounded-full bg-mystic-gold/55 animate-waveform origin-center"
-          style={{
-            height: `${Math.round(h * 14)}px`,
-            animationDelay: `${(i * 0.09).toFixed(2)}s`,
-          }}
-        />
-      ))}
-    </div>
-  )
-}
 
 // Renders text split by paragraphs with smooth fade-in per paragraph
 
-export default function OracleResponse({ onNewReading }) {
+export default function OracleResponse({ onNewReading, spreadId }) {
   const { readingText, isStreaming } = useSession()
   const displayedText = useTypewriter(readingText, isStreaming)
 
@@ -80,16 +70,6 @@ export default function OracleResponse({ onNewReading }) {
         </div>
 
         <Waveform />
-
-        <div className="flex gap-2">
-          {[0, 1, 2, 3].map(i => (
-            <div
-              key={i}
-              className="w-1 h-1 rounded-full bg-mystic-gold/40 animate-pulse-slow"
-              style={{ animationDelay: `${i * 0.25}s` }}
-            />
-          ))}
-        </div>
       </div>
     )
   }
@@ -159,9 +139,14 @@ export default function OracleResponse({ onNewReading }) {
         <div className="flex-1 h-px bg-gradient-to-l from-transparent to-mystic-border/40" />
       </div>
 
+      {/* Related CTAs */}
+      {!isStreaming && displayedText && (
+        <RelatedCTAs sourceId={spreadId} sourceType="spread" />
+      )}
+
       {/* Nueva consulta — only after streaming finishes */}
       {!isStreaming && displayedText && (
-        <div className="mt-10 text-center animate-fadeIn">
+        <div className="mt-6 text-center animate-fadeIn">
           <button
             onClick={onNewReading}
             className="group relative overflow-hidden py-3.5 px-12 rounded-xl

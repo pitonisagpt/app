@@ -8,6 +8,7 @@ import StarField from '../components/StarField'
 import SpreadLayout from '../components/SpreadLayout'
 import QuestionForm from '../components/QuestionForm'
 import OracleResponse from '../components/OracleResponse'
+import SeoHead from '../components/SeoHead'
 
 const MAJOR_ARCANA = [
   { id: 0,  name: 'El Loco',                symbol: '🃏' },
@@ -137,6 +138,7 @@ export default function Reading() {
 
   const { startReading } = useStreaming()
   const [revealedCount, setRevealedCount] = useState(0)
+  const [consulting, setConsulting] = useState(false)
 
   useEffect(() => {
     if (!spread) {
@@ -178,6 +180,8 @@ export default function Reading() {
   }
 
   async function handleConsult() {
+    if (consulting) return
+    setConsulting(true)
     await startReading(
       spreadId,
       question || null,
@@ -188,6 +192,7 @@ export default function Reading() {
         reversed: c.reversed,
       }))
     )
+    setConsulting(false)
   }
 
   function handleNewReading() {
@@ -203,6 +208,13 @@ export default function Reading() {
 
   return (
     <div className="min-h-screen bg-mystic-bg relative overflow-hidden">
+      {spread && (
+        <SeoHead
+          title={spread.name}
+          description={`${spread.description} ${spread.cardCount} cartas. Consulta gratis con inteligencia artificial.`}
+          path={`/tirada/${spreadId}`}
+        />
+      )}
       <StarField count={80} />
       {/* Ambient orb */}
       <div className="absolute top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-mystic-purple/8 rounded-full blur-3xl pointer-events-none" />
@@ -261,7 +273,7 @@ export default function Reading() {
                 <p className="text-mystic-muted/70 mb-6 text-sm tracking-wide font-serif italic">
                   Formula tu pregunta con claridad y confianza.
                 </p>
-                <QuestionForm onSubmit={handleQuestionSubmit} />
+                <QuestionForm onSubmit={handleQuestionSubmit} suggestions={spread.suggestions || []} />
               </div>
             ) : (
               <div className="text-center py-8">
@@ -299,14 +311,27 @@ export default function Reading() {
                 </p>
                 <button
                   onClick={handleConsult}
+                  disabled={consulting}
                   className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
                              bg-gradient-to-r from-mystic-purple via-purple-800 to-mystic-violet
                              hover:from-purple-700 hover:to-violet-700
                              text-mystic-text border border-mystic-gold/30
                              transition-all duration-300 hover:shadow-2xl hover:shadow-mystic-gold/20
-                             hover:-translate-y-0.5 animate-glow"
+                             hover:-translate-y-0.5 animate-glow
+                             disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                 >
-                  🔮 Consultar a la Pitonisa
+                  {consulting
+                    ? <span className="flex items-center gap-3 justify-center">
+                        <span className="flex items-center gap-[3px]" aria-hidden="true">
+                          {[0.35,0.70,1,0.55,0.85,0.45,0.65,0.30,0.75].map((h, i) => (
+                            <span key={i} className="w-[3px] rounded-full bg-mystic-gold/70 animate-waveform origin-center inline-block"
+                              style={{ height: `${Math.round(h*12)}px`, animationDelay: `${(i*0.09).toFixed(2)}s` }} />
+                          ))}
+                        </span>
+                        Consultando…
+                      </span>
+                    : '🔮 Consultar a la Pitonisa'
+                  }
                 </button>
               </div>
             )}
@@ -329,7 +354,7 @@ export default function Reading() {
               <div className="flex-1 h-px bg-gradient-to-l from-transparent to-mystic-gold/30" />
             </div>
 
-            <OracleResponse onNewReading={handleNewReading} />
+            <OracleResponse onNewReading={handleNewReading} spreadId={spreadId} />
           </div>
         )}
       </main>

@@ -2,6 +2,12 @@ import { Link } from 'react-router-dom'
 import StarField from '../components/StarField'
 import { SPREADS, CATEGORIES } from '../data/spreads'
 import { MODULES } from '../data/modules'
+import { useTarotStreak } from '../hooks/useTarotStreak'
+import { useUserProfile } from '../hooks/useUserProfile'
+import MoonPhase from '../components/MoonPhase'
+import RetrogradeBanner from '../components/RetrogradeBanner'
+import NumerologyPortrait from '../components/NumerologyPortrait'
+import SeoHead from '../components/SeoHead'
 
 const BADGE_COLORS = {
   rose:    'bg-rose-900/30 border-rose-700/40 text-rose-300/80',
@@ -11,7 +17,7 @@ const BADGE_COLORS = {
   amber:   'bg-amber-900/30 border-amber-700/40 text-amber-300/80',
 }
 
-function ModuleCard({ mod }) {
+function ModuleCard({ mod, streak }) {
   const badgeCls = BADGE_COLORS[mod.badgeColor] || BADGE_COLORS.amber
   return (
     <Link
@@ -42,7 +48,16 @@ function ModuleCard({ mod }) {
             </span>
           </div>
           <p className="text-mystic-muted text-xs leading-relaxed font-sans">{mod.description}</p>
-          <div className="mt-3 flex items-center justify-end">
+          <div className="mt-3 flex items-center gap-2">
+            {streak > 0 && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-sans
+                               text-amber-400/80 border border-amber-700/40 bg-amber-900/20
+                               px-2 py-0.5 rounded-full tracking-wide">
+                🔥 {streak} {streak === 1 ? 'día' : 'días'}
+              </span>
+            )}
+          </div>
+          <div className="mt-1 flex items-center justify-end">
             <span className="flex items-center gap-1 text-mystic-gold/60 text-xs group-hover:text-mystic-gold
                              transition-colors duration-200 font-sans tracking-wider">
               Consultar
@@ -99,7 +114,12 @@ function SpreadCard({ id, spread }) {
             {spread.description}
           </p>
           <div className="mt-3 flex items-center gap-2">
-            <span className="text-[10px] text-mystic-gold/70 bg-mystic-gold/10 border border-mystic-gold/20
+            {spread.badge && (
+              <span className={`text-[9px] border px-1.5 py-0.5 rounded-full tracking-wider uppercase font-sans ${BADGE_COLORS[spread.badgeColor] || BADGE_COLORS.amber}`}>
+                {spread.badge}
+              </span>
+            )}
+            <span className="text-[10px] text-mystic-gold/50 border border-mystic-gold/15
                              px-2 py-0.5 rounded-full tracking-wider uppercase font-sans">
               {spread.cardCount} {spread.cardCount === 1 ? 'carta' : 'cartas'}
             </span>
@@ -115,6 +135,11 @@ function SpreadCard({ id, spread }) {
 }
 
 export default function Home() {
+  const { streak } = useTarotStreak()
+  const { profile } = useUserProfile()
+
+  const hasSigns = profile.signo_sol || profile.signo_luna || profile.signo_ascendente
+
   const grouped = Object.entries(CATEGORIES).map(([catKey, cat]) => ({
     catKey,
     cat,
@@ -123,6 +148,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-mystic-bg relative overflow-hidden">
+      <SeoHead
+        description="Tarot, astrología y numerología con inteligencia artificial. Carta astral, tiradas personalizadas y lecturas del oráculo. Consulta gratis."
+        path="/"
+      />
       <StarField />
 
       {/* Ambient orbs */}
@@ -155,10 +184,65 @@ export default function Home() {
           <span className="text-mystic-gold text-sm" aria-hidden="true">✦</span>
           <div className="w-20 h-px bg-gradient-to-l from-transparent to-mystic-gold/60" />
         </div>
-        <p className="text-mystic-muted/60 text-xs tracking-widest mt-5 uppercase font-sans">
-          {Object.keys(SPREADS).length} tiradas · Elige tu consulta
-        </p>
+        {/* Sign profile — shown if carta astral was calculated before */}
+        {hasSigns ? (
+          <div className="mt-5 flex flex-col items-center gap-1.5 animate-fadeIn">
+            {profile.nombre && (
+              <p className="text-mystic-muted/50 text-[11px] font-sans tracking-widest uppercase">
+                Hola, {profile.nombre}
+              </p>
+            )}
+            <div className="flex items-center gap-2 flex-wrap justify-center">
+              {profile.signo_sol && (
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-sans
+                                 text-mystic-accent/80 border border-mystic-border/50
+                                 bg-mystic-surface/50 px-3 py-1 rounded-full tracking-wide">
+                  ☀️ {profile.signo_sol}
+                </span>
+              )}
+              {profile.signo_luna && (
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-sans
+                                 text-mystic-accent/80 border border-mystic-border/50
+                                 bg-mystic-surface/50 px-3 py-1 rounded-full tracking-wide">
+                  🌙 {profile.signo_luna}
+                </span>
+              )}
+              {profile.signo_ascendente && (
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-sans
+                                 text-mystic-accent/80 border border-mystic-border/50
+                                 bg-mystic-surface/50 px-3 py-1 rounded-full tracking-wide">
+                  ↑ {profile.signo_ascendente}
+                </span>
+              )}
+            </div>
+          </div>
+        ) : (
+          <p className="text-mystic-muted/60 text-xs tracking-widest mt-5 uppercase font-sans">
+            {Object.keys(SPREADS).length} tiradas · {MODULES.length + 1} módulos · Tarot · Astrología · Numerología
+          </p>
+        )}
       </header>
+
+      {/* ✦ Tu cielo ahora — cosmic dashboard */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4 mb-8">
+        {/* Section header */}
+        <div className="flex items-center gap-4 mb-4">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-violet-500/20" />
+          <span className="text-[10px] font-sans uppercase tracking-[0.35em] text-violet-400/45 whitespace-nowrap">
+            ✦ Tu cielo ahora
+          </span>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-violet-500/20" />
+        </div>
+
+        {/* Moon + Numerology side by side */}
+        <div className={`grid gap-3 mb-3 ${profile.fecha_nacimiento ? 'grid-cols-2' : 'grid-cols-1 max-w-xs mx-auto'}`}>
+          <MoonPhase />
+          {profile.fecha_nacimiento && <NumerologyPortrait profile={profile} />}
+        </div>
+
+        {/* Retrograde row — full width below */}
+        <RetrogradeBanner />
+      </div>
 
       {/* Featured: Carta Astral */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 mb-6">
@@ -179,7 +263,7 @@ export default function Home() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
               <h2 className="text-mystic-gold font-display font-bold text-sm tracking-[0.15em] uppercase">
-                Carta Astral Gratis
+                Carta Astral
               </h2>
               <span className="text-[10px] bg-mystic-gold/15 border border-mystic-gold/30 text-mystic-gold/80
                                px-2 py-0.5 rounded-full font-sans tracking-wider uppercase">Nuevo</span>
@@ -212,7 +296,9 @@ export default function Home() {
           </span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {MODULES.map(mod => <ModuleCard key={mod.id} mod={mod} />)}
+          {MODULES.map(mod => (
+            <ModuleCard key={mod.id} mod={mod} streak={mod.id === 'tarot-diario' ? streak : 0} />
+          ))}
         </div>
       </div>
 

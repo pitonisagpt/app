@@ -13,6 +13,8 @@ from routes.tarot_diario import router as tarot_diario_router
 from routes.anyo_personal import router as anyo_personal_router
 from routes.compatibilidad import router as compatibilidad_router
 from routes.transitos import router as transitos_router
+from routes.moon import router as moon_router
+from routes.retrograde import router as retrograde_router
 
 app = FastAPI(title="Pitonisa GPT API")
 
@@ -34,6 +36,8 @@ app.include_router(tarot_diario_router,  prefix="/api")
 app.include_router(anyo_personal_router, prefix="/api")
 app.include_router(compatibilidad_router, prefix="/api")
 app.include_router(transitos_router,     prefix="/api")
+app.include_router(moon_router,          prefix="/api")
+app.include_router(retrograde_router,    prefix="/api")
 
 
 @app.get("/health")

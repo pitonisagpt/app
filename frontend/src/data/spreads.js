@@ -1,3 +1,34 @@
+export const SUGGESTED_QUESTIONS = {
+  consultas: [
+    '¿Debería cambiar de trabajo?',
+    '¿Es el momento correcto para dar este paso?',
+    '¿Qué necesito saber sobre esta situación?',
+    '¿Cómo puedo superar este bloqueo?',
+    '¿Qué me está impidiendo avanzar?',
+  ],
+  amor: [
+    '¿Tiene futuro esta relación?',
+    '¿Qué siente realmente por mí?',
+    '¿Estoy listo/a para una nueva relación?',
+    '¿Debo hablar con esa persona?',
+    '¿Qué necesita cambiar en mi vida amorosa?',
+  ],
+  dinero: [
+    '¿Cómo puedo mejorar mi situación financiera?',
+    '¿Es buen momento para invertir?',
+    '¿Qué me bloquea económicamente?',
+    '¿Debo aceptar esta oferta de trabajo?',
+    '¿Qué oportunidad económica se acerca?',
+  ],
+  general: [
+    '¿Qué mensaje tienen las cartas para mí hoy?',
+    '¿En qué área de mi vida debo enfocarme?',
+    '¿Qué viene en mi futuro próximo?',
+    '¿Qué necesito soltar para crecer?',
+    '¿Cuál es mi próxima lección de vida?',
+  ],
+}
+
 export const CATEGORIES = {
   consultas:        { label: 'Consultas Rápidas',   icon: '🔮' },
   amor:             { label: 'Amor y Relaciones',    icon: '❤️' },
@@ -17,6 +48,8 @@ export const SPREADS = {
     positions: ["Tu Respuesta"],
     requiresQuestion: true,
     category: "consultas",
+    badge: "Tarot", badgeColor: "violet",
+    suggestions: SUGGESTED_QUESTIONS.consultas,
   },
   "2-cartas": {
     name: "Pregúntale 2 Cartas",
@@ -26,6 +59,8 @@ export const SPREADS = {
     positions: ["Carta Principal", "Carta Complementaria"],
     requiresQuestion: true,
     category: "consultas",
+    badge: "Tarot", badgeColor: "violet",
+    suggestions: SUGGESTED_QUESTIONS.consultas,
   },
   "si-o-no": {
     name: "Sí o No",
@@ -36,6 +71,8 @@ export const SPREADS = {
     requiresQuestion: true,
     yesNoMode: true,
     category: "consultas",
+    badge: "Tarot", badgeColor: "violet",
+    suggestions: SUGGESTED_QUESTIONS.consultas,
   },
   "si-no-2": {
     name: "Sí o No · 2 Cartas",
@@ -46,6 +83,8 @@ export const SPREADS = {
     requiresQuestion: true,
     yesNoMode: true,
     category: "consultas",
+    badge: "Tarot", badgeColor: "violet",
+    suggestions: SUGGESTED_QUESTIONS.consultas,
   },
   "favor-y-contra": {
     name: "A Favor y En Contra",
@@ -55,6 +94,8 @@ export const SPREADS = {
     positions: ["A tu favor", "En tu contra"],
     requiresQuestion: true,
     category: "consultas",
+    badge: "Tarot", badgeColor: "violet",
+    suggestions: SUGGESTED_QUESTIONS.consultas,
   },
   "encrucijada": {
     name: "Tarot Encrucijada",
@@ -64,6 +105,8 @@ export const SPREADS = {
     positions: ["La decisión ante ti", "Camino A", "Camino B", "Lo que debes considerar", "El resultado más probable"],
     requiresQuestion: true,
     category: "consultas",
+    badge: "Tarot", badgeColor: "violet",
+    suggestions: SUGGESTED_QUESTIONS.consultas,
   },
   "verdad-oculta": {
     name: "Tarot Verdad Oculta",
@@ -73,6 +116,8 @@ export const SPREADS = {
     positions: ["La apariencia", "La verdad oculta", "Lo que no quieres ver", "La revelación"],
     requiresQuestion: true,
     category: "consultas",
+    badge: "Tarot", badgeColor: "violet",
+    suggestions: SUGGESTED_QUESTIONS.consultas,
   },
 
   // ── AMOR Y RELACIONES ────────────────────────────────────────────
@@ -84,6 +129,8 @@ export const SPREADS = {
     positions: ["Tú", "La otra persona", "La relación"],
     requiresQuestion: true,
     category: "amor",
+    badge: "Tarot", badgeColor: "rose",
+    suggestions: SUGGESTED_QUESTIONS.amor,
   },
   "que-siente": {
     name: "¿Qué siente por mí?",
@@ -93,6 +140,8 @@ export const SPREADS = {
     positions: ["Sus sentimientos actuales", "Sus pensamientos hacia ti", "Sus intenciones", "El futuro de la relación"],
     requiresQuestion: true,
     category: "amor",
+    badge: "Tarot", badgeColor: "rose",
+    suggestions: SUGGESTED_QUESTIONS.amor,
   },
   "encontrar-amor": {
     name: "Encontrar el Amor",
@@ -102,6 +151,7 @@ export const SPREADS = {
     positions: ["Tu energía amorosa", "Lo que debes soltar", "Qué tipo de amor atraes", "Consejo para abrirte al amor"],
     requiresQuestion: false,
     category: "amor",
+    badge: "Tarot", badgeColor: "rose",
   },
 
   // ── AUTOCONOCIMIENTO ─────────────────────────────────────────────
@@ -113,6 +163,7 @@ export const SPREADS = {
     positions: ["Quién eres realmente", "Tu potencial oculto", "Tu sombra", "Tu propósito de vida", "Tu camino hacia la plenitud"],
     requiresQuestion: false,
     category: "autoconocimiento",
+    badge: "Tarot", badgeColor: "emerald",
   },
   "espejo-alma": {
     name: "Tarot Espejo del Alma",
@@ -122,6 +173,7 @@ export const SPREADS = {
     positions: ["El reflejo de tu alma", "Lo que proyectas al mundo", "Lo que guardas en tu interior", "Tu herida profunda", "Tu don espiritual"],
     requiresQuestion: false,
     category: "autoconocimiento",
+    badge: "Tarot", badgeColor: "emerald",
   },
   "mente-cuerpo-espiritu": {
     name: "Mente · Cuerpo · Espíritu",
@@ -131,6 +183,7 @@ export const SPREADS = {
     positions: ["Mente", "Cuerpo", "Espíritu"],
     requiresQuestion: false,
     category: "autoconocimiento",
+    badge: "Holístico", badgeColor: "emerald",
   },
 
   // ── TIEMPO Y DESTINO ─────────────────────────────────────────────
@@ -142,6 +195,7 @@ export const SPREADS = {
     positions: ["Pasado", "Presente", "Futuro"],
     requiresQuestion: false,
     category: "destino",
+    badge: "Tarot", badgeColor: "amber",
   },
   "oraculo": {
     name: "El Oráculo",
@@ -151,6 +205,7 @@ export const SPREADS = {
     positions: ["Presente", "Futuro cercano", "Influencia oculta", "Consejo", "Resultado"],
     requiresQuestion: false,
     category: "destino",
+    badge: "Oráculo", badgeColor: "amber",
   },
   "celta": {
     name: "Cruz Celta",
@@ -160,6 +215,8 @@ export const SPREADS = {
     positions: ["Situación", "Desafío", "Base", "Pasado reciente", "Posibilidad", "Resultado"],
     requiresQuestion: true,
     category: "destino",
+    badge: "Tarot Clásico", badgeColor: "amber",
+    suggestions: SUGGESTED_QUESTIONS.general,
   },
   "lunar": {
     name: "Tarot Lunar",
@@ -169,6 +226,7 @@ export const SPREADS = {
     positions: ["Luna Nueva · Nuevos inicios", "Cuarto Creciente · Lo que crece", "Luna Llena · Lo que se revela", "Cuarto Menguante · Lo que soltar"],
     requiresQuestion: false,
     category: "destino",
+    badge: "Astrología", badgeColor: "blue",
   },
   "estrella": {
     name: "Tarot Estrella",
@@ -178,6 +236,7 @@ export const SPREADS = {
     positions: ["Tu luz interna", "Tu guía estrella", "Lo que iluminas en los demás", "Tu deseo más profundo", "La esperanza del futuro"],
     requiresQuestion: false,
     category: "destino",
+    badge: "Tarot", badgeColor: "amber",
   },
   "gitano": {
     name: "Tarot Gitano",
@@ -187,6 +246,7 @@ export const SPREADS = {
     positions: ["El camino recorrido", "Lo que el destino prepara", "La influencia del pasado", "El consejo ancestral", "El mensaje de los espíritus"],
     requiresQuestion: false,
     category: "destino",
+    badge: "Tarot", badgeColor: "amber",
   },
   "matriz-destino": {
     name: "Matriz del Destino",
@@ -196,6 +256,7 @@ export const SPREADS = {
     positions: ["Tu energía de vida", "Tu misión de alma", "Tu karma a superar", "Tus talentos y dones", "Tu destino final"],
     requiresQuestion: false,
     category: "destino",
+    badge: "Numerología", badgeColor: "violet",
   },
 
   // ── ESPIRITUALIDAD ───────────────────────────────────────────────
@@ -207,6 +268,7 @@ export const SPREADS = {
     positions: ["Tu herida emocional", "Su origen", "El camino de sanación", "Tu poder curativo"],
     requiresQuestion: false,
     category: "espiritualidad",
+    badge: "Holístico", badgeColor: "violet",
   },
   "desarrollo-espiritual": {
     name: "Desarrollo Espiritual",
@@ -216,6 +278,7 @@ export const SPREADS = {
     positions: ["Tu nivel espiritual actual", "Tu próxima lección", "Tu guía o maestro (energía)", "Tu destino espiritual"],
     requiresQuestion: false,
     category: "espiritualidad",
+    badge: "Espiritualidad", badgeColor: "violet",
   },
   "cabala": {
     name: "Tarot Cábala",
@@ -225,6 +288,7 @@ export const SPREADS = {
     positions: ["Kether · Tu propósito divino", "Chokmah · Tu sabiduría", "Binah · Tu comprensión", "Chesed · Tu abundancia", "Geburah · Tu prueba"],
     requiresQuestion: false,
     category: "espiritualidad",
+    badge: "Cábala", badgeColor: "blue",
   },
 
   // ── ABUNDANCIA ───────────────────────────────────────────────────
@@ -236,5 +300,7 @@ export const SPREADS = {
     positions: ["Energía actual", "Obstáculo", "Consejo"],
     requiresQuestion: true,
     category: "abundancia",
+    badge: "Tarot", badgeColor: "emerald",
+    suggestions: SUGGESTED_QUESTIONS.dinero,
   },
 }
