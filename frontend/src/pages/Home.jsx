@@ -241,7 +241,7 @@ export default function Home() {
         </div>
 
         {/* Retrograde row — full width below */}
-        <RetrogradeBanner />
+        <RetrogradeBanner nombre={profile.nombre} />
       </div>
 
       {/* Featured: Carta Astral */}

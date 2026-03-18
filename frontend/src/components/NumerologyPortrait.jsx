@@ -55,7 +55,9 @@ export default function NumerologyPortrait({ profile }) {
 
       {/* Description */}
       <p className="text-mystic-muted/55 text-[11px] font-sans leading-relaxed line-clamp-3">
-        {lifePathInfo.desc}
+        {profile.nombre
+          ? <><span className="text-mystic-accent/70 font-medium">{profile.nombre.split(' ')[0]}</span>{', '}{lifePathInfo.desc.charAt(0).toLowerCase() + lifePathInfo.desc.slice(1)}</>
+          : lifePathInfo.desc}
       </p>
 
       {/* Secondary numbers */}

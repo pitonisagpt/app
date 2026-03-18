@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import { useUserProfile } from '../hooks/useUserProfile'
 import StarField from '../components/StarField'
@@ -199,12 +199,8 @@ function OverlayOracle({ overlay, nombreA, nombreB }) {
   const [text, setText]           = useState('')
   const [streaming, setStreaming] = useState(false)
   const [error, setError]         = useState(null)
-  const startedRef = useRef(false)
 
   useEffect(() => {
-    if (startedRef.current) return
-    startedRef.current = true
-
     const controller = new AbortController()
 
     async function run() {

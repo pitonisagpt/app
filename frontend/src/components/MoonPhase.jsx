@@ -66,7 +66,7 @@ export default function MoonPhase() {
       {/* Next phase */}
       <span className={`text-[10px] font-sans px-3 py-1 rounded-full border tracking-wide
         ${nextSoon ? 'border-mystic-gold/40 bg-mystic-gold/10 text-mystic-gold/80' : 'border-mystic-border/25 text-mystic-muted/40'}`}>
-        {data.next_phase_days === 0 ? `✦ ${data.next_phase} hoy` : `${data.next_phase} en ${data.next_phase_days}d`}
+        {data.next_phase_days === 0 ? `✦ ${data.next_phase} hoy` : `${data.next_phase} en ${data.next_phase_days} ${data.next_phase_days === 1 ? 'día' : 'días'}`}
       </span>
 
       {/* CTA */}

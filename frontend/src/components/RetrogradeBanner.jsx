@@ -68,7 +68,7 @@ const PLANET_CONFIG = {
   },
 }
 
-function PlanetCard({ planet }) {
+function PlanetCard({ planet, nombre }) {
   const c = PLANET_CONFIG[planet.attr] || PLANET_CONFIG.mercury
   return (
     <div
@@ -127,7 +127,9 @@ function PlanetCard({ planet }) {
 
         {/* Advice */}
         <p className="text-mystic-muted/45 text-[11px] font-sans leading-relaxed italic">
-          {PLANET_CONFIG[planet.attr]?.advice}
+          {nombre
+            ? <><span className="not-italic font-medium" style={{ color: `${c.symbol}99` }}>{nombre.split(' ')[0]}</span>{', '}{PLANET_CONFIG[planet.attr]?.advice.charAt(0).toLowerCase() + PLANET_CONFIG[planet.attr]?.advice.slice(1)}</>
+            : PLANET_CONFIG[planet.attr]?.advice}
         </p>
       </div>
     </div>
@@ -172,7 +174,7 @@ function EmptyState() {
   )
 }
 
-export default function RetrogradeBanner() {
+export default function RetrogradeBanner({ nombre }) {
   const { retrogrades, loading, error } = useRetrogradePlanets()
 
   if (error) return null
@@ -223,7 +225,7 @@ export default function RetrogradeBanner() {
 
       {!loading && retrogrades.length > 0 && (
         <div className={`grid gap-3 ${hasMany ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
-          {retrogrades.map(p => <PlanetCard key={p.attr} planet={p} />)}
+          {retrogrades.map(p => <PlanetCard key={p.attr} planet={p} nombre={nombre} />)}
         </div>
       )}
 
