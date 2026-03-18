@@ -55,9 +55,9 @@ export function useModuleStream() {
               if (parsed && typeof parsed === 'object' && parsed.__error__) {
                 throw new Error(parsed.__error__)
               }
-              // Object events carry metadata (card, score, numero, etc.)
+              // Object events carry metadata — merge so multiple events accumulate
               if (parsed && typeof parsed === 'object') {
-                setMeta(parsed)
+                setMeta(prev => ({ ...(prev || {}), ...parsed }))
                 onMeta?.(parsed)
               } else {
                 // String chunks are oracle text

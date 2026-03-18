@@ -149,10 +149,12 @@ Cálculo astronómico real del cielo en el momento exacto del nacimiento, seguid
 
 | Tarea | Modelo | Output |
 |---|---|---|
-| Interpretación principal | Claude Sonnet 4.6 | 700–900 palabras en streaming |
-| Insights de tabs (12 textos) | Claude Haiku 4.5 | JSON paralelo, 12 insights cortos |
+| Interpretación principal | Claude Sonnet 4.6 | 700–900 palabras en streaming SSE |
+| Insights de tabs | Claude Haiku 4.5 | **Una sola llamada** → JSON estructurado con 17 claves |
 
-Los 12 insights cubren: rueda, planetas, aspectos, casas, energía, Sol, Luna, Ascendente, Venus+Marte, Júpiter+Saturno, patrones y tema de vida.
+Los 17 insights cubren: rueda, planetas, aspectos, casas, energía, Sol, Luna, Mercurio, Venus, Marte, Júpiter, Saturno, Urano, Neptuno, Plutón, Ascendente, tema_vida, patrones (+ Quirón, Lilith, Nodo Norte si están presentes).
+
+La llamada a Haiku se lanza como `asyncio.create_task` **en paralelo** con el stream de Sonnet — los insights están listos para cuando termina la interpretación principal, sin añadir latencia extra al usuario.
 
 ### Visualizaciones — 6 tabs
 
@@ -276,7 +278,7 @@ Sección visual unificada bajo el header principal con tres componentes en tiemp
 | Astrología | kerykeion + pyswisseph (Swiss Ephemeris / JPL DE431) |
 | Geocodificación | OpenStreetMap Nominatim + TimezoneFinder |
 | Streaming | Server-Sent Events (SSE) |
-| Concurrencia | asyncio — insights de Haiku corren en paralelo al stream de Sonnet |
+| Concurrencia | asyncio — 1 llamada JSON a Haiku corre en paralelo al stream de Sonnet |
 | SEO | react-helmet-async + OG tags estáticos en index.html |
 | Persistencia | localStorage (perfil, streak, caché lunar, caché retrógrados) |
 | Routing | React Router v6 |
