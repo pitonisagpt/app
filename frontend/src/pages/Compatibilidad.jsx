@@ -428,20 +428,46 @@ function RuedaTab({ synastry, insights, insightsLoading, nameA, nameB, text, isS
 
 // ── Time input ────────────────────────────────────────────────────────────────
 
-function TimeInput({ label, timeValue, timeKnown, onTimeChange, onKnownChange, inputCls }) {
+const SELECT_CLS = `w-full rounded-xl px-3 py-2.5 text-mystic-text font-sans text-sm
+  focus:outline-none focus:ring-2 focus:ring-blue-500/15 transition-all duration-200 cursor-pointer
+  border border-mystic-border/80 focus:border-blue-400/60`
+const SELECT_STYLE = { background: 'linear-gradient(135deg, #101026, #14143a)' }
+
+function TimeInput({ label, hour, minute, known, onHourChange, onMinuteChange, onKnownChange }) {
   return (
-    <div>
-      <div className="flex items-center justify-between mb-1.5">
-        <label className="text-mystic-muted/70 text-xs tracking-widest uppercase">{label}</label>
-        <label className="flex items-center gap-1.5 cursor-pointer">
-          <input type="checkbox" checked={timeKnown} onChange={e => onKnownChange(e.target.checked)}
-            className="w-3 h-3 accent-violet-500" />
-          <span className="text-mystic-muted/50 text-[10px] font-sans">Conocida</span>
-        </label>
-      </div>
-      <input type="time" value={timeValue} onChange={e => onTimeChange(e.target.value)}
-        disabled={!timeKnown}
-        className={`${inputCls} ${!timeKnown ? 'opacity-30 cursor-not-allowed' : ''}`} />
+    <div className="space-y-2">
+      <label className="flex items-center gap-3 cursor-pointer"
+        onClick={() => onKnownChange(!known)}>
+        <div className={`w-9 h-[18px] rounded-full border transition-all duration-200 flex items-center px-0.5 shrink-0 ${
+          known ? 'bg-blue-500/25 border-blue-400/50' : 'bg-mystic-border/40 border-mystic-border'
+        }`}>
+          <div className={`w-3.5 h-3.5 rounded-full transition-all duration-200 ${
+            known ? 'bg-blue-400 translate-x-[18px]' : 'bg-mystic-muted/60 translate-x-0'
+          }`} />
+        </div>
+        <span className="text-mystic-muted/70 text-xs uppercase tracking-widest font-sans select-none">
+          {label} conocida
+        </span>
+      </label>
+
+      {known && (
+        <div className="grid grid-cols-2 gap-2 animate-fadeIn">
+          <select value={hour} onChange={e => onHourChange(e.target.value)}
+            className={SELECT_CLS} style={SELECT_STYLE}>
+            <option value="">Hora</option>
+            {Array.from({ length: 24 }, (_, i) => i).map(h => (
+              <option key={h} value={h}>{String(h).padStart(2, '0')}:00</option>
+            ))}
+          </select>
+          <select value={minute} onChange={e => onMinuteChange(e.target.value)}
+            className={SELECT_CLS} style={SELECT_STYLE}>
+            <option value="">Min</option>
+            {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(m => (
+              <option key={m} value={m}>{String(m).padStart(2, '0')}</option>
+            ))}
+          </select>
+        </div>
+      )}
     </div>
   )
 }
@@ -477,12 +503,14 @@ export default function Compatibilidad() {
     nombre_a:     profile.nombre           || '',
     fecha_a:      profile.fecha_nacimiento || '',
     ciudad_a:     profile.ciudad           || '',
-    hora_a:       '',
+    hora_a_h:     '',
+    hora_a_m:     '',
     hora_a_known: false,
     nombre_b:     profile.nombre_b || '',
     fecha_b:      profile.fecha_b  || '',
     ciudad_b:     profile.ciudad_b || '',
-    hora_b:       '',
+    hora_b_h:     '',
+    hora_b_m:     '',
     hora_b_known: false,
   })
 
@@ -507,7 +535,19 @@ export default function Compatibilidad() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    await stream('/api/compatibilidad', form)
+    const body = {
+      nombre_a:     form.nombre_a,
+      fecha_a:      form.fecha_a,
+      ciudad_a:     form.ciudad_a,
+      hora_a_known: form.hora_a_known,
+      hora_a:       form.hora_a_known && form.hora_a_h !== '' ? `${form.hora_a_h}:${form.hora_a_m !== '' ? String(form.hora_a_m).padStart(2,'0') : '00'}` : '',
+      nombre_b:     form.nombre_b,
+      fecha_b:      form.fecha_b,
+      ciudad_b:     form.ciudad_b,
+      hora_b_known: form.hora_b_known,
+      hora_b:       form.hora_b_known && form.hora_b_h !== '' ? `${form.hora_b_h}:${form.hora_b_m !== '' ? String(form.hora_b_m).padStart(2,'0') : '00'}` : '',
+    }
+    await stream('/api/compatibilidad', body)
   }
 
   function handleReset() {
@@ -572,10 +612,11 @@ export default function Compatibilidad() {
                     onChange={e => { setForm(f => ({ ...f, fecha_a: e.target.value })); updateProfile({ fecha_nacimiento: e.target.value }) }}
                     className={inputCls} />
                 </div>
-                <TimeInput label="Hora" timeValue={form.hora_a} timeKnown={form.hora_a_known}
-                  onTimeChange={v => setForm(f => ({ ...f, hora_a: v }))}
-                  onKnownChange={v => setForm(f => ({ ...f, hora_a_known: v }))}
-                  inputCls={inputCls} />
+                <TimeInput label="Hora"
+                  hour={form.hora_a_h} minute={form.hora_a_m} known={form.hora_a_known}
+                  onHourChange={v => setForm(f => ({ ...f, hora_a_h: v }))}
+                  onMinuteChange={v => setForm(f => ({ ...f, hora_a_m: v }))}
+                  onKnownChange={v => setForm(f => ({ ...f, hora_a_known: v }))} />
                 <div>
                   <label className="block text-mystic-muted/70 text-xs tracking-widests uppercase mb-1.5">
                     Ciudad <span className="normal-case text-mystic-muted/40">(opcional)</span>
@@ -601,10 +642,11 @@ export default function Compatibilidad() {
                     onChange={e => { setForm(f => ({ ...f, fecha_b: e.target.value })); updateProfile({ fecha_b: e.target.value }) }}
                     className={inputCls} />
                 </div>
-                <TimeInput label="Hora" timeValue={form.hora_b} timeKnown={form.hora_b_known}
-                  onTimeChange={v => setForm(f => ({ ...f, hora_b: v }))}
-                  onKnownChange={v => setForm(f => ({ ...f, hora_b_known: v }))}
-                  inputCls={inputCls} />
+                <TimeInput label="Hora"
+                  hour={form.hora_b_h} minute={form.hora_b_m} known={form.hora_b_known}
+                  onHourChange={v => setForm(f => ({ ...f, hora_b_h: v }))}
+                  onMinuteChange={v => setForm(f => ({ ...f, hora_b_m: v }))}
+                  onKnownChange={v => setForm(f => ({ ...f, hora_b_known: v }))} />
                 <div>
                   <label className="block text-mystic-muted/70 text-xs tracking-widests uppercase mb-1.5">
                     Ciudad <span className="normal-case text-mystic-muted/40">(opcional)</span>
