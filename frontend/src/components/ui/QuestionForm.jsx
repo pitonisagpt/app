@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSession } from '../context/SessionContext'
+import { useSession } from '../../context/SessionContext'
 
 const MAX = 300
 

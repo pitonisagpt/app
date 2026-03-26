@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useTypewriter } from '../hooks/useTypewriter'
+import { useTypewriter } from '../../hooks/useTypewriter'
 import OracleMarkdown from './OracleMarkdown'
 import Waveform from './Waveform'
 import RelatedCTAs from './RelatedCTAs'

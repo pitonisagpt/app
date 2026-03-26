@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { SPREADS } from '../data/spreads'
-import { MODULES } from '../data/modules'
+import { SPREADS } from '../../data/spreads'
+import { MODULES } from '../../data/modules'
 
 const BADGE_COLORS = {
   rose:    'bg-rose-900/30 border-rose-700/40 text-rose-300/80',

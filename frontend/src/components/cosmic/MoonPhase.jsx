@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useMoonPhase } from '../hooks/useMoonPhase'
+import { useMoonPhase } from '../../hooks/useMoonPhase'
 
 export default function MoonPhase() {
   const { data, loading } = useMoonPhase()

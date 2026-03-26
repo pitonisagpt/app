@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { updateProfile } from '../hooks/useUserProfile'
+import { updateProfile } from '../../hooks/useUserProfile'
 
 const STORAGE_KEY = 'pitonisa_onboarding_done'
 

@@ -3,8 +3,8 @@
  * HamburgerMenu (mobile, slides from right) and SidebarMenu (desktop, slides from left).
  */
 import { Link } from 'react-router-dom'
-import { MODULES } from '../data/modules'
-import { SPREADS, CATEGORIES } from '../data/spreads'
+import { MODULES } from '../../data/modules'
+import { SPREADS, CATEGORIES } from '../../data/spreads'
 
 const BADGE_COLORS = {
   rose:    'bg-rose-900/30 border-rose-700/40 text-rose-300/80',

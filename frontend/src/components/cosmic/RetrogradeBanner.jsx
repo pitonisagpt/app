@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useRetrogradePlanets } from '../hooks/useRetrogradePlanets'
+import { useRetrogradePlanets } from '../../hooks/useRetrogradePlanets'
 
 const PLANET_CONFIG = {
   mercury: {

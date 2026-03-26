@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useSession } from '../context/SessionContext'
-import { useTypewriter } from '../hooks/useTypewriter'
+import { useSession } from '../../context/SessionContext'
+import { useTypewriter } from '../../hooks/useTypewriter'
 import OracleMarkdown from './OracleMarkdown'
 import Waveform from './Waveform'
 import RelatedCTAs from './RelatedCTAs'

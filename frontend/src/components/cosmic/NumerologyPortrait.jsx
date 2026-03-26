@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useNumerology } from '../hooks/useNumerology'
+import { useNumerology } from '../../hooks/useNumerology'
 
 export default function NumerologyPortrait({ profile }) {
   const { lifePath, destiny, soul, lifePathInfo } = useNumerology(profile)
