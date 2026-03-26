@@ -18,6 +18,15 @@ export const MODULES = [
     badgeColor:  'emerald',
   },
   {
+    id:          'suenos',
+    name:        'Interpretación de Sueños',
+    icon:        '🌙',
+    description: 'Tu inconsciente habla mientras duermes. Descifra el mensaje arquetípico.',
+    path:        '/suenos',
+    badge:       'Inconsciente',
+    badgeColor:  'violet',
+  },
+  {
     id:          'anyo-personal',
     name:        'Predicción del Año',
     icon:        '🔢',

@@ -15,6 +15,7 @@ from routes.compatibilidad import router as compatibilidad_router
 from routes.transitos import router as transitos_router
 from routes.moon import router as moon_router
 from routes.retrograde import router as retrograde_router
+from routes.suenos import router as suenos_router
 
 app = FastAPI(title="Pitonisa GPT API")
 
@@ -38,6 +39,7 @@ app.include_router(compatibilidad_router, prefix="/api")
 app.include_router(transitos_router,     prefix="/api")
 app.include_router(moon_router,          prefix="/api")
 app.include_router(retrograde_router,    prefix="/api")
+app.include_router(suenos_router,        prefix="/api")
 
 
 @app.get("/health")
