@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import Navbar from '../components/Navbar'
-import StarField from '../components/StarField'
-import CardDisplay from '../components/CardDisplay'
-import ModuleResult from '../components/ModuleResult'
+import Navbar from '../components/layout/Navbar'
+import StarField from '../components/ui/StarField'
+import CardDisplay from '../components/oracle/CardDisplay'
+import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
 import { useUserProfile } from '../hooks/useUserProfile'
 import { useTarotStreak, getMilestone } from '../hooks/useTarotStreak'
-import SeoHead from '../components/SeoHead'
+import SeoHead from '../components/ui/SeoHead'
 
 // ── Streak badge ──────────────────────────────────────────────────────────────
 function StreakBadge({ streak, isNew }) {

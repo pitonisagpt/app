@@ -3,12 +3,12 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { SPREADS } from '../data/spreads'
 import { useSession } from '../context/SessionContext'
 import { useStreaming } from '../hooks/useStreaming'
-import Navbar from '../components/Navbar'
-import StarField from '../components/StarField'
-import SpreadLayout from '../components/SpreadLayout'
-import QuestionForm from '../components/QuestionForm'
-import OracleResponse from '../components/OracleResponse'
-import SeoHead from '../components/SeoHead'
+import Navbar from '../components/layout/Navbar'
+import StarField from '../components/ui/StarField'
+import SpreadLayout from '../components/oracle/SpreadLayout'
+import QuestionForm from '../components/ui/QuestionForm'
+import OracleResponse from '../components/oracle/OracleResponse'
+import SeoHead from '../components/ui/SeoHead'
 
 const MAJOR_ARCANA = [
   { id: 0,  name: 'El Loco',                symbol: '🃏' },

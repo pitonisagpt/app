@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/layout/Navbar'
 import { useUserProfile } from '../hooks/useUserProfile'
-import StarField from '../components/StarField'
-import ModuleResult from '../components/ModuleResult'
+import StarField from '../components/ui/StarField'
+import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
-import SeoHead from '../components/SeoHead'
-import SynastryWheel from '../components/SynastryWheel'
-import Waveform from '../components/Waveform'
+import SeoHead from '../components/ui/SeoHead'
+import SynastryWheel from '../components/astrology/SynastryWheel'
+import Waveform from '../components/oracle/Waveform'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 

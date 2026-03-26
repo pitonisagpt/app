@@ -1,7 +1,7 @@
 /**
  * ZodiacHeroCards.jsx — Sol / Luna / Ascendente hero cards
  */
-import OraclePulse, { PULSE_MESSAGES } from './OraclePulse'
+import OraclePulse, { PULSE_MESSAGES } from '../oracle/OraclePulse'
 
 const SIGN_DATA = {
   Aries:       { symbol: '♈', element: 'Fuego',  modality: 'Cardinal', emoji: '🔥', ruling: 'Marte' },

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/layout/Navbar'
 import { useUserProfile } from '../hooks/useUserProfile'
-import StarField from '../components/StarField'
-import ModuleResult from '../components/ModuleResult'
+import StarField from '../components/ui/StarField'
+import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
-import SeoHead from '../components/SeoHead'
+import SeoHead from '../components/ui/SeoHead'
 
 const EMOCIONES = [
   { value: 'miedo',      label: 'Miedo',      color: 'border-slate-500/50 text-slate-300 hover:border-slate-400 hover:bg-slate-800/40' },

@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom'
-import StarField from '../components/StarField'
+import StarField from '../components/ui/StarField'
 import { SPREADS, CATEGORIES } from '../data/spreads'
 import { MODULES } from '../data/modules'
 import { useTarotStreak } from '../hooks/useTarotStreak'
 import { useUserProfile } from '../hooks/useUserProfile'
-import MoonPhase from '../components/MoonPhase'
-import RetrogradeBanner from '../components/RetrogradeBanner'
-import NumerologyPortrait from '../components/NumerologyPortrait'
-import SeoHead from '../components/SeoHead'
+import MoonPhase from '../components/cosmic/MoonPhase'
+import RetrogradeBanner from '../components/cosmic/RetrogradeBanner'
+import NumerologyPortrait from '../components/cosmic/NumerologyPortrait'
+import SeoHead from '../components/ui/SeoHead'
 
 const BADGE_COLORS = {
   rose:    'bg-rose-900/30 border-rose-700/40 text-rose-300/80',

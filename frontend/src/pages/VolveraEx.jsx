@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useUserProfile } from '../hooks/useUserProfile'
-import Navbar from '../components/Navbar'
-import StarField from '../components/StarField'
-import CardDisplay from '../components/CardDisplay'
-import ModuleResult from '../components/ModuleResult'
+import Navbar from '../components/layout/Navbar'
+import StarField from '../components/ui/StarField'
+import CardDisplay from '../components/oracle/CardDisplay'
+import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
-import SeoHead from '../components/SeoHead'
+import SeoHead from '../components/ui/SeoHead'
 
 // ── Full deck (78 cards) ─────────────────────────────────────────────────────
 const MAJOR_ARCANA = [

@@ -11,7 +11,7 @@ import AnyoPersonal from './pages/AnyoPersonal'
 import Compatibilidad from './pages/Compatibilidad'
 import Transitos from './pages/Transitos'
 import Suenos from './pages/Suenos'
-import OnboardingModal, { useShowOnboarding } from './components/OnboardingModal'
+import OnboardingModal, { useShowOnboarding } from './components/ui/OnboardingModal'
 
 function AppRoutes() {
   const [showOnboarding, closeOnboarding] = useShowOnboarding()

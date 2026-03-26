@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/layout/Navbar'
 import { useUserProfile } from '../hooks/useUserProfile'
-import StarField from '../components/StarField'
-import ModuleResult from '../components/ModuleResult'
+import StarField from '../components/ui/StarField'
+import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
-import SeoHead from '../components/SeoHead'
+import SeoHead from '../components/ui/SeoHead'
 
 const NUMBER_COLORS = {
   1: '#e88c8c', 2: '#8cb8e8', 3: '#e8c97e', 4: '#8cc8a0',

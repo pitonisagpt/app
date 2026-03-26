@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/layout/Navbar'
 import { useUserProfile } from '../hooks/useUserProfile'
-import StarField from '../components/StarField'
-import ModuleResult from '../components/ModuleResult'
+import StarField from '../components/ui/StarField'
+import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
-import SeoHead from '../components/SeoHead'
+import SeoHead from '../components/ui/SeoHead'
 
 const INTENSITY_LABEL = { 1: 'Suave', 2: 'Moderado', 3: 'Intenso', 4: 'Exacto' }
 const INTENSITY_COLOR  = { 1: '#8cb8c8', 2: '#e8c97e', 3: '#e8a08c', 4: '#fca5a5' }
