@@ -63,7 +63,7 @@ const PLANET_CONFIG = {
     border: 'rgba(167,139,250,0.22)',
     glow:   'rgba(167,139,250,0.15)',
     symbol: '#a78bfa',
-    badge:  'border-violet-500/40 bg-violet-900/25 text-violet-300/80',
+    badge:  'border-mystic-purple/40 bg-mystic-purple/15 text-mystic-purple/80',
     advice: 'Transformación profunda en curso. Deja ir lo que ya no sirve a tu evolución.',
   },
 }
@@ -189,7 +189,7 @@ export default function RetrogradeBanner({ nombre }) {
           className="flex-1 h-px"
           style={{
             background: loading || retrogrades.length === 0
-              ? 'linear-gradient(to right, transparent, rgba(255,255,255,0.06))'
+              ? 'linear-gradient(to right, transparent, rgba(196,180,224,0.15))'
               : 'linear-gradient(to right, transparent, rgba(239,68,68,0.25))',
           }}
         />
@@ -197,7 +197,7 @@ export default function RetrogradeBanner({ nombre }) {
           className="text-[9px] font-sans uppercase tracking-[0.3em] whitespace-nowrap"
           style={{
             color: loading || retrogrades.length === 0
-              ? 'rgba(255,255,255,0.22)'
+              ? 'rgba(46,60,20,0.35)'
               : 'rgba(239,68,68,0.60)',
           }}
         >
@@ -212,7 +212,7 @@ export default function RetrogradeBanner({ nombre }) {
           className="flex-1 h-px"
           style={{
             background: loading || retrogrades.length === 0
-              ? 'linear-gradient(to left, transparent, rgba(255,255,255,0.06))'
+              ? 'linear-gradient(to left, transparent, rgba(196,180,224,0.15))'
               : 'linear-gradient(to left, transparent, rgba(239,68,68,0.25))',
           }}
         />

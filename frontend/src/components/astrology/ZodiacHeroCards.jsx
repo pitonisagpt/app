@@ -53,15 +53,15 @@ function getSignData(rawSign) {
 function HeroCard({ icon, label, planet, deg, house, signRaw, insight, insightLoading }) {
   const sd = getSignData(signRaw)
   if (!sd) return null
-  const glow   = ELEMENT_GLOW[sd.element]   || 'rgba(201,168,76,0.15)'
-  const border = ELEMENT_BORDER[sd.element] || 'rgba(201,168,76,0.25)'
-  const color  = ELEMENT_TEXT[sd.element]   || '#c9a84c'
+  const glow   = ELEMENT_GLOW[sd.element]   || 'rgba(240,160,90,0.15)'
+  const border = ELEMENT_BORDER[sd.element] || 'rgba(240,160,90,0.25)'
+  const color  = ELEMENT_TEXT[sd.element]   || '#F0A05A'
 
   return (
     <div
       className="relative rounded-2xl p-5 overflow-hidden flex flex-col gap-3 transition-transform duration-300 hover:-translate-y-0.5"
       style={{
-        background: `radial-gradient(ellipse at 60% 0%, ${glow} 0%, #0f0f1e 70%)`,
+        background: `radial-gradient(ellipse at 60% 0%, ${glow} 0%, #F5EDE3 70%)`,
         border: `1px solid ${border}`,
         boxShadow: `0 8px 32px ${glow}`,
       }}
@@ -100,7 +100,7 @@ function HeroCard({ icon, label, planet, deg, house, signRaw, insight, insightLo
           {insightLoading
             ? <OraclePulse messages={PULSE_MESSAGES.hero} compact />
             : <p className="text-[12px] font-sans leading-relaxed italic"
-                 style={{ color: 'rgba(209,213,219,0.7)' }}>
+                 style={{ color: 'rgba(46,60,20,0.65)' }}>
                 {insight}
               </p>
           }

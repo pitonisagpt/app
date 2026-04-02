@@ -3,15 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --mystic-bg:      #0a0a18;
-  --mystic-surface: #101026;
-  --mystic-card:    #14143a;
-  --mystic-border:  #2a1f4e;
-  --mystic-purple:  #7b2d8b;
-  --mystic-gold:    #c9a84c;
-  --mystic-accent:  #e8c97e;
-  --mystic-text:    #e2d9f3;
-  --mystic-muted:   #8878aa;
+  --mystic-bg:      #F5EDE3;
+  --mystic-surface: #EDE0D0;
+  --mystic-card:    #E8D8C8;
+  --mystic-border:  #C4B4E0;
+  --mystic-purple:  #5B6BE0;
+  --mystic-violet:  #8070C8;
+  --mystic-gold:    #F0A05A;
+  --mystic-accent:  #C4B4E0;
+  --mystic-text:    #2E3C14;
+  --mystic-muted:   #7B5C3A;
+  --mystic-moss:    #606B2C;
+  --mystic-mint:    #A8C8A0;
+  --mystic-blush:   #E8D0C0;
+  --mystic-red:     #CC2A1A;
 }
 
 * {
@@ -20,6 +25,9 @@
 
 body {
   background-color: var(--mystic-bg);
+  background-image: url('/background.png');
+  background-repeat: repeat;
+  background-size: 540px 540px;
   color: var(--mystic-text);
   font-family: 'Josefin Sans', 'Palatino Linotype', Georgia, sans-serif;
   font-size: 16px;
@@ -85,27 +93,27 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--mystic-bg);
+  background: var(--mystic-surface);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--mystic-border);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--mystic-gold);
-  opacity: 0.4;
+  background: var(--mystic-purple);
+  opacity: 0.6;
 }
 
-/* Star animation */
-@keyframes twinkle {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50%       { opacity: 1;   transform: scale(1.3); }
+/* Botanical particle animation (replaces stars) */
+@keyframes drift {
+  0%, 100% { opacity: 0.15; transform: scale(1) translateY(0px); }
+  50%       { opacity: 0.5;  transform: scale(1.4) translateY(-4px); }
 }
 
 .star {
   position: absolute;
-  background: white;
+  background: var(--mystic-moss);
   border-radius: 50%;
-  animation: twinkle var(--duration, 3s) ease-in-out infinite;
+  animation: drift var(--duration, 4s) ease-in-out infinite;
   animation-delay: var(--delay, 0s);
 }

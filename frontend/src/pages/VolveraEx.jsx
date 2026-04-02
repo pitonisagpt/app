@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useUserProfile } from '../hooks/useUserProfile'
 import Navbar from '../components/layout/Navbar'
 import StarField from '../components/ui/StarField'
+import Sprite, { LeafDivider } from '../components/ui/Sprite'
 import CardDisplay from '../components/oracle/CardDisplay'
 import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
@@ -156,6 +157,7 @@ export default function VolveraEx() {
             <div className="absolute inset-0 rounded-full bg-rose-500/15 blur-xl scale-125 animate-glow" />
             <div className="text-5xl relative">💔</div>
           </div>
+          <Sprite name="cat-belly" className="opacity-65 mx-auto" style={{ transform: 'scale(0.75)' }} />
           <h2 className="text-2xl font-display font-bold tracking-widest mb-2"
               style={{ background: 'linear-gradient(90deg, #e88c8c, #f5b8b8, #e88c8c)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
             ¿Volverá mi ex?
@@ -166,6 +168,7 @@ export default function VolveraEx() {
             <span className="text-rose-400/60 text-xs">✦</span>
             <div className="w-16 h-px bg-gradient-to-l from-transparent to-rose-400/40" />
           </div>
+          <LeafDivider className="my-4 opacity-50" />
         </div>
 
         {/* Step: form */}

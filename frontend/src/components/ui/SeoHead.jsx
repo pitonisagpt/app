@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 
 const BASE_URL   = import.meta.env.VITE_APP_URL || ''
-const SITE_NAME  = 'Pitonisa GPT'
+const SITE_NAME  = 'Pytonia'
 const DEFAULT_IMG = `${BASE_URL}/og-image.png`
 
 export default function SeoHead({ title, description, image, path }) {

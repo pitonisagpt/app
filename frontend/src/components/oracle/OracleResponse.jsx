@@ -98,10 +98,10 @@ export default function OracleResponse({ onNewReading, spreadId }) {
         className="relative bg-mystic-surface/90 backdrop-blur-sm rounded-2xl p-7 pt-10
                    border transition-all duration-700"
         style={{
-          borderColor: isStreaming ? 'rgba(201,168,76,0.40)' : 'rgba(201,168,76,0.18)',
+          borderColor: isStreaming ? 'rgba(91,107,224,0.40)' : 'rgba(91,107,224,0.18)',
           boxShadow: isStreaming
-            ? '0 0 60px rgba(201,168,76,0.10), 0 0 120px rgba(123,45,139,0.12), 0 25px 50px rgba(0,0,0,0.4)'
-            : '0 25px 50px rgba(0,0,0,0.35)',
+            ? '0 0 60px rgba(91,107,224,0.10), 0 0 120px rgba(91,107,224,0.12), 0 25px 50px rgba(46,60,20,0.06)'
+            : '0 25px 50px rgba(46,60,20,0.05)',
         }}
       >
         {/* Corner ornaments */}
@@ -117,7 +117,7 @@ export default function OracleResponse({ onNewReading, spreadId }) {
             <div
               className="absolute inset-0 rounded-full blur-md transition-all duration-700"
               style={{
-                background: isStreaming ? 'rgba(201,168,76,0.45)' : 'rgba(201,168,76,0.15)',
+                background: isStreaming ? 'rgba(91,107,224,0.45)' : 'rgba(91,107,224,0.15)',
                 transform: isStreaming ? 'scale(1.5)' : 'scale(1)',
               }}
             />
@@ -163,7 +163,7 @@ export default function OracleResponse({ onNewReading, spreadId }) {
               className="absolute inset-y-0 -left-full group-hover:left-full w-1/2
                          transition-all duration-700 ease-in-out pointer-events-none skew-x-[-12deg]"
               aria-hidden="true"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(201,168,76,0.14), transparent)' }}
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(91,107,224,0.14), transparent)' }}
             />
           </button>
         </div>

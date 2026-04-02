@@ -12,6 +12,7 @@ import PatternCards from '../components/astrology/PatternCards'
 import OraclePulse, { PULSE_MESSAGES } from '../components/oracle/OraclePulse'
 import Waveform from '../components/oracle/Waveform'
 import { useTypewriter } from '../hooks/useTypewriter'
+import { LeafDivider, InfinitySymbol } from '../components/ui/Sprite'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
@@ -475,7 +476,7 @@ function EnergyOracle({ chart, energyType }) {
 // ── Birth chart summary grid ─────────────────────────────────────────────────
 function ChartSummary({ chart, insights, insightsLoading, tab, setTab }) {
   const planets = chart.planets
-  const elemColor = ELEMENT_COLOR[chart.dominant_element] || '#e8c97e'
+  const elemColor = ELEMENT_COLOR[chart.dominant_element] || '#F0A05A'
   const [selectedPlanet, setSelectedPlanet] = useState(null)
   const [selectedEnergy, setSelectedEnergy] = useState(null)
 
@@ -548,7 +549,7 @@ function ChartSummary({ chart, insights, insightsLoading, tab, setTab }) {
           <div key={label} className="flex items-center gap-5">
             <div className="text-center">
               <p className="text-[10px] text-mystic-muted/60 uppercase tracking-widest font-sans mb-1">{label}</p>
-              <p className="font-display font-semibold" style={{ color: color || '#c9a84c' }}>{value}</p>
+              <p className="font-display font-semibold" style={{ color: color || '#5B6BE0' }}>{value}</p>
             </div>
             {i < arr.length - 1 && <div className="w-px h-8 bg-mystic-border/40" />}
           </div>
@@ -986,7 +987,7 @@ export default function CartaAstral() {
       />
       <StarField count={100} />
       <div className="absolute top-20 left-1/4 w-80 h-80 bg-mystic-purple/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-40 right-1/4 w-96 h-96 bg-indigo-900/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-40 right-1/4 w-96 h-96 bg-mystic-purple/8 rounded-full blur-3xl pointer-events-none" />
       <Navbar />
 
       <main className="relative z-10 max-w-3xl mx-auto px-4 py-10">
@@ -996,10 +997,11 @@ export default function CartaAstral() {
             <div className="absolute inset-0 rounded-full bg-mystic-gold/15 blur-xl scale-125 animate-glow" />
             <div className="text-5xl relative" role="img" aria-label="Carta astral">⭐</div>
           </div>
+          <InfinitySymbol className="opacity-65 mx-auto" style={{ transform: 'scale(0.9)' }} />
           <h1
             className="text-3xl md:text-4xl font-display font-bold tracking-widest uppercase mb-2"
             style={{
-              background: 'linear-gradient(90deg, #c9a84c, #e8c97e, #c9a84c)',
+              background: 'linear-gradient(90deg, #5B6BE0, #8070C8, #5B6BE0)',
               backgroundSize: '200% auto',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
@@ -1016,6 +1018,7 @@ export default function CartaAstral() {
             <span className="text-mystic-gold/60 text-xs" aria-hidden="true">✦</span>
             <div className="w-16 h-px bg-gradient-to-l from-transparent to-mystic-gold/40" />
           </div>
+          <LeafDivider className="my-4 opacity-50" />
         </div>
 
         {!showResult ? (
@@ -1036,7 +1039,7 @@ export default function CartaAstral() {
                            text-mystic-text placeholder-mystic-muted/40 font-sans text-sm
                            focus:outline-none focus:ring-2 transition-all duration-200
                            border ${fieldErr('name') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
-                style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
+                style={{ background: 'linear-gradient(135deg, #EDE0D0, #E8D8C8)' }}
               />
             </div>
 
@@ -1053,7 +1056,7 @@ export default function CartaAstral() {
                     className={`w-full rounded-xl px-3 py-3 text-mystic-text font-sans text-sm
                                focus:outline-none focus:ring-2 transition-all duration-200 cursor-pointer
                                border ${fieldErr('day') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
-                    style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
+                    style={{ background: 'linear-gradient(135deg, #EDE0D0, #E8D8C8)' }}
                   >
                     <option value="">Día</option>
                     {Array.from({length: 31}, (_, i) => i+1).map(d => (
@@ -1068,7 +1071,7 @@ export default function CartaAstral() {
                     className={`w-full rounded-xl px-3 py-3 text-mystic-text font-sans text-sm
                                focus:outline-none focus:ring-2 transition-all duration-200 cursor-pointer
                                border ${fieldErr('month') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
-                    style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
+                    style={{ background: 'linear-gradient(135deg, #EDE0D0, #E8D8C8)' }}
                   >
                     <option value="">Mes</option>
                     {MONTHS.map((m, i) => (
@@ -1087,7 +1090,7 @@ export default function CartaAstral() {
                     className={`w-full rounded-xl px-3 py-3 text-mystic-text placeholder-mystic-muted/40 font-sans text-sm
                                focus:outline-none focus:ring-2 transition-all duration-200
                                border ${fieldErr('year') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
-                    style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
+                    style={{ background: 'linear-gradient(135deg, #EDE0D0, #E8D8C8)' }}
                   />
                 </div>
               </div>
@@ -1128,7 +1131,7 @@ export default function CartaAstral() {
                       className={`w-full rounded-xl px-3 py-3 text-mystic-text font-sans text-sm
                                  focus:outline-none focus:ring-2 transition-all duration-200 cursor-pointer
                                  border ${fieldErr('hour') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
-                      style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
+                      style={{ background: 'linear-gradient(135deg, #EDE0D0, #E8D8C8)' }}
                     >
                       <option value="">Hora</option>
                       {Array.from({length: 24}, (_, i) => i).map(h => (
@@ -1143,7 +1146,7 @@ export default function CartaAstral() {
                       className={`w-full rounded-xl px-3 py-3 text-mystic-text font-sans text-sm
                                  focus:outline-none focus:ring-2 transition-all duration-200 cursor-pointer
                                  border ${fieldErr('minute') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
-                      style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
+                      style={{ background: 'linear-gradient(135deg, #EDE0D0, #E8D8C8)' }}
                     >
                       <option value="">Min</option>
                       {[0,5,10,15,20,25,30,35,40,45,50,55].map(m => (
@@ -1170,7 +1173,7 @@ export default function CartaAstral() {
                            text-mystic-text placeholder-mystic-muted/40 font-sans text-sm
                            focus:outline-none focus:ring-2 transition-all duration-200
                            border ${fieldErr('city') ? 'border-red-500/70 focus:border-red-400/80 focus:ring-red-500/10' : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'}`}
-                style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
+                style={{ background: 'linear-gradient(135deg, #EDE0D0, #E8D8C8)' }}
               />
               <p className="text-mystic-muted/40 text-[11px] font-sans mt-1">
                 Se usa para calcular latitud, longitud y zona horaria exactas.
@@ -1187,7 +1190,7 @@ export default function CartaAstral() {
               type="submit"
               className="w-full py-4 px-6 rounded-xl font-display font-semibold tracking-[0.18em] uppercase text-sm
                          bg-gradient-to-r from-mystic-purple to-mystic-violet
-                         hover:from-purple-700 hover:to-violet-700
+                         hover:from-mystic-purple/80 hover:to-mystic-violet/80
                          text-mystic-text border border-mystic-border/60
                          transition-all duration-300 hover:shadow-2xl hover:shadow-mystic-purple/40
                          hover:-translate-y-0.5 cursor-pointer
@@ -1219,10 +1222,10 @@ export default function CartaAstral() {
                 <div
                   className="relative bg-mystic-surface/90 backdrop-blur-sm rounded-2xl p-7 border transition-all duration-700"
                   style={{
-                    borderColor: streaming ? 'rgba(201,168,76,0.40)' : 'rgba(201,168,76,0.18)',
+                    borderColor: streaming ? 'rgba(91,107,224,0.40)' : 'rgba(91,107,224,0.18)',
                     boxShadow: streaming
-                      ? '0 0 60px rgba(201,168,76,0.10), 0 25px 50px rgba(0,0,0,0.4)'
-                      : '0 25px 50px rgba(0,0,0,0.35)',
+                      ? '0 0 60px rgba(91,107,224,0.10), 0 25px 50px rgba(46,60,20,0.06)'
+                      : '0 25px 50px rgba(46,60,20,0.05)',
                   }}
                 >
                   {['top-3 left-3','top-3 right-3','bottom-3 left-3','bottom-3 right-3'].map(pos => (
@@ -1251,7 +1254,7 @@ export default function CartaAstral() {
                   <div className="flex-1 h-px bg-gradient-to-l from-transparent to-mystic-gold/30" />
                 </div>
                 <div className="relative rounded-2xl p-6 overflow-hidden"
-                     style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(109,40,217,0.18) 0%, #0f0f1e 70%)', border: '1px solid rgba(201,168,76,0.25)' }}>
+                     style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(91,107,224,0.12) 0%, #F5EDE3 70%)', border: '1px solid rgba(91,107,224,0.25)' }}>
                   <div className="absolute top-3 left-3 text-mystic-gold/15 text-sm select-none">✦</div>
                   <div className="absolute top-3 right-3 text-mystic-gold/15 text-sm select-none">✦</div>
                   <p className="text-center text-3xl mb-3 select-none">🌟</p>

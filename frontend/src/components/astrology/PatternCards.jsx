@@ -66,12 +66,12 @@ function SectionTitle({ children }) {
 // Chart Ruler
 function ChartRulerCard({ ruler }) {
   if (!ruler || !ruler.planet) return null
-  const color = PLANET_COLOR[ruler.planet] || '#c9a84c'
+  const color = PLANET_COLOR[ruler.planet] || '#F0A05A'
   return (
     <div
       className="rounded-2xl p-5 relative overflow-hidden"
       style={{
-        background: `radial-gradient(ellipse at 30% 0%, ${color}18 0%, #0f0f1e 65%)`,
+        background: `radial-gradient(ellipse at 30% 0%, ${color}18 0%, #F5EDE3 65%)`,
         border: `1px solid ${color}30`,
         boxShadow: `0 8px 32px ${color}14`,
       }}

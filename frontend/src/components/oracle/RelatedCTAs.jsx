@@ -5,7 +5,7 @@ import { MODULES } from '../../data/modules'
 const BADGE_COLORS = {
   rose:    'bg-rose-900/30 border-rose-700/40 text-rose-300/80',
   emerald: 'bg-emerald-900/30 border-emerald-700/40 text-emerald-300/80',
-  violet:  'bg-violet-900/30 border-violet-700/40 text-violet-300/80',
+  violet:  'bg-mystic-purple/15 border-mystic-purple/30 text-mystic-purple/80',
   blue:    'bg-blue-900/30 border-blue-700/40 text-blue-300/80',
   amber:   'bg-amber-900/30 border-amber-700/40 text-amber-300/80',
 }

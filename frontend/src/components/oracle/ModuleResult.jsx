@@ -3,6 +3,7 @@ import { useTypewriter } from '../../hooks/useTypewriter'
 import OracleMarkdown from './OracleMarkdown'
 import Waveform from './Waveform'
 import RelatedCTAs from './RelatedCTAs'
+import Sprite, { LeafDivider } from '../ui/Sprite'
 
 const PHASES = [
   { icon: '🕯️', text: 'La Pitonisa enciende las velas...' },
@@ -71,6 +72,7 @@ export default function ModuleResult({ text, isStreaming, error, onReset, module
           <p className="text-mystic-muted/80 text-sm tracking-[0.22em] uppercase font-sans">{phase.text}</p>
         </div>
         <Waveform />
+        <Sprite name="cat-meditating" className="opacity-50 mx-auto animate-float-slow" style={{ transform: 'scale(0.7)' }} />
       </div>
     )
   }
@@ -96,10 +98,10 @@ export default function ModuleResult({ text, isStreaming, error, onReset, module
       <div
         className="relative bg-mystic-surface/90 backdrop-blur-sm rounded-2xl p-7 pt-10 border transition-all duration-700"
         style={{
-          borderColor: isStreaming ? 'rgba(201,168,76,0.40)' : 'rgba(201,168,76,0.18)',
+          borderColor: isStreaming ? 'rgba(91,107,224,0.40)' : 'rgba(91,107,224,0.18)',
           boxShadow: isStreaming
-            ? '0 0 60px rgba(201,168,76,0.10), 0 0 120px rgba(123,45,139,0.12), 0 25px 50px rgba(0,0,0,0.4)'
-            : '0 25px 50px rgba(0,0,0,0.35)',
+            ? '0 0 60px rgba(91,107,224,0.10), 0 0 120px rgba(91,107,224,0.12), 0 25px 50px rgba(46,60,20,0.06)'
+            : '0 25px 50px rgba(46,60,20,0.05)',
         }}
       >
         {['top-3 left-3','top-3 right-3','bottom-3 left-3','bottom-3 right-3'].map(pos => (
@@ -108,7 +110,7 @@ export default function ModuleResult({ text, isStreaming, error, onReset, module
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
           <div className="relative">
             <div className="absolute inset-0 rounded-full blur-md transition-all duration-700"
-                 style={{ background: isStreaming ? 'rgba(201,168,76,0.45)' : 'rgba(201,168,76,0.15)', transform: isStreaming ? 'scale(1.5)' : 'scale(1)' }} />
+                 style={{ background: isStreaming ? 'rgba(91,107,224,0.45)' : 'rgba(91,107,224,0.15)', transform: isStreaming ? 'scale(1.5)' : 'scale(1)' }} />
             <div className="relative bg-mystic-card border border-mystic-gold/40 rounded-full w-9 h-9 flex items-center justify-center text-lg select-none">🔮</div>
           </div>
         </div>
@@ -116,11 +118,7 @@ export default function ModuleResult({ text, isStreaming, error, onReset, module
       </div>
 
       {/* Bottom ornament */}
-      <div className="flex items-center gap-3 mt-2 px-4">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent to-mystic-border/40" />
-        <span className="text-mystic-border/50 text-[10px] tracking-widest select-none" aria-hidden="true">✦ ✦ ✦</span>
-        <div className="flex-1 h-px bg-gradient-to-l from-transparent to-mystic-border/40" />
-      </div>
+      <LeafDivider className="mt-3 opacity-60" />
 
       {/* Related CTAs */}
       {!isStreaming && displayed && (
@@ -143,7 +141,7 @@ export default function ModuleResult({ text, isStreaming, error, onReset, module
             <span className="absolute inset-y-0 -left-full group-hover:left-full w-1/2
                              transition-all duration-700 ease-in-out pointer-events-none skew-x-[-12deg]"
                   aria-hidden="true"
-                  style={{ background: 'linear-gradient(90deg, transparent, rgba(201,168,76,0.14), transparent)' }} />
+                  style={{ background: 'linear-gradient(90deg, transparent, rgba(91,107,224,0.14), transparent)' }} />
           </button>
         </div>
       )}

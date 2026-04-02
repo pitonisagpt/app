@@ -83,7 +83,7 @@ export default function QuestionForm({ onSubmit, placeholder = 'Escribe tu pregu
                          ? 'border-red-500/60 focus:border-red-500/80 focus:ring-red-500/15'
                          : 'border-mystic-border/80 focus:border-mystic-gold/60 focus:ring-mystic-gold/15'
                      }`}
-          style={{ background: 'linear-gradient(135deg, #101026, #14143a)' }}
+          style={{ background: 'linear-gradient(135deg, #EDE0D0, #E8D8C8)' }}
         />
         <span
           className={`absolute bottom-3 right-3 text-[10px] tabular-nums font-sans ${
@@ -111,7 +111,7 @@ export default function QuestionForm({ onSubmit, placeholder = 'Escribe tu pregu
         disabled={!question.trim() || isBlocked}
         className="mt-4 w-full py-3.5 px-6 rounded-xl font-display font-semibold tracking-[0.15em] uppercase text-sm
                    bg-gradient-to-r from-mystic-purple to-mystic-violet
-                   hover:from-purple-700 hover:to-violet-700
+                   hover:from-mystic-purple/80 hover:to-mystic-violet/80
                    disabled:opacity-35 disabled:cursor-not-allowed disabled:from-mystic-purple disabled:to-mystic-violet
                    text-mystic-text border border-mystic-border/60
                    transition-all duration-300 hover:shadow-xl hover:shadow-mystic-purple/40

@@ -5,23 +5,28 @@ export default {
     extend: {
       colors: {
         mystic: {
-          bg:      '#0a0a18',
-          surface: '#101026',
-          card:    '#14143a',
-          border:  '#2a1f4e',
-          purple:  '#7b2d8b',
-          violet:  '#5b21b6',
-          gold:    '#c9a84c',
-          accent:  '#e8c97e',
-          text:    '#e2d9f3',
-          muted:   '#8878aa',
-          glow:    '#c9a84c33',
+          bg:      '#F5EDE3',  // crema parchment cálido
+          surface: '#EDE0D0',  // crema profunda para paneles
+          card:    '#E8D8C8',  // blush crema para cards
+          border:  '#C4B4E0',  // lavanda suave (bordes)
+          purple:  '#5B6BE0',  // azul pervinca (acento principal)
+          violet:  '#8070C8',  // lavanda media
+          gold:    '#F0A05A',  // melocotón/ámbar (reemplaza el dorado)
+          accent:  '#C4B4E0',  // lavanda acento
+          text:    '#2E3C14',  // verde bosque oscuro (texto principal)
+          muted:   '#7B5C3A',  // marrón cálido (texto secundario)
+          glow:    '#5B6BE022',// pervinca sutil
+          moss:    '#606B2C',  // verde musgo (figuras botánicas)
+          mint:    '#A8C8A0',  // menta suave (hierba, naturaleza)
+          blush:   '#E8D0C0',  // rosa blush (marcos)
+          red:     '#CC2A1A',  // rojo botánico (acento)
         },
       },
       fontFamily: {
         display: ['Cinzel', 'serif'],
         sans:    ['Josefin Sans', 'sans-serif'],
-        serif:   ['Cinzel', '"Palatino Linotype"', 'Georgia', 'serif'],
+        serif:   ['Lora', 'Georgia', 'serif'],
+        body:    ['Lora', 'Georgia', 'serif'],
       },
       animation: {
         'pulse-slow':  'pulse 3s ease-in-out infinite',
@@ -45,8 +50,8 @@ export default {
           '50%':      { opacity: '0' },
         },
         glow: {
-          '0%, 100%': { boxShadow: '0 0 10px #c9a84c22, 0 0 20px #c9a84c11' },
-          '50%':      { boxShadow: '0 0 25px #c9a84c55, 0 0 50px #c9a84c22' },
+          '0%, 100%': { boxShadow: '0 2px 12px #5B6BE022, 0 4px 24px #606B2C11' },
+          '50%':      { boxShadow: '0 4px 24px #5B6BE055, 0 8px 40px #606B2C22' },
         },
         shimmer: {
           '0%':   { backgroundPosition: '-200% center' },

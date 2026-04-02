@@ -5,6 +5,7 @@ import StarField from '../components/ui/StarField'
 import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
 import SeoHead from '../components/ui/SeoHead'
+import Sprite, { LeafDivider } from '../components/ui/Sprite'
 
 const EMOCIONES = [
   { value: 'miedo',      label: 'Miedo',      color: 'border-slate-500/50 text-slate-300 hover:border-slate-400 hover:bg-slate-800/40' },
@@ -14,7 +15,7 @@ const EMOCIONES = [
   { value: 'alegría',    label: 'Alegría',    color: 'border-yellow-500/50 text-yellow-300 hover:border-yellow-400 hover:bg-yellow-900/30' },
   { value: 'amor',       label: 'Amor',       color: 'border-rose-600/50 text-rose-300 hover:border-rose-400 hover:bg-rose-900/30' },
   { value: 'tristeza',   label: 'Tristeza',   color: 'border-blue-600/50 text-blue-300 hover:border-blue-400 hover:bg-blue-900/30' },
-  { value: 'extrañeza',  label: 'Extrañeza',  color: 'border-violet-500/50 text-violet-300 hover:border-violet-400 hover:bg-violet-900/30' },
+  { value: 'extrañeza',  label: 'Extrañeza',  color: 'border-mystic-purple/50 text-mystic-purple hover:border-mystic-purple hover:bg-mystic-purple/15' },
 ]
 
 const EMOCION_SELECTED = {
@@ -25,7 +26,7 @@ const EMOCION_SELECTED = {
   alegría:   'border-yellow-400 bg-yellow-900/40 text-yellow-200',
   amor:      'border-rose-400 bg-rose-900/40 text-rose-200',
   tristeza:  'border-blue-400 bg-blue-900/40 text-blue-200',
-  extrañeza: 'border-violet-400 bg-violet-900/40 text-violet-200',
+  extrañeza: 'border-mystic-purple bg-mystic-purple/25 text-mystic-purple',
 }
 
 export default function Suenos() {
@@ -74,7 +75,7 @@ export default function Suenos() {
         path="/suenos"
       />
       <StarField count={90} />
-      <div className="absolute top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-900/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-mystic-purple/8 rounded-full blur-3xl pointer-events-none" />
       <Navbar />
 
       <main className="relative z-10 max-w-2xl mx-auto px-4 py-10">
@@ -84,16 +85,18 @@ export default function Suenos() {
             <div className="absolute inset-0 rounded-full bg-indigo-500/15 blur-xl scale-125 animate-glow" />
             <div className="text-5xl relative">🌙</div>
           </div>
+          <Sprite name="moon-stars" className="opacity-75 mx-auto" style={{ transform: 'scale(0.9)' }} />
           <h2 className="text-2xl font-display font-bold tracking-widest mb-2"
-              style={{ background: 'linear-gradient(90deg, #818cf8, #c4b5fd, #818cf8)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
+              style={{ background: 'linear-gradient(90deg, #5B6BE0, #8070C8, #5B6BE0)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
             Interpretación de Sueños
           </h2>
           <p className="text-mystic-muted/70 text-sm tracking-wide">Tu inconsciente habla mientras duermes · descifra el mensaje.</p>
           <div className="mt-4 flex justify-center items-center gap-3">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-indigo-400/40" />
-            <span className="text-indigo-400/60 text-xs">✦</span>
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-indigo-400/40" />
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-mystic-purple/40" />
+            <span className="text-mystic-purple/60 text-xs">✦</span>
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-mystic-purple/40" />
           </div>
+          <LeafDivider className="my-4 opacity-50" />
         </div>
 
         {/* Form */}
@@ -105,7 +108,7 @@ export default function Suenos() {
               <input
                 required maxLength={60} value={form.nombre}
                 onChange={e => { setForm(f => ({ ...f, nombre: e.target.value })); updateProfile({ nombre: e.target.value }) }}
-                className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-2.5 text-mystic-text text-sm placeholder:text-mystic-muted/40 focus:outline-none focus:border-indigo-400/50"
+                className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-2.5 text-mystic-text text-sm placeholder:text-mystic-muted/40 focus:outline-none focus:border-mystic-purple/50"
                 placeholder="Tu nombre"
               />
             </div>
@@ -117,7 +120,7 @@ export default function Suenos() {
                 required minLength={15} maxLength={1500} value={form.sueno}
                 onChange={e => setForm(f => ({ ...f, sueno: e.target.value }))}
                 rows={5}
-                className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-3 text-mystic-text text-sm placeholder:text-mystic-muted/40 focus:outline-none focus:border-indigo-400/50 resize-none leading-relaxed"
+                className="w-full bg-mystic-surface/60 border border-mystic-border/60 rounded-xl px-4 py-3 text-mystic-text text-sm placeholder:text-mystic-muted/40 focus:outline-none focus:border-mystic-purple/50 resize-none leading-relaxed"
                 placeholder="Describe lo que recuerdas con el mayor detalle posible: qué ocurrió, quién estaba, dónde, qué sentiste..."
               />
               <p className="text-mystic-muted/40 text-[11px] text-right mt-1">{form.sueno.length}/1500</p>
@@ -147,7 +150,7 @@ export default function Suenos() {
                 type="button"
                 onClick={() => setForm(f => ({ ...f, recurrente: !f.recurrente }))}
                 className={`relative w-11 h-6 rounded-full border transition-all duration-300 focus:outline-none
-                  ${form.recurrente ? 'bg-indigo-600/70 border-indigo-500/60' : 'bg-mystic-border/40 border-mystic-border/40'}`}
+                  ${form.recurrente ? 'bg-mystic-purple/70 border-mystic-purple/50' : 'bg-mystic-border/40 border-mystic-border/40'}`}
               >
                 <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white/90 shadow-sm transition-transform duration-300 ${form.recurrente ? 'translate-x-5' : 'translate-x-0'}`} />
               </button>
@@ -158,10 +161,10 @@ export default function Suenos() {
                 type="submit"
                 disabled={isStreaming || !form.emocion || form.sueno.length < 15}
                 className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
-                           bg-gradient-to-r from-indigo-800 to-violet-800
-                           hover:from-indigo-700 hover:to-violet-700
-                           text-mystic-text border border-indigo-700/60
-                           transition-all duration-300 hover:shadow-xl hover:shadow-indigo-900/40 hover:-translate-y-0.5
+                           bg-gradient-to-r from-mystic-purple to-mystic-violet
+                           hover:from-mystic-purple/80 hover:to-mystic-violet/80
+                           text-mystic-text border border-mystic-purple/40
+                           transition-all duration-300 hover:shadow-xl hover:shadow-mystic-purple/20 hover:-translate-y-0.5
                            disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isStreaming ? 'Interpretando...' : '🌙 Descifrar mi Sueño'}
@@ -177,9 +180,9 @@ export default function Suenos() {
               <div className="mb-10 animate-fadeIn">
                 {/* Central archetype */}
                 <div className="text-center mb-8">
-                  <p className="text-indigo-300/60 text-[11px] tracking-[0.3em] uppercase mb-1">Arquetipo central</p>
+                  <p className="text-mystic-purple/60 text-[11px] tracking-[0.3em] uppercase mb-1">Arquetipo central</p>
                   <h3 className="font-display font-bold text-2xl tracking-wide"
-                      style={{ color: '#a5b4fc', textShadow: '0 0 40px rgba(165,180,252,0.4)' }}>
+                      style={{ color: '#8070C8', textShadow: '0 0 40px rgba(128,112,200,0.4)' }}>
                     {simbolosData.arquetipo_central}
                   </h3>
                 </div>
@@ -188,20 +191,20 @@ export default function Suenos() {
                 <div className="grid grid-cols-3 gap-3 mb-8">
                   {(simbolosData.simbolos || []).map((s, i) => (
                     <div key={i}
-                         className="bg-mystic-surface/70 border border-indigo-500/20 rounded-xl p-3 text-center
-                                    hover:border-indigo-400/40 transition-all duration-300"
+                         className="bg-mystic-surface/70 border border-mystic-purple/20 rounded-xl p-3 text-center
+                                    hover:border-mystic-purple/40 transition-all duration-300"
                          style={{ animationDelay: `${i * 120}ms` }}>
                       <p className="text-mystic-text/90 text-sm font-semibold mb-0.5 leading-snug">{s.simbolo}</p>
-                      <p className="text-indigo-300/70 text-[10px] tracking-widest uppercase mb-1">{s.arquetipo}</p>
+                      <p className="text-mystic-purple/70 text-[10px] tracking-widest uppercase mb-1">{s.arquetipo}</p>
                       <p className="text-mystic-muted/60 text-[11px] italic leading-snug">{s.significado}</p>
                     </div>
                   ))}
                 </div>
 
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="flex-1 h-px bg-gradient-to-r from-transparent to-indigo-400/30" />
-                  <span className="text-indigo-400/70 text-sm tracking-[0.3em] uppercase">Tu Lectura</span>
-                  <div className="flex-1 h-px bg-gradient-to-l from-transparent to-indigo-400/30" />
+                  <div className="flex-1 h-px bg-gradient-to-r from-transparent to-mystic-purple/30" />
+                  <span className="text-mystic-purple/70 text-sm tracking-[0.3em] uppercase">Tu Lectura</span>
+                  <div className="flex-1 h-px bg-gradient-to-l from-transparent to-mystic-purple/30" />
                 </div>
               </div>
             )}

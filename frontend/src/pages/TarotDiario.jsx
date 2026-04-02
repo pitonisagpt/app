@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Navbar from '../components/layout/Navbar'
 import StarField from '../components/ui/StarField'
+import Sprite, { LeafDivider } from '../components/ui/Sprite'
 import CardDisplay from '../components/oracle/CardDisplay'
 import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
@@ -101,8 +102,9 @@ export default function TarotDiario() {
             <div className="absolute inset-0 rounded-full bg-amber-500/15 blur-xl scale-125 animate-glow" />
             <div className="text-5xl relative">🌅</div>
           </div>
+          <Sprite name="cat-meditating" className="opacity-70 mx-auto" style={{ transform: 'scale(0.8)' }} />
           <h2 className="text-2xl font-display font-bold tracking-widest mb-1"
-              style={{ background: 'linear-gradient(90deg, #c9a84c, #e8c97e, #c9a84c)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
+              style={{ background: 'linear-gradient(90deg, #5B6BE0, #8070C8, #5B6BE0)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
             Tarot del Día
           </h2>
           <p className="text-mystic-muted/60 text-xs tracking-widest uppercase font-sans mb-4">{fechaDisplay}</p>
@@ -119,6 +121,7 @@ export default function TarotDiario() {
             <span className="text-mystic-gold/60 text-xs">✦</span>
             <div className="w-16 h-px bg-gradient-to-l from-transparent to-mystic-gold/40" />
           </div>
+          <LeafDivider className="my-4 opacity-50" />
         </div>
 
         {/* Step: form */}
@@ -158,7 +161,7 @@ export default function TarotDiario() {
               <button type="submit"
                 className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
                            bg-gradient-to-r from-mystic-purple to-mystic-violet
-                           hover:from-purple-700 hover:to-violet-700
+                           hover:from-mystic-purple/80 hover:to-mystic-violet/80
                            text-mystic-text border border-mystic-border/60
                            transition-all duration-300 hover:shadow-xl hover:shadow-mystic-purple/40 hover:-translate-y-0.5">
                 🌅 Revelar mi Carta del Día

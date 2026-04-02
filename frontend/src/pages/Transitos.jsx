@@ -5,9 +5,10 @@ import StarField from '../components/ui/StarField'
 import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
 import SeoHead from '../components/ui/SeoHead'
+import Sprite, { LeafDivider } from '../components/ui/Sprite'
 
 const INTENSITY_LABEL = { 1: 'Suave', 2: 'Moderado', 3: 'Intenso', 4: 'Exacto' }
-const INTENSITY_COLOR  = { 1: '#8cb8c8', 2: '#e8c97e', 3: '#e8a08c', 4: '#fca5a5' }
+const INTENSITY_COLOR  = { 1: '#8cb8c8', 2: '#F0A05A', 3: '#e8a08c', 4: '#fca5a5' }
 
 function TransitBadge({ intensity }) {
   const color = INTENSITY_COLOR[intensity] || '#8cb8c8'
@@ -79,8 +80,9 @@ export default function Transitos() {
             <div className="absolute inset-0 rounded-full bg-amber-500/15 blur-xl scale-125 animate-glow" />
             <div className="text-5xl relative">🪐</div>
           </div>
+          <Sprite name="pentacle-gold" className="opacity-70 mx-auto" style={{ transform: 'scale(0.85)' }} />
           <h2 className="text-2xl font-display font-bold tracking-widest mb-2"
-              style={{ background: 'linear-gradient(90deg, #e8c97e, #f5e0a8, #e8c97e)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
+              style={{ background: 'linear-gradient(90deg, #F0A05A, #C4B4E0, #F0A05A)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
             Tránsitos Planetarios
           </h2>
           <p className="text-mystic-muted/70 text-sm tracking-wide">Qué planetas te afectan ahora mismo y por cuánto tiempo.</p>
@@ -89,6 +91,7 @@ export default function Transitos() {
             <span className="text-amber-400/60 text-xs">✦</span>
             <div className="w-16 h-px bg-gradient-to-l from-transparent to-amber-400/40" />
           </div>
+          <LeafDivider className="my-4 opacity-50" />
         </div>
 
         {/* Step: form */}

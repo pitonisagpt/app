@@ -117,7 +117,7 @@ export default function OnboardingModal({ onClose }) {
           <div className="text-center mb-6">
             <h2 className="font-display font-bold text-lg tracking-widest mb-2"
                 style={{
-                  background: 'linear-gradient(90deg, #c9a84c, #e8c97e, #c9a84c)',
+                  background: 'linear-gradient(90deg, #5B6BE0, #8070C8, #5B6BE0)',
                   backgroundSize: '200% auto',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',

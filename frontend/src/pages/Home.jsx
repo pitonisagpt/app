@@ -8,11 +8,12 @@ import MoonPhase from '../components/cosmic/MoonPhase'
 import RetrogradeBanner from '../components/cosmic/RetrogradeBanner'
 import NumerologyPortrait from '../components/cosmic/NumerologyPortrait'
 import SeoHead from '../components/ui/SeoHead'
+import { LeafDivider, InfinitySymbol } from '../components/ui/Sprite'
 
 const BADGE_COLORS = {
   rose:    'bg-rose-900/30 border-rose-700/40 text-rose-300/80',
   emerald: 'bg-emerald-900/30 border-emerald-700/40 text-emerald-300/80',
-  violet:  'bg-violet-900/30 border-violet-700/40 text-violet-300/80',
+  violet:  'bg-mystic-purple/15 border-mystic-purple/30 text-mystic-purple/80',
   blue:    'bg-blue-900/30 border-blue-700/40 text-blue-300/80',
   amber:   'bg-amber-900/30 border-amber-700/40 text-amber-300/80',
 }
@@ -167,22 +168,20 @@ export default function Home() {
         <h1
           className="text-4xl sm:text-5xl md:text-6xl font-display font-bold tracking-widest uppercase mb-3"
           style={{
-            background: 'linear-gradient(90deg, #c9a84c, #e8c97e, #c9a84c, #9d7a30, #c9a84c)',
+            background: 'linear-gradient(90deg, #5B6BE0, #8070C8, #5B6BE0, #5B6BE0, #8070C8)',
             backgroundSize: '300% auto',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             animation: 'shimmer 4s linear infinite',
           }}
         >
-          Pitonisa GPT
+          Pytonia
         </h1>
         <p className="text-mystic-muted text-base tracking-[0.25em] uppercase mb-6 font-sans">
           Tu Oráculo con Inteligencia Artificial
         </p>
-        <div className="flex justify-center items-center gap-3">
-          <div className="w-20 h-px bg-gradient-to-r from-transparent to-mystic-gold/60" />
-          <span className="text-mystic-gold text-sm" aria-hidden="true">✦</span>
-          <div className="w-20 h-px bg-gradient-to-l from-transparent to-mystic-gold/60" />
+        <div className="flex justify-center items-center gap-3 mt-2">
+          <InfinitySymbol className="opacity-60" />
         </div>
         {/* Sign profile — shown if carta astral was calculated before */}
         {hasSigns ? (
@@ -227,11 +226,11 @@ export default function Home() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 mb-8">
         {/* Section header */}
         <div className="flex items-center gap-4 mb-4">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-violet-500/20" />
-          <span className="text-[10px] font-sans uppercase tracking-[0.35em] text-violet-400/45 whitespace-nowrap">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-mystic-purple/20" />
+          <span className="text-[10px] font-sans uppercase tracking-[0.35em] text-mystic-purple/45 whitespace-nowrap">
             ✦ Tu cielo ahora
           </span>
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-violet-500/20" />
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-mystic-purple/20" />
         </div>
 
         {/* Moon + Numerology side by side */}
@@ -283,6 +282,9 @@ export default function Home() {
         </Link>
       </div>
 
+      {/* Leaf divider */}
+      <LeafDivider className="relative z-10 mb-8 opacity-50" />
+
       {/* Módulos Especiales */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 mb-10">
         <div className="flex items-center gap-4 mb-6">
@@ -301,6 +303,9 @@ export default function Home() {
           ))}
         </div>
       </div>
+
+      {/* Leaf divider */}
+      <LeafDivider className="relative z-10 mb-8 opacity-50" />
 
       {/* Grouped spread sections */}
       <main className="relative z-10 max-w-6xl mx-auto px-4 pb-24 space-y-14">

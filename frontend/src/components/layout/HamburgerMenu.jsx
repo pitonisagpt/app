@@ -23,17 +23,17 @@ export default function HamburgerMenu() {
         className={`fixed top-0 right-0 h-full z-[9999] w-[85vw] max-w-sm flex flex-col overflow-hidden
                     transition-transform duration-300 ease-in-out
                     ${open ? 'translate-x-0' : 'translate-x-full'}`}
-        style={{ background: 'linear-gradient(160deg, #0d0d20 0%, #10102a 100%)', borderLeft: '1px solid rgba(201,168,76,0.15)' }}
+        style={{ background: 'linear-gradient(160deg, #EDE0D0 0%, #E8D8C8 100%)', borderLeft: '1px solid rgba(196,180,224,0.40)' }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-mystic-border/30 flex-shrink-0"
-             style={{ background: 'linear-gradient(180deg, rgba(20,20,50,0.95), rgba(16,16,38,0.90))' }}>
+             style={{ background: 'linear-gradient(180deg, rgba(245,237,227,0.98), rgba(237,224,208,0.95))' }}>
           <Link to="/" onClick={() => setOpen(false)} className="flex items-center gap-2.5">
             <span className="text-xl animate-float">🔮</span>
             <div>
               <p className="text-sm font-display font-bold tracking-[0.18em] uppercase"
-                 style={{ background: 'linear-gradient(90deg, #c9a84c, #e8c97e)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                Pitonisa GPT
+                 style={{ background: 'linear-gradient(90deg, #5B6BE0, #8070C8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                Pytonia
               </p>
               <p className="text-[9px] text-mystic-muted/50 tracking-widest uppercase font-sans">Tu Oráculo con IA</p>
             </div>

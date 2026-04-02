@@ -7,6 +7,7 @@ import { useModuleStream } from '../hooks/useModuleStream'
 import SeoHead from '../components/ui/SeoHead'
 import SynastryWheel from '../components/astrology/SynastryWheel'
 import Waveform from '../components/oracle/Waveform'
+import { LeafDivider, InfinitySymbol } from '../components/ui/Sprite'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
@@ -22,7 +23,7 @@ function renderMarkdown(text) {
 // ── Score meter ───────────────────────────────────────────────────────────────
 
 function ScoreMeter({ score }) {
-  const color = score >= 70 ? '#86efac' : score >= 45 ? '#e8c97e' : '#fca5a5'
+  const color = score >= 70 ? '#86efac' : score >= 45 ? '#F0A05A' : '#fca5a5'
   const label = score >= 75 ? 'Alta afinidad' : score >= 50 ? 'Conexión real' : score >= 35 ? 'Con desafíos' : 'Energía compleja'
   return (
     <div className="text-center animate-fadeIn">
@@ -427,7 +428,7 @@ function RuedaTab({ synastry, insights, insightsLoading, nameA, nameB, text, isS
 const SELECT_CLS = `w-full rounded-xl px-3 py-2.5 text-mystic-text font-sans text-sm
   focus:outline-none focus:ring-2 focus:ring-blue-500/15 transition-all duration-200 cursor-pointer
   border border-mystic-border/80 focus:border-blue-400/60`
-const SELECT_STYLE = { background: 'linear-gradient(135deg, #101026, #14143a)' }
+const SELECT_STYLE = { background: 'linear-gradient(135deg, #EDE0D0, #E8D8C8)' }
 
 function TimeInput({ label, hour, minute, known, onHourChange, onMinuteChange, onKnownChange }) {
   return (
@@ -577,6 +578,7 @@ export default function Compatibilidad() {
             <div className="absolute inset-0 rounded-full bg-blue-500/15 blur-xl scale-125 animate-glow" />
             <div className="text-5xl relative">💞</div>
           </div>
+          <InfinitySymbol className="opacity-70 mx-auto" style={{ transform: 'scale(0.9)' }} />
           <h2 className="text-2xl font-display font-bold tracking-widest mb-2"
               style={{ background: 'linear-gradient(90deg, #8cb8e8, #b8d8f8, #8cb8e8)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
             Compatibilidad Amorosa
@@ -587,6 +589,7 @@ export default function Compatibilidad() {
             <span className="text-blue-400/60 text-xs">✦</span>
             <div className="w-16 h-px bg-gradient-to-l from-transparent to-blue-400/40" />
           </div>
+          <LeafDivider className="my-4 opacity-50" />
         </div>
 
         {/* ── FORM ─────────────────────────────────────────────────────────── */}
@@ -657,9 +660,9 @@ export default function Compatibilidad() {
             <div className="text-center">
               <button type="submit" disabled={isStreaming}
                 className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
-                           bg-gradient-to-r from-blue-800 to-indigo-800 hover:from-blue-700 hover:to-indigo-700
-                           text-mystic-text border border-blue-700/60
-                           transition-all duration-300 hover:shadow-xl hover:shadow-blue-900/40 hover:-translate-y-0.5
+                           bg-gradient-to-r from-mystic-purple to-mystic-violet hover:from-mystic-purple/80 hover:to-mystic-violet/80
+                           text-mystic-text border border-mystic-purple/40
+                           transition-all duration-300 hover:shadow-xl hover:shadow-mystic-purple/20 hover:-translate-y-0.5
                            disabled:opacity-50 disabled:cursor-not-allowed">
                 {isStreaming ? 'Calculando sinastría...' : '💞 Calcular Compatibilidad'}
               </button>

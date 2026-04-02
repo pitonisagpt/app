@@ -117,7 +117,7 @@ function ZodiacRingA({ ascLon }) {
     const lp   = lonToXY(startLon + 15, ascLon, R_LABEL_A)
     return (
       <g key={sign.name}>
-        <path d={path} fill={sign.color} fillOpacity={0.18} stroke="#444" strokeWidth={0.4} />
+        <path d={path} fill={sign.color} fillOpacity={0.18} stroke="#C4B4E0" strokeWidth={0.4} />
         <text x={f(lp.x)} y={f(lp.y)}
               textAnchor="middle" dominantBaseline="central"
               fontSize={10} fill={sign.color} fontWeight="bold">
@@ -138,7 +138,7 @@ function HouseLinesA({ ascLon, houseCusps }) {
       <line key={i}
             x1={f(inner.x)} y1={f(inner.y)}
             x2={f(outer.x)} y2={f(outer.y)}
-            stroke={isAngle ? "#fff" : "#555"}
+            stroke={isAngle ? "#2E3C14" : "#C4B4E0"}
             strokeWidth={isAngle ? 1.2 : 0.5}
             strokeDasharray={isAngle ? undefined : "2 2"} />
     )
@@ -155,7 +155,7 @@ function HouseNumbersA({ ascLon, houseCusps }) {
     return (
       <text key={i} x={f(p.x)} y={f(p.y)}
             textAnchor="middle" dominantBaseline="central"
-            fontSize={6} fill="#888">
+            fontSize={6} fill="#7B5C3A">
         {i + 1}
       </text>
     )
@@ -176,7 +176,7 @@ function AngleLabelsA({ ascLon, midheavenLon }) {
     return (
       <text key={label} x={f(p.x)} y={f(p.y)}
             textAnchor="middle" dominantBaseline="central"
-            fontSize={6.5} fill="#e2e8f0" fontWeight="bold">
+            fontSize={6.5} fill="#2E3C14" fontWeight="bold">
         {label}
       </text>
     )
@@ -204,7 +204,7 @@ function PlanetGlyphsA({ ascLon, planets }) {
     return (
       <g key={key}>
         <circle cx={f(p.x)} cy={f(p.y)} r={8}
-                fill="#0d0d1f" fillOpacity={0.9}
+                fill="#EDE0D0" fillOpacity={0.9}
                 stroke={color} strokeWidth={0.8} />
         <text x={f(p.x)} y={f(p.y)}
               textAnchor="middle" dominantBaseline="central"
@@ -223,8 +223,8 @@ function SeparatorRing({ ascLon }) {
   const ticks = Array.from({ length: 12 }, (_, i) => i * 30)
   return (
     <>
-      <circle cx={CX} cy={CY} r={R_SEP} fill="none" stroke="#4a3a6a" strokeWidth={1} />
-      <circle cx={CX} cy={CY} r={R_OUTER_B} fill="none" stroke="#4a3a6a" strokeWidth={0.6} />
+      <circle cx={CX} cy={CY} r={R_SEP} fill="none" stroke="#C4B4E0" strokeWidth={1} />
+      <circle cx={CX} cy={CY} r={R_OUTER_B} fill="none" stroke="#C4B4E0" strokeWidth={0.6} />
       {ticks.map(lon => {
         const outer = lonToXY(lon, ascLon, R_OUTER_B)
         const inner = lonToXY(lon, ascLon, R_SEP - 4)
@@ -232,7 +232,7 @@ function SeparatorRing({ ascLon }) {
           <line key={lon}
                 x1={f(inner.x)} y1={f(inner.y)}
                 x2={f(outer.x)} y2={f(outer.y)}
-                stroke="#4a3a6a" strokeWidth={0.8} />
+                stroke="#C4B4E0" strokeWidth={0.8} />
         )
       })}
     </>
@@ -260,7 +260,7 @@ function PlanetGlyphsB({ ascLon, planets, name }) {
     return (
       <g key={key}>
         <circle cx={f(p.x)} cy={f(p.y)} r={8.5}
-                fill="#0d0d1f" fillOpacity={0.9}
+                fill="#EDE0D0" fillOpacity={0.9}
                 stroke={color} strokeWidth={1}
                 strokeDasharray="3 1.5" />
         <text x={f(p.x)} y={f(p.y)}
@@ -317,10 +317,10 @@ export default function SynastryWheel({ chartA, chartB, aspects }) {
         viewBox="0 0 460 460"
         width="100%"
         style={{ maxWidth: 460 }}
-        className="drop-shadow-[0_0_24px_rgba(139,92,246,0.25)]"
+        className="drop-shadow-[0_0_24px_rgba(91,107,224,0.18)]"
       >
         {/* Background */}
-        <circle cx={CX} cy={CY} r={R_OUTER_B} fill="#0d0d1f" />
+        <circle cx={CX} cy={CY} r={R_OUTER_B} fill="#F5EDE3" />
 
         {/* Outer B ring background (subtle tint) */}
         <circle cx={CX} cy={CY} r={R_SEP} fill="none" />
@@ -334,10 +334,10 @@ export default function SynastryWheel({ chartA, chartB, aspects }) {
         <ZodiacRingA ascLon={ascLon} />
 
         {/* Inner A: structure circles */}
-        <circle cx={CX} cy={CY} r={R_CORE}     fill="#0f0f1a" stroke="#444" strokeWidth={0.6} />
-        <circle cx={CX} cy={CY} r={R_HOUSES_A} fill="none"    stroke="#444" strokeWidth={0.4} />
-        <circle cx={CX} cy={CY} r={R_ZODIAC_A} fill="none"    stroke="#555" strokeWidth={0.6} />
-        <circle cx={CX} cy={CY} r={R_OUTER_A}  fill="none"    stroke="#555" strokeWidth={0.6} />
+        <circle cx={CX} cy={CY} r={R_CORE}     fill="#EDE0D0" stroke="#C4B4E0" strokeWidth={0.6} />
+        <circle cx={CX} cy={CY} r={R_HOUSES_A} fill="none"    stroke="#C4B4E0" strokeWidth={0.4} />
+        <circle cx={CX} cy={CY} r={R_ZODIAC_A} fill="none"    stroke="#C4B4E0" strokeWidth={0.6} />
+        <circle cx={CX} cy={CY} r={R_OUTER_A}  fill="none"    stroke="#C4B4E0" strokeWidth={0.6} />
 
         {/* Inner A: houses and angles */}
         <HouseLinesA   ascLon={ascLon} houseCusps={houseCusps} />
@@ -357,16 +357,16 @@ export default function SynastryWheel({ chartA, chartB, aspects }) {
         <PlanetGlyphsB ascLon={ascLon} planets={planetsB} name={nameB} />
 
         {/* Center decoration */}
-        <circle cx={CX} cy={CY} r={14} fill="#1a1a2e" stroke="#6d28d9" strokeWidth={1} />
-        <text x={CX} y={CY} textAnchor="middle" dominantBaseline="central" fontSize={12} fill="#a78bfa">✦</text>
+        <circle cx={CX} cy={CY} r={14} fill="#EDE0D0" stroke="#5B6BE0" strokeWidth={1} />
+        <text x={CX} y={CY} textAnchor="middle" dominantBaseline="central" fontSize={12} fill="#8070C8">✦</text>
 
         {/* Name labels — A bottom-left, B bottom-right */}
         <text x={CX - R_OUTER_B + 8} y={CY + R_OUTER_B - 10}
-              fontSize={8} fill="rgba(200,185,220,0.7)" fontFamily="sans-serif">
+              fontSize={8} fill="rgba(46,60,20,0.55)" fontFamily="sans-serif">
           {nameA}
         </text>
         <text x={CX + R_OUTER_B - 8} y={CY + R_OUTER_B - 10}
-              textAnchor="end" fontSize={8} fill="rgba(255,150,200,0.7)" fontFamily="sans-serif">
+              textAnchor="end" fontSize={8} fill="rgba(240,160,90,0.70)" fontFamily="sans-serif">
           {nameB}
         </text>
       </svg>

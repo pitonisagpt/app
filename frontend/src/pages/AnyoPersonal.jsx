@@ -5,9 +5,10 @@ import StarField from '../components/ui/StarField'
 import ModuleResult from '../components/oracle/ModuleResult'
 import { useModuleStream } from '../hooks/useModuleStream'
 import SeoHead from '../components/ui/SeoHead'
+import Sprite, { LeafDivider } from '../components/ui/Sprite'
 
 const NUMBER_COLORS = {
-  1: '#e88c8c', 2: '#8cb8e8', 3: '#e8c97e', 4: '#8cc8a0',
+  1: '#e88c8c', 2: '#8cb8e8', 3: '#C4B4E0', 4: '#8cc8a0',
   5: '#c88ce8', 6: '#e8a08c', 7: '#8cb8c8', 8: '#e8d88c', 9: '#c8a0e8',
 }
 
@@ -46,7 +47,7 @@ export default function AnyoPersonal() {
     setStep('form')
   }
 
-  const color = NUMBER_COLORS[numero] || '#c9a84c'
+  const color = NUMBER_COLORS[numero] || '#F0A05A'
 
   return (
     <div className="min-h-screen bg-mystic-bg relative overflow-hidden">
@@ -66,16 +67,18 @@ export default function AnyoPersonal() {
             <div className="absolute inset-0 rounded-full bg-violet-500/15 blur-xl scale-125 animate-glow" />
             <div className="text-5xl relative">🔢</div>
           </div>
+          <Sprite name="sun-warm" className="opacity-70 mx-auto" style={{ transform: 'scale(0.85)' }} />
           <h2 className="text-2xl font-display font-bold tracking-widest mb-2"
-              style={{ background: 'linear-gradient(90deg, #c9a84c, #e8c97e, #c9a84c)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
+              style={{ background: 'linear-gradient(90deg, #5B6BE0, #8070C8, #5B6BE0)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'shimmer 4s linear infinite' }}>
             Predicción del Año Personal
           </h2>
           <p className="text-mystic-muted/70 text-sm tracking-wide">Tu energía personal para {new Date().getFullYear()} · cambia cada año.</p>
           <div className="mt-4 flex justify-center items-center gap-3">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-violet-400/40" />
-            <span className="text-violet-400/60 text-xs">✦</span>
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-violet-400/40" />
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-mystic-purple/40" />
+            <span className="text-mystic-purple/60 text-xs">✦</span>
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-mystic-purple/40" />
           </div>
+          <LeafDivider className="my-4 opacity-50" />
         </div>
 
         {/* Step: form */}
@@ -97,10 +100,10 @@ export default function AnyoPersonal() {
             <div className="text-center pt-2">
               <button type="submit" disabled={isStreaming}
                 className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
-                           bg-gradient-to-r from-violet-800 to-purple-800
-                           hover:from-violet-700 hover:to-purple-700
-                           text-mystic-text border border-violet-700/60
-                           transition-all duration-300 hover:shadow-xl hover:shadow-violet-900/40 hover:-translate-y-0.5
+                           bg-gradient-to-r from-mystic-purple to-mystic-violet
+                           hover:from-mystic-purple/80 hover:to-mystic-violet/80
+                           text-mystic-text border border-mystic-purple/40
+                           transition-all duration-300 hover:shadow-xl hover:shadow-mystic-purple/20 hover:-translate-y-0.5
                            disabled:opacity-50 disabled:cursor-not-allowed">
                 {isStreaming ? 'Calculando...' : '🔢 Revelar mi Año Personal'}
               </button>
@@ -132,9 +135,9 @@ export default function AnyoPersonal() {
             )}
 
             <div className="flex items-center gap-4 my-6">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent to-violet-400/30" />
-              <span className="text-violet-400/70 text-sm tracking-[0.3em] uppercase">Tu Predicción</span>
-              <div className="flex-1 h-px bg-gradient-to-l from-transparent to-violet-400/30" />
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent to-mystic-purple/30" />
+              <span className="text-mystic-purple/70 text-sm tracking-[0.3em] uppercase">Tu Predicción</span>
+              <div className="flex-1 h-px bg-gradient-to-l from-transparent to-mystic-purple/30" />
             </div>
 
             <ModuleResult text={text} isStreaming={isStreaming} error={error} onReset={handleReset} moduleId="anyo-personal" />

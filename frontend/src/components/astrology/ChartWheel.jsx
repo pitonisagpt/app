@@ -98,7 +98,7 @@ function ZodiacRing({ ascLon }) {
     const lp   = lonToXY(midLon, ascLon, R_LABEL)
     return (
       <g key={sign.name}>
-        <path d={path} fill={sign.color} fillOpacity={0.18} stroke="#444" strokeWidth={0.4} />
+        <path d={path} fill={sign.color} fillOpacity={0.18} stroke="#C4B4E0" strokeWidth={0.4} />
         <text
           x={f(lp.x)} y={f(lp.y)}
           textAnchor="middle" dominantBaseline="central"
@@ -122,7 +122,7 @@ function HouseLines({ ascLon, houseCusps }) {
         key={i}
         x1={f(inner.x)} y1={f(inner.y)}
         x2={f(outer.x)} y2={f(outer.y)}
-        stroke={isAngle ? "#fff" : "#666"}
+        stroke={isAngle ? "#2E3C14" : "#C4B4E0"}
         strokeWidth={isAngle ? 1.2 : 0.6}
         strokeDasharray={isAngle ? undefined : "2 2"}
       />
@@ -143,7 +143,7 @@ function HouseNumbers({ ascLon, houseCusps }) {
         key={i}
         x={f(p.x)} y={f(p.y)}
         textAnchor="middle" dominantBaseline="central"
-        fontSize={6.5} fill="#aaa"
+        fontSize={6.5} fill="#7B5C3A"
       >
         {i + 1}
       </text>
@@ -197,7 +197,7 @@ function PlanetGlyphs({ ascLon, planets, extraPoints }) {
       <g key={key}>
         <circle
           cx={f(p.x)} cy={f(p.y)} r={9}
-          fill="#1a1a2e" fillOpacity={0.85}
+          fill="#EDE0D0" fillOpacity={0.85}
           stroke={color} strokeWidth={0.8}
         />
         <text
@@ -229,7 +229,7 @@ function AngleLabels({ ascLon, midheavenLon }) {
       key={label}
       x={f(p.x)} y={f(p.y)}
       textAnchor="middle" dominantBaseline="central"
-      fontSize={7} fill="#e2e8f0" fontWeight="bold"
+      fontSize={7} fill="#2E3C14" fontWeight="bold"
     >
       {label}
     </text>
@@ -239,10 +239,10 @@ function AngleLabels({ ascLon, midheavenLon }) {
 function InnerCircle() {
   return (
     <>
-      <circle cx={CX} cy={CY} r={R_HOUSE_INNER} fill="#0f0f1a" stroke="#444" strokeWidth={0.6} />
-      <circle cx={CX} cy={CY} r={R_HOUSES}      fill="none"    stroke="#444" strokeWidth={0.5} />
-      <circle cx={CX} cy={CY} r={R_ZODIAC}      fill="none"    stroke="#555" strokeWidth={0.7} />
-      <circle cx={CX} cy={CY} r={R_OUTER}       fill="none"    stroke="#555" strokeWidth={0.7} />
+      <circle cx={CX} cy={CY} r={R_HOUSE_INNER} fill="#EDE0D0" stroke="#C4B4E0" strokeWidth={0.6} />
+      <circle cx={CX} cy={CY} r={R_HOUSES}      fill="none"    stroke="#C4B4E0" strokeWidth={0.5} />
+      <circle cx={CX} cy={CY} r={R_ZODIAC}      fill="none"    stroke="#C4B4E0" strokeWidth={0.7} />
+      <circle cx={CX} cy={CY} r={R_OUTER}       fill="none"    stroke="#C4B4E0" strokeWidth={0.7} />
     </>
   )
 }
@@ -265,10 +265,10 @@ export default function ChartWheel({ chart }) {
         viewBox="0 0 400 400"
         width="100%"
         style={{ maxWidth: 420 }}
-        className="drop-shadow-[0_0_20px_rgba(139,92,246,0.3)]"
+        className="drop-shadow-[0_0_20px_rgba(91,107,224,0.2)]"
       >
         {/* Background */}
-        <circle cx={CX} cy={CY} r={R_OUTER} fill="#0d0d1f" />
+        <circle cx={CX} cy={CY} r={R_OUTER} fill="#F5EDE3" />
 
         {/* Layers */}
         <ZodiacRing       ascLon={ascLon} />
@@ -280,12 +280,12 @@ export default function ChartWheel({ chart }) {
         <AngleLabels      ascLon={ascLon} midheavenLon={midheavenLon} />
 
         {/* Center decoration */}
-        <circle cx={CX} cy={CY} r={14} fill="#1a1a2e" stroke="#6d28d9" strokeWidth={1} />
-        <text x={CX} y={CY} textAnchor="middle" dominantBaseline="central" fontSize={12} fill="#a78bfa">✦</text>
+        <circle cx={CX} cy={CY} r={14} fill="#EDE0D0" stroke="#5B6BE0" strokeWidth={1} />
+        <text x={CX} y={CY} textAnchor="middle" dominantBaseline="central" fontSize={12} fill="#8070C8">✦</text>
       </svg>
 
       {/* Legend */}
-      <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-slate-400 mt-1">
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-mystic-muted/60 mt-1">
         <span><span className="text-green-400">—</span> Trígono / Sextil</span>
         <span><span className="text-red-400">—</span> Cuadratura / Oposición</span>
         <span><span className="text-amber-400">—</span> Conjunción</span>

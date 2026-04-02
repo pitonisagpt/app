@@ -30,7 +30,7 @@ function InlineText({ text }) {
         <strong
           key={match.index}
           className="font-semibold"
-          style={{ color: '#e8c97e' }}
+          style={{ color: '#5B6BE0' }}
         >
           {match[2]}
         </strong>
@@ -41,7 +41,7 @@ function InlineText({ text }) {
         <em
           key={match.index}
           className="italic"
-          style={{ color: 'rgba(226,217,243,0.80)' }}
+          style={{ color: 'rgba(46,60,20,0.70)' }}
         >
           {match[3]}
         </em>
@@ -99,7 +99,7 @@ function OracleHeading({ content }) {
   return (
     <h3
       className="font-display text-mystic-gold/85 text-base tracking-[0.18em] uppercase text-center animate-fadeIn"
-      style={{ textShadow: '0 0 20px rgba(201,168,76,0.3)' }}
+      style={{ textShadow: '0 0 20px rgba(91,107,224,0.3)' }}
     >
       <InlineText text={content} />
     </h3>
@@ -110,7 +110,7 @@ const VERDICT_STYLES = {
   'SÍ':      { color: '#86efac', glow: 'rgba(134,239,172,0.35)' }, // green
   'SI':      { color: '#86efac', glow: 'rgba(134,239,172,0.35)' },
   'NO':      { color: '#fca5a5', glow: 'rgba(252,165,165,0.35)' }, // red
-  'TAL VEZ': { color: '#e8c97e', glow: 'rgba(232,201,126,0.35)' }, // gold
+  'TAL VEZ': { color: '#F0A05A', glow: 'rgba(240,160,90,0.35)' }, // peach
 }
 
 function OracleVerdict({ content }) {

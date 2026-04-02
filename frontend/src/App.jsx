@@ -41,7 +41,7 @@ function useCopyAttribution() {
       if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return
       const selected = window.getSelection()?.toString()
       if (!selected?.trim()) return
-      e.clipboardData.setData('text/plain', `Pitonisa GPT dice:\n"${selected}"\n\nhttps://pitonisa-gpt.vercel.app/`)
+      e.clipboardData.setData('text/plain', `Pytonia dice:\n"${selected}"\n\nhttps://pitonisa-gpt.vercel.app/`)
       e.preventDefault()
     }
     document.addEventListener('copy', handleCopy)

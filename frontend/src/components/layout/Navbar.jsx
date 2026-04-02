@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import HamburgerMenu from './HamburgerMenu'
 import SidebarMenu from './SidebarMenu'
+import { InfinitySymbol } from '../ui/Sprite'
 
 function ArrowLeftIcon() {
   return (
@@ -15,7 +16,7 @@ function ArrowLeftIcon() {
 export default function Navbar() {
   return (
     <nav className="relative z-10 border-b border-mystic-border/40 backdrop-blur-md"
-         style={{ background: 'linear-gradient(180deg, rgba(16,16,38,0.95), rgba(10,10,24,0.90))' }}>
+         style={{ background: 'linear-gradient(180deg, rgba(245,237,227,0.97), rgba(237,224,208,0.95))' }}>
       <div className="max-w-6xl mx-auto px-5 py-3.5 flex items-center justify-between">
 
         {/* Left: desktop sidebar toggle + logo */}
@@ -33,13 +34,14 @@ export default function Navbar() {
           <div>
             <h1 className="text-base font-display font-bold tracking-[0.2em] uppercase"
                 style={{
-                  background: 'linear-gradient(90deg, #c9a84c, #e8c97e)',
+                  background: 'linear-gradient(90deg, #5B6BE0, #8070C8)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}>
-              Pitonisa GPT
+              Pytonia
             </h1>
             <p className="text-[10px] text-mystic-muted/60 tracking-[0.15em] uppercase font-sans">Tu Oráculo con IA</p>
+            <InfinitySymbol style={{ transform: 'scale(0.55)', opacity: 0.5, marginTop: '-4px' }} />
           </div>
         </Link>
         </div>

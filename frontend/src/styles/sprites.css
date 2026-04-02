@@ -1,0 +1,42 @@
+/* =========================================
+   TAROT SPRITESHEET — Pytonia
+   Imagen: /public/spritesheet.png
+   Grid de referencia: 1000 × 1000 px
+   ========================================= */
+
+.tarot-asset {
+  display: inline-block;
+  background-image: url('/spritesheet.png');
+  background-repeat: no-repeat;
+  background-size: 1000px 1000px;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  flex-shrink: 0;
+}
+
+/* --- PATRONES REPETIBLES (transparentes, funcionan sobre cualquier fondo) --- */
+.floral-transparent-light {
+  width: 250px; height: 250px;
+  background-position: 0px -250px;
+  background-repeat: repeat;
+}
+.floral-transparent-dark {
+  width: 250px; height: 250px;
+  background-position: -250px -250px;
+  background-repeat: repeat;
+}
+
+/* --- ICONOS MÍSTICOS --- */
+.infinity-blue   { width: 60px; height: 40px; background-position: -510px -80px; }
+.sun-warm        { width: 70px; height: 70px; background-position: -750px -40px; }
+.moon-stars      { width: 65px; height: 65px; background-position: -510px -440px; }
+.pentacle-gold   { width: 60px; height: 60px; background-position: -740px -450px; }
+
+/* --- GATITOS (transparentes) --- */
+.cat-meditating  { width: 90px;  height: 70px;  background-position: -30px  -40px; }
+.cat-stretching  { width: 100px; height: 80px;  background-position: -410px -40px; }
+.cat-belly       { width: 120px; height: 100px; background-position: -110px -850px; }
+
+/* --- TIPOGRAFÍA --- */
+.text-mago        { width: 110px; height: 35px; background-position: -510px -940px; }
+.text-sacerdotisa { width: 180px; height: 35px; background-position: -730px -940px; }

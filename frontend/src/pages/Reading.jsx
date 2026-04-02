@@ -229,7 +229,7 @@ export default function Reading() {
           </div>
           <h2 className="text-2xl font-display font-bold tracking-widest mb-2"
               style={{
-                background: 'linear-gradient(90deg, #c9a84c, #e8c97e, #c9a84c)',
+                background: 'linear-gradient(90deg, #5B6BE0, #8070C8, #5B6BE0)',
                 backgroundSize: '200% auto',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -255,7 +255,7 @@ export default function Reading() {
               onClick={handleStart}
               className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
                          bg-gradient-to-r from-mystic-purple to-mystic-violet
-                         hover:from-purple-700 hover:to-violet-700
+                         hover:from-mystic-purple/80 hover:to-mystic-violet/80
                          text-mystic-text border border-mystic-border/60
                          transition-all duration-300 hover:shadow-xl hover:shadow-mystic-purple/40
                          hover:-translate-y-0.5"
@@ -284,7 +284,7 @@ export default function Reading() {
                   onClick={handleNoQuestion}
                   className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
                              bg-gradient-to-r from-mystic-purple to-mystic-violet
-                             hover:from-purple-700 hover:to-violet-700
+                             hover:from-mystic-purple/80 hover:to-mystic-violet/80
                              text-mystic-text border border-mystic-border/60
                              transition-all duration-300 hover:shadow-xl hover:shadow-mystic-purple/40
                              hover:-translate-y-0.5"
@@ -313,8 +313,8 @@ export default function Reading() {
                   onClick={handleConsult}
                   disabled={consulting}
                   className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
-                             bg-gradient-to-r from-mystic-purple via-purple-800 to-mystic-violet
-                             hover:from-purple-700 hover:to-violet-700
+                             bg-gradient-to-r from-mystic-purple via-mystic-violet to-mystic-violet
+                             hover:from-mystic-purple/80 hover:to-mystic-violet/80
                              text-mystic-text border border-mystic-gold/30
                              transition-all duration-300 hover:shadow-2xl hover:shadow-mystic-gold/20
                              hover:-translate-y-0.5 animate-glow

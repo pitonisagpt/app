@@ -15,20 +15,20 @@ export default function NumerologyPortrait({ profile }) {
                  border bg-mystic-surface/60 backdrop-blur-sm w-full h-full
                  transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl overflow-hidden"
       style={{
-        borderColor: isMaster ? 'rgba(201,168,76,0.40)' : 'rgba(255,255,255,0.08)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+        borderColor: isMaster ? 'rgba(240,160,90,0.40)' : 'rgba(196,180,224,0.25)',
+        boxShadow: '0 8px 32px rgba(46,60,20,0.08)',
       }}
     >
       {/* Ambient glow */}
       <div className="absolute inset-0 rounded-2xl pointer-events-none"
-           style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(123,45,189,0.10), transparent 70%)' }} />
+           style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(91,107,224,0.10), transparent 70%)' }} />
 
       {/* Number badge */}
       <div className="relative">
         <div className="absolute inset-0 rounded-full blur-2xl pointer-events-none"
-             style={{ background: isMaster ? 'rgba(201,168,76,0.25)' : 'rgba(148,100,220,0.20)', transform: 'scale(2.5)' }} />
+             style={{ background: isMaster ? 'rgba(240,160,90,0.25)' : 'rgba(91,107,224,0.20)', transform: 'scale(2.5)' }} />
         <div className="relative w-14 h-14 rounded-2xl border flex flex-col items-center justify-center bg-mystic-bg/60"
-             style={{ borderColor: isMaster ? 'rgba(201,168,76,0.45)' : 'rgba(148,100,220,0.35)' }}>
+             style={{ borderColor: isMaster ? 'rgba(240,160,90,0.45)' : 'rgba(91,107,224,0.35)' }}>
           <span className={`font-display font-bold leading-none ${lifePath >= 10 ? 'text-xl' : 'text-2xl'} ${lifePathInfo.color}`}>
             {lifePath}
           </span>
