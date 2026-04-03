@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useUserProfile } from '../hooks/useUserProfile'
 import Navbar from '../components/layout/Navbar'
@@ -114,13 +114,21 @@ export default function VolveraEx() {
   const { text, isStreaming, error, stream, reset } = useModuleStream()
   const { profile, updateProfile } = useUserProfile()
 
-  const [step, setStep]                 = useState('form')
-  const [cards, setCards]               = useState([])
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [flippedCards, setFlippedCards] = useState([])
-  const [showGlow, setShowGlow]         = useState(false)
-  const [shakeCard, setShakeCard]       = useState(false)
-  const [cardKey, setCardKey]           = useState(0)
+  const [step, setStep]                   = useState('form')
+  const [cards, setCards]                 = useState([])
+  const [currentIndex, setCurrentIndex]   = useState(0)
+  const [flippedCards, setFlippedCards]   = useState([])
+  const [showGlow, setShowGlow]           = useState(false)
+  const [shakeCard, setShakeCard]         = useState(false)
+  const [cardKey, setCardKey]             = useState(0)
+  const [slideDirection, setSlideDirection] = useState('up')
+  const [isAnimating, setIsAnimating]     = useState(false)
+  const [hintVisible, setHintVisible]     = useState(true)
+  const [justFlipped, setJustFlipped]     = useState(false)
+
+  const touchRef    = useRef({ y: null, time: null })
+  const handlersRef = useRef({})
+
   const [form, setForm] = useState({
     nombre:    profile.nombre    || '',
     ex_nombre: profile.ex_nombre || '',
@@ -153,23 +161,95 @@ export default function VolveraEx() {
   }
 
   function handleFlip() {
+    if (flippedCards[currentIndex]) return
+    if (navigator.vibrate) navigator.vibrate(10)
     const updated = [...flippedCards]
     updated[currentIndex] = true
     setFlippedCards(updated)
+    setJustFlipped(true)
+    setTimeout(() => setJustFlipped(false), 900)
     setShowGlow(true)
     setTimeout(() => setShowGlow(false), 650)
+    if (currentIndex === cards.length - 1 && navigator.vibrate) {
+      setTimeout(() => navigator.vibrate([10, 50, 10]), 500)
+    }
     if (cards[currentIndex]?.reversed) {
       setTimeout(() => { setShakeCard(true); setTimeout(() => setShakeCard(false), 600) }, 420)
     }
   }
 
-  function handleNext() {
-    setShakeCard(false)
+  function handleSwipeNext() {
+    if (isAnimating) return
+    if (!flippedCards[currentIndex]) {
+      setShakeCard(true)
+      setTimeout(() => setShakeCard(false), 600)
+      return
+    }
+    if (currentIndex >= cards.length - 1) {
+      setStep('reading')
+      return
+    }
+    setHintVisible(false)
+    setJustFlipped(false)
+    setIsAnimating(true)
+    setSlideDirection('up')
     setShowGlow(false)
+    setShakeCard(false)
     setTimeout(() => {
       setCurrentIndex(i => i + 1)
       setCardKey(k => k + 1)
+      setTimeout(() => setIsAnimating(false), 380)
     }, 80)
+  }
+
+  function handleSwipePrev() {
+    if (isAnimating || currentIndex <= 0) return
+    setHintVisible(false)
+    setJustFlipped(false)
+    setIsAnimating(true)
+    setSlideDirection('down')
+    setShowGlow(false)
+    setShakeCard(false)
+    setTimeout(() => {
+      setCurrentIndex(i => i - 1)
+      setCardKey(k => k + 1)
+      setTimeout(() => setIsAnimating(false), 380)
+    }, 80)
+  }
+
+  // Keep ref always pointing to latest handlers so useEffect keyboard listener stays stable
+  handlersRef.current = { handleFlip, handleSwipeNext, handleSwipePrev }
+
+  useEffect(() => {
+    if (step !== 'cards') return
+    function onKey(e) {
+      if (e.key === 'ArrowUp')                   { e.preventDefault(); handlersRef.current.handleSwipeNext() }
+      else if (e.key === 'ArrowDown')             { e.preventDefault(); handlersRef.current.handleSwipePrev() }
+      else if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); handlersRef.current.handleFlip() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [step])
+
+  function handleTouchStart(e) {
+    touchRef.current = { y: e.touches[0].clientY, time: Date.now() }
+  }
+
+  function handleTouchEnd(e) {
+    const { y: startY, time: startTime } = touchRef.current
+    if (startY === null) return
+    const endY     = e.changedTouches[0].clientY
+    const deltaY   = startY - endY               // positive = finger moved up
+    const velocity = Math.abs(deltaY) / (Date.now() - startTime)
+    touchRef.current = { y: null, time: null }
+
+    if (Math.abs(deltaY) < 10) {
+      handlersRef.current.handleFlip()
+    } else if (deltaY > 50 || (deltaY > 0 && velocity > 0.3)) {
+      handlersRef.current.handleSwipeNext()
+    } else if (deltaY < -50 || (deltaY < 0 && velocity > 0.3)) {
+      handlersRef.current.handleSwipePrev()
+    }
   }
 
   function handleReset() {
@@ -181,6 +261,10 @@ export default function VolveraEx() {
     setShowGlow(false)
     setShakeCard(false)
     setCardKey(0)
+    setSlideDirection('up')
+    setIsAnimating(false)
+    setHintVisible(true)
+    setJustFlipped(false)
     setForm({ nombre: profile.nombre || '', ex_nombre: profile.ex_nombre || '', tiempo: '', razon: '', contacto: '' })
   }
 
@@ -280,139 +364,7 @@ export default function VolveraEx() {
           </form>
         )}
 
-        {/* Step: cards — one at a time reveal */}
-        {step === 'cards' && cards.length > 0 && (() => {
-          const card = cards[currentIndex]
-          const isFlipped = flippedCards[currentIndex]
-          return (
-            <div className="flex flex-col items-center">
-
-              {/* Progress dots */}
-              <div className="flex items-center gap-2 mb-8">
-                {cards.map((_, i) => (
-                  <div key={i} className="transition-all duration-500"
-                       style={{
-                         width:  i === currentIndex ? '24px' : i < currentIndex ? '8px' : '8px',
-                         height: '8px',
-                         borderRadius: '9999px',
-                         background: i < currentIndex ? '#8070C8' : i === currentIndex ? '#F0A05A' : 'rgba(196,180,224,0.3)',
-                         boxShadow: i === currentIndex ? '0 0 8px rgba(240,160,90,0.6)' : 'none',
-                       }} />
-                ))}
-              </div>
-
-              {/* Counter + position */}
-              <p className="text-[10px] uppercase tracking-[0.3em] text-mystic-muted/45 mb-2 font-sans">
-                Carta {currentIndex + 1} de {cards.length}
-              </p>
-              <p className="text-base font-serif italic text-mystic-muted/70 mb-8 text-center px-4 leading-snug">
-                {card.position}
-              </p>
-
-              {/* Card with glow burst + shake */}
-              <div key={cardKey} className="relative animate-card-enter">
-                {showGlow && (
-                  <div className="absolute inset-0 rounded-2xl pointer-events-none z-20 animate-glow-burst"
-                       style={{
-                         background: card.reversed
-                           ? 'radial-gradient(circle, rgba(204,80,80,0.45), transparent 70%)'
-                           : 'radial-gradient(circle, rgba(91,107,224,0.40), transparent 70%)',
-                         filter: 'blur(18px)',
-                       }} />
-                )}
-                <div className={shakeCard ? 'animate-shake-once' : ''}>
-                  <CardDisplay
-                    card={card}
-                    isRevealed={isFlipped}
-                    isReversed={card.reversed}
-                    index={currentIndex}
-                    size="lg"
-                  />
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="mt-10 text-center min-h-[120px] flex flex-col items-center justify-start">
-                {!isFlipped ? (
-                  <button
-                    onClick={handleFlip}
-                    className="group relative py-4 px-14 rounded-2xl font-semibold tracking-[0.18em] uppercase text-sm
-                               border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl animate-card-back-shimmer"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(196,180,224,0.35), rgba(91,107,224,0.20))',
-                      borderColor: 'rgba(91,107,224,0.40)',
-                      color: 'rgba(91,107,224,0.85)',
-                      boxShadow: '0 4px 20px rgba(91,107,224,0.18)',
-                    }}
-                  >
-                    <span className="mr-2 group-hover:animate-pulse">✦</span>
-                    Revelar carta
-                  </button>
-                ) : (
-                  <div className="animate-fadeInUp flex flex-col items-center w-full max-w-sm gap-4">
-                    {/* Per-card reading text */}
-                    {cardTexts[currentIndex] ? (
-                      <p className="text-mystic-text/80 text-sm font-serif leading-relaxed text-center px-2
-                                    animate-fadeIn">
-                        {cardTexts[currentIndex]}
-                      </p>
-                    ) : isStreaming ? (
-                      <div className="flex items-center gap-2 text-mystic-muted/50 text-xs font-sans">
-                        <span className="flex gap-[3px]">
-                          {[0.35,0.7,1,0.55,0.85].map((h, j) => (
-                            <span key={j} className="w-[2px] rounded-full bg-mystic-violet/50 animate-waveform origin-center inline-block"
-                              style={{ height: `${Math.round(h*10)}px`, animationDelay: `${(j*0.1).toFixed(1)}s` }} />
-                          ))}
-                        </span>
-                        Las cartas hablan…
-                      </div>
-                    ) : null}
-
-                    {card.reversed && (
-                      <p className="text-[11px] text-rose-500/75 border border-rose-400/30 bg-rose-50/60
-                                    px-4 py-1.5 rounded-full font-sans tracking-wide">
-                        🔄 Carta invertida — energía bloqueada o en transformación
-                      </p>
-                    )}
-
-                    {currentIndex < cards.length - 1 ? (
-                      <button
-                        onClick={handleNext}
-                        className="py-3.5 px-10 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
-                                   border border-mystic-border/50 bg-mystic-surface/60 text-mystic-muted/80
-                                   transition-all duration-300 hover:border-mystic-gold/50 hover:text-mystic-text hover:-translate-y-0.5 hover:shadow-lg"
-                      >
-                        Siguiente carta →
-                      </button>
-                    ) : (
-                      <div className="flex flex-col items-center gap-4 w-full">
-                        {/* Closing text */}
-                        {closingText ? (
-                          <p className="text-mystic-muted/75 text-sm font-serif italic leading-relaxed text-center px-2 animate-fadeIn">
-                            {closingText}
-                          </p>
-                        ) : isStreaming ? (
-                          <div className="flex items-center gap-2 text-mystic-muted/40 text-xs font-sans">
-                            <span className="animate-pulse">✦</span> Cerrando la lectura…
-                          </div>
-                        ) : null}
-                        <button
-                          onClick={() => setStep('reading')}
-                          className="py-3.5 px-12 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
-                                     bg-gradient-to-r from-rose-800 via-pink-800 to-rose-700
-                                     text-mystic-text border border-rose-600/30
-                                     transition-all duration-300 hover:shadow-2xl hover:shadow-rose-900/20 hover:-translate-y-0.5"
-                        >
-                          Ver lectura completa →
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          )
-        })()}
+        {/* Step: cards — TikTok-style full-screen swipe reveal (rendered outside main container) */}
 
         {/* Step: reading — full summary */}
         {step === 'reading' && (
@@ -441,6 +393,181 @@ export default function VolveraEx() {
           </div>
         )}
       </main>
+
+      {/* Step: cards — TikTok full-screen swipe overlay */}
+      {step === 'cards' && cards.length > 0 && (() => {
+        const card      = cards[currentIndex]
+        const isFlipped = flippedCards[currentIndex]
+        const slideIn   = slideDirection === 'up' ? 'animate-slide-in-bottom' : 'animate-slide-in-top'
+
+        return (
+          <div
+            className="fixed inset-0 z-50 flex flex-col select-none overflow-hidden"
+            style={{
+              backgroundColor: '#F5EDE3',
+              backgroundImage: "url('/background.png')",
+              backgroundRepeat: 'repeat',
+              backgroundSize: '540px 540px',
+              touchAction: 'none',
+            }}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <StarField count={40} />
+
+            {/* ── Top bar ── */}
+            <div className="relative z-10 flex items-center justify-between px-5 pt-12 pb-2 flex-shrink-0">
+              <div className="flex items-center gap-1.5">
+                {cards.map((_, i) => (
+                  <div key={i} className="rounded-full transition-all duration-500"
+                       style={{
+                         width:  i === currentIndex ? '20px' : '8px',
+                         height: '8px',
+                         background: i < currentIndex ? '#8070C8' : i === currentIndex ? '#F0A05A' : 'rgba(196,180,224,0.3)',
+                         boxShadow: i === currentIndex ? '0 0 8px rgba(240,160,90,0.6)' : 'none',
+                       }} />
+                ))}
+              </div>
+              <span className="text-[11px] uppercase tracking-widest text-mystic-muted/50 font-sans">
+                Carta {currentIndex + 1} de {cards.length}
+              </span>
+            </div>
+
+            {/* ── Position label ── */}
+            <div className="relative z-10 text-center px-8 pb-2 flex-shrink-0">
+              <p className="text-sm font-serif italic text-mystic-muted/65 leading-snug">
+                "{card.position}"
+              </p>
+            </div>
+
+            {/* ── Card area ── */}
+            <div
+              className="relative z-10 flex-1 flex flex-col items-center justify-center min-h-0 cursor-pointer"
+              onClick={() => handlersRef.current.handleFlip()}
+            >
+              <div key={cardKey} className={`relative ${slideIn}`}>
+                {showGlow && (
+                  <div className="absolute inset-0 rounded-2xl pointer-events-none z-20 animate-glow-burst"
+                       style={{
+                         background: card.reversed
+                           ? 'radial-gradient(circle, rgba(204,80,80,0.45), transparent 70%)'
+                           : 'radial-gradient(circle, rgba(91,107,224,0.40), transparent 70%)',
+                         filter: 'blur(18px)',
+                       }} />
+                )}
+                <div className={shakeCard ? 'animate-shake-once' : ''}>
+                  <CardDisplay
+                    card={card}
+                    isRevealed={isFlipped}
+                    isReversed={card.reversed}
+                    index={currentIndex}
+                    size="lg"
+                  />
+                </div>
+              </div>
+
+              {/* Swipe hint */}
+              {hintVisible && (
+                <p className="absolute bottom-3 left-0 right-0 text-center text-xs text-mystic-muted/40 font-sans tracking-wide animate-pulse-slow pointer-events-none">
+                  {!isFlipped ? 'toca para revelar' : currentIndex < cards.length - 1 ? '↑ desliza para siguiente' : null}
+                </p>
+              )}
+            </div>
+
+            {/* ── Caption zone ── */}
+            <div className="relative z-10 flex-shrink-0 px-5 pt-3 pb-10 border-t border-mystic-border/20 min-h-[160px] max-h-[230px] overflow-y-auto"
+                 style={{ background: 'rgba(245,237,227,0.88)', backdropFilter: 'blur(6px)' }}>
+              {isFlipped ? (
+                <div
+                  className={justFlipped ? 'animate-fadeInUp' : 'animate-fadeIn'}
+                  style={{ animationDelay: justFlipped ? '400ms' : '0ms', animationFillMode: 'both' }}
+                >
+                  {cardTexts[currentIndex] ? (
+                    <p className="text-mystic-text/80 text-sm font-serif leading-relaxed text-center">
+                      {cardTexts[currentIndex]}
+                    </p>
+                  ) : isStreaming ? (
+                    <div className="flex items-center justify-center gap-2 text-mystic-muted/50 text-xs font-sans py-3">
+                      <span className="flex gap-[3px]">
+                        {[0.35,0.7,1,0.55,0.85].map((h, j) => (
+                          <span key={j} className="w-[2px] rounded-full bg-mystic-violet/50 animate-waveform origin-center inline-block"
+                            style={{ height: `${Math.round(h*10)}px`, animationDelay: `${(j*0.1).toFixed(1)}s` }} />
+                        ))}
+                      </span>
+                      <span>Las cartas hablan…</span>
+                    </div>
+                  ) : null}
+
+                  {card.reversed && (
+                    <p className="mt-2 text-center text-[11px] text-rose-500/75 border border-rose-400/30 bg-rose-50/60 px-3 py-1 rounded-full font-sans tracking-wide inline-block mx-auto">
+                      🔄 Carta invertida — energía bloqueada o en transformación
+                    </p>
+                  )}
+
+                  {currentIndex === cards.length - 1 && (
+                    <div className="mt-4 flex flex-col items-center gap-3">
+                      {closingText ? (
+                        <p className="text-mystic-muted/70 text-xs font-serif italic leading-relaxed text-center animate-fadeIn">
+                          {closingText}
+                        </p>
+                      ) : isStreaming ? (
+                        <div className="flex items-center justify-center gap-2 text-mystic-muted/40 text-xs font-sans">
+                          <span className="animate-pulse">✦</span> Cerrando la lectura…
+                        </div>
+                      ) : null}
+                      <button
+                        onClick={() => setStep('reading')}
+                        className="py-3 px-10 rounded-xl font-semibold tracking-[0.15em] uppercase text-sm
+                                   bg-gradient-to-r from-rose-800 via-pink-800 to-rose-700
+                                   text-mystic-text border border-rose-600/30
+                                   transition-all duration-300 hover:shadow-xl hover:shadow-rose-900/20 hover:-translate-y-0.5">
+                        Ver lectura completa →
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center py-4">
+                  <button
+                    onClick={() => handlersRef.current.handleFlip()}
+                    className="group py-3.5 px-12 rounded-2xl font-semibold tracking-[0.18em] uppercase text-sm
+                               border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl animate-card-back-shimmer"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(196,180,224,0.35), rgba(91,107,224,0.20))',
+                      borderColor: 'rgba(91,107,224,0.40)',
+                      color: 'rgba(91,107,224,0.85)',
+                      boxShadow: '0 4px 20px rgba(91,107,224,0.18)',
+                    }}
+                  >
+                    <span className="mr-2 group-hover:animate-pulse">✦</span>
+                    Revelar carta
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Desktop nav arrows */}
+            {currentIndex > 0 && (
+              <button
+                onClick={e => { e.stopPropagation(); handleSwipePrev() }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full border border-mystic-border/30 bg-mystic-surface/50 text-mystic-muted/50 hover:text-mystic-text hover:border-mystic-border/60 hover:bg-mystic-surface/80 transition-all text-lg"
+                title="Carta anterior (↓)"
+              >
+                ↑
+              </button>
+            )}
+            {isFlipped && currentIndex < cards.length - 1 && (
+              <button
+                onClick={e => { e.stopPropagation(); handleSwipeNext() }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full border border-mystic-border/30 bg-mystic-surface/50 text-mystic-muted/50 hover:text-mystic-text hover:border-mystic-border/60 hover:bg-mystic-surface/80 transition-all text-lg"
+                title="Siguiente carta (↑)"
+              >
+                ↓
+              </button>
+            )}
+          </div>
+        )
+      })()}
     </div>
   )
 }
