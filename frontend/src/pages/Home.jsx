@@ -20,6 +20,57 @@ const BADGE_COLORS = {
 
 function ModuleCard({ mod, streak }) {
   const badgeCls = BADGE_COLORS[mod.badgeColor] || BADGE_COLORS.amber
+
+  if (mod.image) {
+    return (
+      <Link
+        to={mod.path}
+        className="group block relative rounded-2xl overflow-hidden cursor-pointer
+                   border border-mystic-border/70 hover:border-mystic-gold/50
+                   transition-all duration-300 hover:-translate-y-1
+                   hover:shadow-2xl hover:shadow-rose-300/20
+                   focus:outline-none focus:ring-2 focus:ring-mystic-gold/40"
+        style={{}}
+      >
+        {/* Illustration */}
+        <div className="relative flex items-center justify-center pt-6 pb-2 px-4"
+             style={{ minHeight: '160px' }}>
+          <img
+            src={mod.image}
+            alt={mod.name}
+            className="relative z-10 object-contain animate-float-slow select-none"
+            style={{ height: '130px', mixBlendMode: 'multiply' }}
+          />
+        </div>
+
+        {/* Footer */}
+        <div className="px-5 pb-4 pt-2" style={{ borderTop: '1px solid rgba(196,180,224,0.20)' }}>
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <h3 className="font-display font-semibold text-sm leading-snug tracking-wide"
+                style={{ color: 'rgba(204,80,80,0.85)' }}>
+              {mod.name}
+            </h3>
+            <span className={`text-[9px] border px-1.5 py-0.5 rounded-full tracking-wider uppercase font-sans ${badgeCls}`}>
+              {mod.badge}
+            </span>
+          </div>
+          <p className="text-mystic-muted text-xs leading-relaxed font-sans">{mod.description}</p>
+          <div className="mt-2 flex items-center justify-end">
+            <span className="flex items-center gap-1 text-mystic-gold/60 text-xs group-hover:text-mystic-gold
+                             transition-colors duration-200 font-sans tracking-wider">
+              Consultar
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                   className="w-3 h-3 inline-block group-hover:translate-x-1 transition-transform duration-200">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </Link>
+    )
+  }
+
   return (
     <Link
       to={mod.path}
@@ -253,11 +304,13 @@ export default function Home() {
                      transition-all duration-300 hover:-translate-y-0.5
                      focus:outline-none focus:ring-2 focus:ring-mystic-gold/40"
         >
-          <div className="flex-shrink-0 w-14 h-14 flex items-center justify-center
-                          bg-gradient-to-br from-mystic-gold/20 to-mystic-purple/20
-                          rounded-xl border border-mystic-gold/30 group-hover:border-mystic-gold/60
-                          transition-all duration-300">
-            <span className="text-3xl" aria-hidden="true">⭐</span>
+          <div className="flex-shrink-0 w-16 h-16 flex items-center justify-center">
+            <img
+              src="/modules/00_carta_astral.png"
+              alt="Carta Astral"
+              className="w-16 h-16 object-contain select-none"
+              style={{ mixBlendMode: 'multiply' }}
+            />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">

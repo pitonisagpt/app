@@ -39,6 +39,10 @@ export default {
         'waveform':    'waveform 0.9s ease-in-out infinite',
         'fadeIn':      'fadeIn 0.45s ease-out both',
         'fadeInUp':    'fadeInUp 0.5s ease-out both',
+        'card-enter':  'cardEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'shake-once':  'shakeOnce 0.55s ease-in-out',
+        'glow-burst':  'glowBurst 0.65s ease-out forwards',
+        'card-back-shimmer': 'cardBackShimmer 1.8s ease-in-out infinite',
       },
       keyframes: {
         float: {
@@ -68,6 +72,31 @@ export default {
         fadeInUp: {
           '0%':   { opacity: '0', transform: 'translateY(8px)' },
           '100%': { opacity: '1', transform: 'translateY(0)'   },
+        },
+        cardEnter: {
+          '0%':   { opacity: '0', transform: 'translateX(80px) scale(0.93)' },
+          '100%': { opacity: '1', transform: 'translateX(0) scale(1)' },
+        },
+        cardExit: {
+          '0%':   { opacity: '1', transform: 'translateX(0) scale(1)' },
+          '100%': { opacity: '0', transform: 'translateX(-80px) scale(0.93)' },
+        },
+        shakeOnce: {
+          '0%, 100%': { transform: 'translateX(0) rotate(0deg)' },
+          '15%': { transform: 'translateX(-7px) rotate(-1.5deg)' },
+          '30%': { transform: 'translateX(7px) rotate(1.5deg)' },
+          '45%': { transform: 'translateX(-5px) rotate(-0.8deg)' },
+          '60%': { transform: 'translateX(5px) rotate(0.8deg)' },
+          '75%': { transform: 'translateX(-2px)' },
+        },
+        glowBurst: {
+          '0%':   { opacity: '0', transform: 'scale(0.85)' },
+          '40%':  { opacity: '1', transform: 'scale(1.15)' },
+          '100%': { opacity: '0', transform: 'scale(1.5)' },
+        },
+        cardBackShimmer: {
+          '0%, 100%': { opacity: '0.5' },
+          '50%':      { opacity: '1' },
         },
       },
     },

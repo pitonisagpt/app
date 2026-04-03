@@ -51,9 +51,17 @@ class VolveraExRequest(BaseModel):
         return v
 
 
+OPENERS = [
+    "{nombre}, voy a ser clara con lo que veo porque te lo mereces.",
+    "Mira, {nombre}, esta carta no me deja callada.",
+    "{nombre}, escucha lo que me está mostrando esto.",
+    "Seré directa contigo, {nombre}, porque creo que lo necesitas.",
+    "{nombre}, hay algo importante aquí que no puedo ignorar.",
+]
+
 def _build_prompt(req: VolveraExRequest) -> str:
     lines = "\n".join(
-        f"- {POSICIONES[i].format(ex=req.ex_nombre)}: **{c.name}** ({c.symbol}) — "
+        f"- Posición {i+1} ({POSICIONES[i].format(ex=req.ex_nombre)}): **{c.name}** ({c.symbol}) — "
         f"{'Invertida' if c.reversed else 'Derecha'}"
         for i, c in enumerate(req.cards)
     )
@@ -67,20 +75,34 @@ Contexto:
 Cartas:
 {lines}
 
-Interpreta cada carta en un párrafo propio. Menciona el nombre de cada carta en negrita \
-y conecta lo que muestra con algo concreto de la situación entre {req.nombre} y {req.ex_nombre}: \
-lo que probablemente está sintiendo cada uno, qué está en medio de los dos, cómo puede evolucionar esto.
+Escribe la lectura organizada EXACTAMENTE con estos marcadores, uno por sección, \
+sin líneas vacías entre el marcador y el texto que sigue:
 
-Sé directa y honesta — no prometas nada que las cartas no digan, pero tampoco seas evasiva. \
-Si la carta muestra algo difícil, dilo con cariño. Si muestra posibilidad, dilo con claridad.
+[C1]
+Párrafo sobre la carta 1. Empieza con una variación personal de "{req.nombre}, voy a ser clara..." \
+— usa siempre el nombre pero varía la frase de apertura en cada sección. Interpreta la carta \
+en relación directa con la posición y la situación concreta de {req.nombre} y {req.ex_nombre}. \
+Menciona el nombre de la carta. 60-80 palabras.
 
-Cierra con un párrafo que diga: "La pregunta más importante aquí no es si {req.ex_nombre} va a \
-volver, sino..." y completa con algo real sobre lo que {req.nombre} necesita para estar bien, \
-con o sin {req.ex_nombre}.
+[C2]
+Párrafo sobre la carta 2. Apertura personal diferente a [C1]. 60-80 palabras.
 
-Habla directo a {req.nombre} usando "tú". Sin frases vacías como "las energías sugieren" o \
-"el universo conspira". Habla de personas reales en situaciones reales. \
-Sin encabezados, sin listas. Extensión: 350-480 palabras."""
+[C3]
+Párrafo sobre la carta 3. Apertura personal diferente a las anteriores. 60-80 palabras.
+
+[C4]
+Párrafo sobre la carta 4. Apertura personal diferente a las anteriores. 60-80 palabras.
+
+[C5]
+Párrafo sobre la carta 5. Apertura personal diferente a las anteriores. 60-80 palabras.
+
+[CIERRE]
+Párrafo de cierre que diga: "La pregunta más importante aquí no es si {req.ex_nombre} va a volver, \
+sino..." y completa con algo real sobre lo que {req.nombre} necesita para estar bien, \
+con o sin {req.ex_nombre}. 60-80 palabras.
+
+Reglas: habla de "tú" a {req.nombre}. Sin frases vacías. Sin encabezados adicionales. \
+Solo los marcadores [C1] [C2] [C3] [C4] [C5] [CIERRE] y el texto de cada sección."""
 
 
 async def _event_gen(req: VolveraExRequest):
@@ -88,7 +110,7 @@ async def _event_gen(req: VolveraExRequest):
     try:
         async with client.messages.stream(
             model="claude-haiku-4-5-20251001",
-            max_tokens=1024,
+            max_tokens=1800,
             system=SYSTEM_PROMPT,
             messages=[{"role": "user", "content": _build_prompt(req)}],
         ) as stream:
