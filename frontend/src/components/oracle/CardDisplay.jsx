@@ -74,31 +74,13 @@ export default function CardDisplay({ card, isRevealed, isReversed, position, in
         <div className={`card-inner ${isRevealed ? 'flipped' : ''}`}>
 
           {/* Card back */}
-          <div className="card-face card-back w-full h-full rounded-xl border border-mystic-border/80 overflow-hidden"
+          <div className="card-face card-back w-full h-full rounded-xl overflow-hidden"
                style={{ boxShadow: '0 4px 20px rgba(91,107,224,0.15), 0 2px 8px rgba(46,60,20,0.10)' }}>
-            <div className="w-full h-full flex items-center justify-center relative"
-                 style={{ background: 'linear-gradient(145deg, #D4C8F0, #EDE0D0)' }}>
-              <svg viewBox={`0 0 ${w} ${h}`} className="absolute inset-0 w-full h-full">
-                <defs>
-                  <radialGradient id={`backGlow${index}`} cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#5B6BE0" stopOpacity="0.18" />
-                    <stop offset="100%" stopColor="#5B6BE0" stopOpacity="0" />
-                  </radialGradient>
-                </defs>
-                <rect width={w} height={h} fill={`url(#backGlow${index})`} />
-                <rect x="5" y="5" width={w-10} height={h-10} rx="6" fill="none" stroke="#5B6BE0" strokeOpacity="0.30" strokeWidth="1" />
-                <rect x="9" y="9" width={w-18} height={h-18} rx="4" fill="none" stroke="#C4B4E0" strokeOpacity="0.25" strokeWidth="0.5" />
-                {[...Array(12)].map((_, i) => (
-                  <text key={i} x={(i % 3) * (w/3) + (w/6)} y={Math.floor(i / 3) * (h/4) + (h/8)}
-                        fontSize="10" textAnchor="middle" fill="#8070C8" opacity="0.30">✦</text>
-                ))}
-              </svg>
-              <div className="relative z-10 text-center">
-                <div className="text-4xl mb-2 opacity-85">🔮</div>
-                <div className="w-10 h-px bg-mystic-gold/40 mx-auto mb-1" />
-                <div className="text-[8px] text-mystic-violet/50 tracking-[0.25em] uppercase font-sans">Pytonia</div>
-              </div>
-            </div>
+            <img
+              src="/cards/back.png"
+              alt="Pytonia"
+              className="w-full h-full object-cover select-none"
+            />
           </div>
 
           {/* Card front */}
